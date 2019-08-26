@@ -15,6 +15,7 @@ class ArticleDetailView(generic.DetailView):
 
 class ArticleCreateView(generic.CreateView):
     fields = ('title', 'content')
+    model = models.Article
 
 class ArticleUpdateView(generic.UpdateView):
     pass
