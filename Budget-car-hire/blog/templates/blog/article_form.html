@@ -1,10 +1,11 @@
 {% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block blog_content%}
 
-    <form action="{% url 'blogs:create' %}" method="post">
+    <form action="{% url 'blogs:blog_create' %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+            {{ form|crispy }}
         <button type="submit">Create</button>
     </form>
 
