@@ -22,4 +22,10 @@
   }
 
 
+  .article-img {
+    width: 100px;
+    border: 2px solid #75ccff;
+    padding: 4px;
+  }
+
   

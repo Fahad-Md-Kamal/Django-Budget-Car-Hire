@@ -26,8 +26,8 @@ def profile(request):
                                          request.FILES, 
                                          instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
+            u_form.save(force_insert=False)
+            p_form.save(force_insert=False)
             username = u_form.cleaned_data.get('username')
             messages.success(request, f'Accont {username} has been updated successfully.')
             return redirect('profile')

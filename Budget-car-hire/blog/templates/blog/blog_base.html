@@ -3,15 +3,16 @@
 {% block title %} Blogs {% endblock %}
 
 {% block content %}
-<div class="nav-scroller py-1 px-5 mb-2">
-        <nav class="nav">
-          <a class="btn text-info mr-2 text-decoration-none" href="#">Blog List</a>
-          <a class="btn  text-success text-decoration-none" href="{% url 'blogs:create' %}">Write Blog</a>
+<div class="nav-scroller py-1 px-5 mb-2 bg-secondary">
+        <nav class="nav d-flex justify-content-center">
+          <a class="btn text-light mr-2 text-decoration-none" href="{% url 'blogs:blog_list' %}">Blogs</a>
+          <a class="btn text-light text-decoration-none" href="{% url 'blogs:article_create' %}">Write Blog</a>
         </nav>
       </div>
 
-{% block blog_content%}
-{% endblock blog_content %}
-
+<div class="container">
+  {% block blog_content%}
+  {% endblock blog_content %}
+</div>
 
 {% endblock content %}
