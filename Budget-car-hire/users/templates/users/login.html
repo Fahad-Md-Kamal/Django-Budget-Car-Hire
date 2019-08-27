@@ -1,26 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'users/users_base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %} Blogs {% endblock %}
+{% block title %} User Login {% endblock %}
 
-{% block content %}
-
-<div class="container">
+{% block users_content %}
+<div class="jumbotron col-4 offset-4 mt-5">
     <form method="post">
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Log In</legend>
             {{ form|crispy }}
         </fieldset>
-        <div class="form-group">
-            <button type="submit" class="btn btn-outline-info">Login</button>
+        <div class="lead">
+            <button type="submit"  class="btn btn-primary btn-lg">Login</button>
         </div>
     </form>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Don't have an account ? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-        </small>
-    </div>
-</div>
-
-{% endblock content %}
+    <small class="text-muted">
+        Don't have an account ? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+    </small>
+  </div>
+{% endblock users_content %}

@@ -4,7 +4,7 @@
 {% block blog_content%}
 
 {% for post in object_list %}
-
+<div class="col-md-8 col-sm-12 offset-md-2">
     <article class="card text-white bg-dark mb-3">
             <div class="card-header d-flex justify-content-start">
                 <img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" alt="" srcset="">
@@ -20,7 +20,7 @@
             </div>
             </div>
         </article>
-
+    </div>
     {% endfor %}
 
 {% endblock  %}

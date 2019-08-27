@@ -22,4 +22,22 @@
   }
 
 
+.rounded-circle{
+  box-shadow: 0 0 10px #c4e9ff !important;
+}
+
+  .article-img{
+    width: 100px;
+    height: 100px;
+  }
   
+  .profile-img{
+    width: 150px;
+    height: 150px;
+    border: 3px dotted #cacfa9;
+    padding: 2px;
+  }
+
+  .card {
+    box-shadow: 0 0 25px #c4e9ff !important;
+  }
