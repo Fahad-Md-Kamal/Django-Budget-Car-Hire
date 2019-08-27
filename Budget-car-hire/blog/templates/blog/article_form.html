@@ -4,7 +4,7 @@
 
     <form action="{% url 'blogs:create' %}" method="post">
         {% csrf_token %}
-            {{form|crispy}}
+        {{ form.as_p }}
         <button type="submit">Create</button>
     </form>
 

@@ -17,7 +17,7 @@ class ArticleCreateView(generic.CreateView):
     fields = ('title', 'content')
     model = models.Article
 
-class ArticleUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ArticleUpdateView(generic.UpdateView):
     pass
 
 class ArticleDeteleView(generic.DeleteView):
