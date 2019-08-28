@@ -16,7 +16,13 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
             <div>
-                <a class="card-title text-light text-decoration-none" href="#">Comments <span class="ml-2 badge badge-primary badge-pill">14</span></a>
+                <a class="card-title text-light text-decoration-none" href="#">
+
+                    {% if post.comments %}
+                        <div class="my-2"> Comment(s): 
+                            <span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span>
+                        </div>
+                        {% endif %}</a>
             </div>
             </div>
         </article>

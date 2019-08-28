@@ -19,20 +19,6 @@ class BlogDetailView(generic.DetailView):
         context['form'] = forms.comment_form
         return context
 
-# def BlogDetailView(request, pk):
-#     if request.method == "POST":
-#         data = { 'user' : request.user.username,
-#                     'article_id': pk
-#                 }
-#         form = forms.comment_form()
-
-# form = CreateASomething(request.POST)
-# if form.is_valid():
-#     obj = form.save(commit=False)
-#     obj.field1 = request.user
-#     obj.save()
-
-
 
 class ArticleCreateView(generic.CreateView):
     fields = ('title', 'content')
