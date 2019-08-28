@@ -17,17 +17,29 @@
               
             </div>
             <div class="card-footer d-flex justify-content-between">
-                <div>
-                    Comments <span class="badge badge-primary badge-pill">14</span>
-                </div>
+                
                 <div>
                     <a class="btn btn-success" href="#">Delete</a>
                 </div>
             </div>
-
-
+            <div class="card px-2">
+            {% if article.comments %}
+                <div class="my-2"> Comment(s): 
+                    <span class="badge badge-primary badge-pill">{{article.comments.count}}</span>
+                </div>
+                {% endif %}
             {% for cmt in article.comments.all %}
-                {{cmt.user.username}}
+                   <div class="card mb-2"> 
+                <div class="mt-3 ml-3">
+                    <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}" alt="" srcset="">
+                    <a class="mr-2 text-light" href="#">{{cmt.user.username}}</a>
+                        <small class="text-primary">{{cmt.comment_date}}</small>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="card-text">{{ cmt.comment }}</p>
+                  </div>
+                </div>
             {% endfor %}
 
 
@@ -39,5 +51,6 @@
             <button type="submit" class="btn btn-primary mr-2">Submit</button>
         </form>
     </div>
+</div>
         </div>
 {% endblock  %}

@@ -38,6 +38,11 @@
     padding: 2px;
   }
 
+.comment-img {
+  width: 50px;
+}
+
   .card {
     box-shadow: 0 0 25px #c4e9ff !important;
   }
+
