@@ -13,10 +13,24 @@ class ArticleListView(generic.ListView):
 class BlogDetailView(generic.DetailView):
     model = models.Article
 
-    def get_context_data(self, **kwargs):
+
+    def get_context_data(self,  *args, **kwargs):
         context = super(BlogDetailView, self).get_context_data(**kwargs)
         context['form'] = forms.comment_form
         return context
+
+# def BlogDetailView(request, pk):
+#     if request.method == "POST":
+#         data = { 'user' : request.user.username,
+#                     'article_id': pk
+#                 }
+#         form = forms.comment_form()
+
+# form = CreateASomething(request.POST)
+# if form.is_valid():
+#     obj = form.save(commit=False)
+#     obj.field1 = request.user
+#     obj.save()
 
 
 

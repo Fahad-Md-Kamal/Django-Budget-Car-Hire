@@ -24,6 +24,13 @@
                     <a class="btn btn-success" href="#">Delete</a>
                 </div>
             </div>
+
+
+            {% for cmt in article.comments.all %}
+                {{cmt.user.username}}
+            {% endfor %}
+
+
         </article>
 
         <div class="card bg-dark p-3">
