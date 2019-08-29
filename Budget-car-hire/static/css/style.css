@@ -23,7 +23,7 @@
 
 
 .rounded-circle{
-  box-shadow: 0 0 10px #c4e9ff !important;
+  box-shadow: 0 0 10px #fdc4ff !important;
 }
 
 .article-img{
@@ -43,7 +43,29 @@
   height: 50px;
 }
 
-.card {
-  box-shadow: 0 0 25px #c4e9ff !important;
+.nav-scroller{
+  border-radius: 100px;
 }
 
+.nav-scroller a{
+  font-size: 1.5em;
+}
+
+.nav-scroller a:hover{
+  box-shadow: 0 0 5px #edd8ff;
+  border-radius: 50%;
+}
+/* .my-nav-style{
+  background: #000;
+  margin-left: 0 !important;
+} */
+
+body{
+  /* background-color: black; */
+  background: #060e1b;
+}
+
+
+/* .main-container {
+  height: 80vh;
+} */

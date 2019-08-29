@@ -15,7 +15,7 @@
 
 
 
-<div class="container-fluid">
+<div class="container my-2 main-container">
 
     {% if messages %}
       {% for message in messages %}
@@ -27,9 +27,11 @@
     {% endblock %}
 </div>
 
+{% include 'footer.html' %}
     <script src="{% static 'js/jquery.3.3.1.slim.js' %}"></script>
     <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
   </body>
 </html>
 

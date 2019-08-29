@@ -28,14 +28,20 @@ class ArticleCreateView(SuccessMessageMixin, generic.CreateView):
     fields = ('title', 'content')
     model = models.Article
     success_message = "New article created"
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class ArticleUpdateView(generic.UpdateView):
-    form_class = forms.article_form
+class ArticleUpdateView(SuccessMessageMixin, generic.UpdateView):
     model = models.Article
+    fields = ('title', 'content')
+    success_message = "Article Updated"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class ArticleDeteleView(generic.DeleteView):

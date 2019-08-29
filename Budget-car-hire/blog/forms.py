@@ -18,7 +18,7 @@ class comment_form(forms.ModelForm):
 
 class article_form(forms.ModelForm):
 
-    class Meta():
+    class Meta:
         model = models.Article
         fields = ('title', 'content')
 

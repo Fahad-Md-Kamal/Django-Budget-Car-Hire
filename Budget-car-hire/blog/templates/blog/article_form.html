@@ -3,7 +3,7 @@
 
 {% block blog_content%}
 <div class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 my-5">
-    <form action="{% url 'blogs:blog_create' %}" method="post">
+    <form method="post">
         <fieldset>
             <legend class="border-bottom mb-4 h1 text-center">Article Form</legend>
             {% csrf_token %}
