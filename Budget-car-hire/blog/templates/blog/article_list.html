@@ -16,13 +16,12 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
             <div>
-                <a class="card-title text-light text-decoration-none" href="#">
-
-                    {% if post.comments %}
-                        <div class="my-2"> Comment(s): 
-                            <span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span>
-                        </div>
-                        {% endif %}</a>
+                <a class="card-title text-light text-decoration-none" href="{% url 'blogs:blog_detail' post.id%}">
+                {% if post.comments.count > 0 %}
+                    <div class="my-2"> Comment(s): 
+                        <span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span>
+                    </div>
+                {% endif %}</a>
             </div>
             </div>
         </article>

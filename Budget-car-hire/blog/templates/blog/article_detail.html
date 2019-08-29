@@ -13,14 +13,19 @@
                 </div>
             </div>
             <div class="card-body">
-              <p class="card-text">{{ article.content }}</p>
+                <p>Article</p>
+              <p class="card-text bg-light p-2 text-dark">{{ article.content }}</p>
               
             </div>
             <div class="card-footer d-flex justify-content-between">
-                
+            {% if user.is_authenticated %}
+                {% if user.id == article.author.id or user.is_staff %}
                 <div>
-                    <a class="btn btn-success" href="#">Delete</a>
+                    <a class="btn btn-secondary mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
+                    <a class="btn btn-warning" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
                 </div>
+                {% endif %}
+            {% endif %}
             </div>
             <div class="card px-2">
             {% if article.comments %}
@@ -30,15 +35,22 @@
                 {% endif %}
             {% for cmt in article.comments.all %}
                    <div class="card mb-2"> 
-                <div class="mt-3 ml-3">
-                    <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}" alt="" srcset="">
-                    <a class="mr-2 text-light" href="#">@ {{cmt.user.username}}</a>
+                    <div class="mt-3 ml-3">
+                        <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}">
+                        <a class="mr-2 text-light" href="#">@ {{cmt.user.username}}</a>
                         <small class="text-primary">{{cmt.comment_date}}</small>
                     </div>
                     
                     <div class="card-body">
                         <p class="card-text">{{ cmt.comment }}</p>
                   </div>
+                  {% if user.id == cmt.user.id or user.is_staff %}
+                  <div class="card-footer">
+                        <!-- Comment Option will be delveloped letter -->
+                          <!-- <a class="btn btn-secondary" href="{ url 'blogs:edit_blog_comment' cmt.pk }">Edit</a> -->
+                          <a class="btn btn-secondary" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
+                  </div>
+                  {% endif %}
                 </div>
             {% endfor %}
 
@@ -46,7 +58,8 @@
         </article>
 
         <div class="card bg-dark p-3">
-        <form action="" method="post">
+        <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
+            {% csrf_token %}
             {{ form|crispy }}
             <button type="submit" class="btn btn-primary mr-2">Submit</button>
         </form>

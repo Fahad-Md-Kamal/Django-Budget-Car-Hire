@@ -1,0 +1,16 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block blog_content%}
+    <div  class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 mt-5">
+        <p class="display-4 text-danger"> Warning !! </p>
+        <hr class="my-4 bg-light" >
+        <p class="lead"> Do you really want to Delete the Blog ? </p>
+        <hr class="my-4 bg-light" >
+        <form method="post">
+            {% csrf_token %}
+                <button class="btn btn-lg btn-success" type="submit">Delete</button>
+        <a class="btn btn-lg btn-success" href="{% url 'blogs:blog_detail' object.pk %}">Cancel</a>
+    </form>
+    </div>
+{% endblock  %}
