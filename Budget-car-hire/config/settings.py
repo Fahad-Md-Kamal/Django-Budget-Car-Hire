@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'users.apps.UsersConfig',
     'blog.apps.BlogConfig',
+    'vehicle.apps.VehicleConfig'
 ]
 
 MIDDLEWARE = [
