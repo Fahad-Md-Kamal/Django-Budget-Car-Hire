@@ -1,0 +1,70 @@
+{% extends 'vehicle/vehicle_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block vehicle_content%}
+
+<div class="col-md-8 col-sm-12 offset-md-2">
+    <article class=" text-white bg-light mb-3">
+            <div class="card-header d-flex justify-content-start">
+                <img class="rounded-circle article-img mr-2" src="{{ article.author.profile.image.url }}" alt="" srcset="">
+                <div class="mt-3 ml-3">
+                    <a class="mr-2 text-primary" href="#">@ {{ article.author }}</a>
+                    <small class="text-primary text-muted">{{ article.posted_date }}</small>
+                    <h4 class="card-title text-dark">{{ article.title }}</h4>
+                </div>
+            </div>
+            <div class="card-body text-danger">
+                <p>Article</p>
+              <p class="card-text py-3 px-2 text-dark table-active">{{ article.content }}</p>
+              
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+            {% if user.is_authenticated %}
+                {% if user.id == article.author.id or user.is_staff %}
+                <div>
+                    <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
+                    <a class="btn btn-outline-warning" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
+                </div>
+                {% endif %}
+            {% endif %}
+            </div>
+            <div class="text-dark p-2">
+            {% if article.comments %}
+                <div class="my-2"> Comment(s): 
+                    <span class="badge badge-primary badge-pill">{{article.comments.count}}</span>
+                </div>
+                {% endif %}
+            {% for cmt in article.comments.all %}
+                   <div class="mb-2"> 
+                    <div class="mt-3 ml-3">
+                        <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}">
+                        <a class="mr-2 text-primary" href="#">@ {{cmt.user.username}}</a>
+                        <small class="text-muted">{{cmt.comment_date}}</small>
+                    </div>
+                    
+                    <div class="card-body table-active">
+                        <p class="card-text text-dark">{{ cmt.comment }}</p>
+                  </div>
+                  {% if user.id == cmt.user.id or user.is_staff %}
+                  <div class="card-footer">
+                        <!-- Comment Option will be delveloped letter -->
+                          <!-- <a class="btn btn-secondary" href="{ url 'blogs:edit_blog_comment' cmt.pk }">Edit</a> -->
+                          <a class="btn btn-warning" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
+                  </div>
+                  {% endif %}
+                </div>
+            {% endfor %}
+
+
+        </article>
+
+        <div class="table-danger p-3">
+        <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+        </form>
+    </div>
+</div>
+        </div>
+{% endblock  %}

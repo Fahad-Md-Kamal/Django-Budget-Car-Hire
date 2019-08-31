@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -10,38 +11,49 @@ from . import models, forms
 
 class ArticleListView(generic.ListView):
     model = models.Article
-    # template_name = 'blog/index.html'
+    queryset = models.Article.objects.all()
     ordering = ['-posted_date']
 
 
-class BlogDetailView(generic.DetailView):
+class ArticleDetailView(generic.DetailView):
     model = models.Article
 
+    def get_object(self):
+        _id = self.kwargs.get("pk")
+        return get_object_or_404(models.Article, id=_id)
 
+    ## Adding additional data to the context data dictionary
     def get_context_data(self,  *args, **kwargs):
-        context = super(BlogDetailView, self).get_context_data(**kwargs)
+        context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['form'] = forms.comment_form
         return context
 
 
 class ArticleCreateView(SuccessMessageMixin, generic.CreateView):
-    fields = ('title', 'content')
-    model = models.Article
+    template_name = 'blog/article_form.html'
+    form_class = forms.article_form
     success_message = "New article created"
 
+    ## adds user's info with the data
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        return super(ArticleCreateView, self).form_valid(form)
+
 
 
 class ArticleUpdateView(SuccessMessageMixin, generic.UpdateView):
-    model = models.Article
-    fields = ('title', 'content')
+    template_name = 'blog/article_form.html'
+    form_class = forms.article_form
     success_message = "Article Updated"
+
+    def get_object(self):
+        _id = self.kwargs.get("pk")
+        return get_object_or_404(models.Article, id=_id)
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
 
 
 class ArticleDeteleView(generic.DeleteView):
@@ -62,18 +74,6 @@ def create_comment(request, pk):
             comment.save()
             messages.success(request, f'Comment added for - {article.title} ')
             return redirect('blogs:blog_detail', pk = article.pk)
-
-####### Comment edit option
-# def comment_edit(request, pk):
-#     comment = get_object_or_404(models.Comment, pk = pk)
-#     if request.method == "POST":
-#         form = forms.comment_form(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Comment updated successfully')
-#     else:
-#         messages.error(request, 'Faild to update comment')
-#     return redirect ('blogs:blog_detail', pk = comment.article.pk)
 
 
 def comment_delete(request, pk):
