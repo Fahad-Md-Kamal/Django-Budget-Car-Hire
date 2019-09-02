@@ -2,6 +2,83 @@
 
 {% block vehicle_content%}
 
-This is vehicle app
+<div class="col-md-8 my-2 col-sm-12">
+    <div class="h3 text-light">All Available Cars</div>
+        {% for car in CarsList %}
+        <a class="card my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+            <div class="d-flex">
+                <div class="p-2">
+                    <img class="rounded" src="https://via.placeholder.com/150" alt="">
+                </div>
+                <div class="container p-3">
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Model:</p>
+                            <p class="col-4 text-uppercase"> {{ car.model_name }} </p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Model Year:</p>
+                            <p class="col-4"> {{ car.model_year }} </p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Registration No:</p>
+                            <p class="col-4"> {{ car.reg_no }} </p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Vehicle Type:</p>
+                            <p class="col-4">
+                                {% if car.vehicle_type == 0  %} 
+                                    <span class="text-dark"> Small </span>
+                                {% elif car.vehicle_type == 1  %}
+                                    <span class="text-dark"> Medium </span>
+                                {% elif car.vehicle_type == 2  %} 
+                                    <span class="text-dark"> Large </span>
+                                {% else  %} 
+                                    <span class="text-dark"> Van </span>
+                                {% endif %}
+                            </p>
+                        </div>
+                </div>
+        </div>
+        </a>
+    {% endfor %}
+</div>
+
+<div class="col-md-4 d-sm-none d-md-block my-2">
+    <div class="h3 text-light">All Categories</div>
+    <p class="h4 text-light mt-5">Vehicle Type</p>
+    <ul class="list-group">
+        <li class="list-group-item"> <a href="#"> Small Car </a></li>
+        <li class="list-group-item"> <a href="#"> Medium Car </a></li>
+        <li class="list-group-item"> <a href="#"> Large Car </a></li>
+        <li class="list-group-item"> <a href="#"> Van </a></li>
+    </ul>
+</div>
+
+
+
+<!-- <p class="table table-striped d-flex justify-content-between">
+        <tr>
+            <td>Model: </td>
+            <td class="font-weight-bolder">{{ car.model_name }}</td>
+        </tr>
+        <tr>
+            <td>Registration No: </td>
+            <td>{{ car.reg_no }}</td>
+        </tr>
+        <tr>
+            <td class="font-weight-bolder">Vehicle Type: </td>
+            <td>{% if car.vehicle_type == 0  %} 
+                    <span class="text-dark"> Small </span>
+                {% elif car.vehicle_type == 1  %}
+                    <span class="text-dark"> Medium </span>
+                {% elif car.vehicle_type == 2  %} 
+                    <span class="text-dark"> Large </span>
+                {% else  %} 
+                    <span class="text-dark"> Van </span>
+                {% endif %}
+            </td> -->
+
+
+
 
 {% endblock  %}

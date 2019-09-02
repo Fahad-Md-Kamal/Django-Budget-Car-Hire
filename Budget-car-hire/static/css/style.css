@@ -69,3 +69,9 @@ body{
 /* .main-container {
   height: 80vh;
 } */
+
+.list-group-item a {
+  color: #1a1919;
+  font-weight: 600;
+  text-decoration: none;
+}

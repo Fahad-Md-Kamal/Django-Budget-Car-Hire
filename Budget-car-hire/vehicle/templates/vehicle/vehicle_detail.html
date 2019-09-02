@@ -3,68 +3,90 @@
 
 {% block vehicle_content%}
 
-<div class="col-md-8 col-sm-12 offset-md-2">
-    <article class=" text-white bg-light mb-3">
-            <div class="card-header d-flex justify-content-start">
-                <img class="rounded-circle article-img mr-2" src="{{ article.author.profile.image.url }}" alt="" srcset="">
-                <div class="mt-3 ml-3">
-                    <a class="mr-2 text-primary" href="#">@ {{ article.author }}</a>
-                    <small class="text-primary text-muted">{{ article.posted_date }}</small>
-                    <h4 class="card-title text-dark">{{ article.title }}</h4>
-                </div>
-            </div>
-            <div class="card-body text-danger">
-                <p>Article</p>
-              <p class="card-text py-3 px-2 text-dark table-active">{{ article.content }}</p>
-              
-            </div>
-            <div class="card-footer d-flex justify-content-between">
-            {% if user.is_authenticated %}
-                {% if user.id == article.author.id or user.is_staff %}
-                <div>
-                    <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
-                    <a class="btn btn-outline-warning" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
-                </div>
-                {% endif %}
-            {% endif %}
-            </div>
-            <div class="text-dark p-2">
-            {% if article.comments %}
-                <div class="my-2"> Comment(s): 
-                    <span class="badge badge-primary badge-pill">{{article.comments.count}}</span>
-                </div>
-                {% endif %}
-            {% for cmt in article.comments.all %}
-                   <div class="mb-2"> 
-                    <div class="mt-3 ml-3">
-                        <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}">
-                        <a class="mr-2 text-primary" href="#">@ {{cmt.user.username}}</a>
-                        <small class="text-muted">{{cmt.comment_date}}</small>
-                    </div>
-                    
-                    <div class="card-body table-active">
-                        <p class="card-text text-dark">{{ cmt.comment }}</p>
-                  </div>
-                  {% if user.id == cmt.user.id or user.is_staff %}
-                  <div class="card-footer">
-                        <!-- Comment Option will be delveloped letter -->
-                          <!-- <a class="btn btn-secondary" href="{ url 'blogs:edit_blog_comment' cmt.pk }">Edit</a> -->
-                          <a class="btn btn-warning" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
-                  </div>
-                  {% endif %}
-                </div>
-            {% endfor %}
+
+<!-- Jumbotron -->
+<div class="jumbotron col-10 offset-1">
+        <p class="h3">Model model_year Details</p>
+        <table class="table table-striped table-dark">
+                <tbody>
+                  <tr>
+                    <td>Owner:</td>
+                    <td>vehicle.owner.username</td>
+                  </tr>
+                  <tr>
+                    <td>Model Name: </td>
+                    <td>vehicle.model_name</td>
+                  </tr>
+                  <tr>
+                    <td>Model Year: </td>
+                    <td>vehicle.model_year</td>
+                  </tr>
+                  <tr>
+                    <td>Registration No: </td>
+                    <td>vehicle.model_year</td>
+                  </tr>
+                  <tr>
+                    <td>Category</td>
+                    <td>vehicle.vehicle_type</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>Hired or available</td>
+                  </tr>
+                  <tr>
+                    <td>Capacity</td>
+                    <td>3 Person</td>
+                  </tr>
+                  <tr>
+                    <td>Rent/month</td>
+                    <td>vehicle.rent_per_month</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="btn-group d-flex justify-content-end">
+                  <a class="btn btn-lg btn-success" href="#">Hire</a>
+                  <a class="btn btn-lg btn-primary" href="#">Edit Info</a>
+                  <a class="btn btn-lg btn-warning" href="#">Freeze</a>
+                  <a class="btn btn-lg btn-danger" href="#">Delete</a>
+              </div>
+      </div>
+      <!-- Jumbotron -->
 
 
-        </article>
 
-        <div class="table-danger p-3">
-        <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-        </form>
-    </div>
-</div>
-        </div>
+
+
+
 {% endblock  %}
+
+
+<!-- <div class="col-md-8 col-sm-12 offset-md-2">
+        <article class=" text-white bg-light mb-3">
+                <div class="card-header d-flex justify-content-start">
+                    <img class="rounded-circle article-img mr-2" src="#" alt="" srcset="">
+                    <div class="mt-3 ml-3">
+                        <a class="mr-2 text-primary" href="#">@ {{ car.owner.username }}</a>
+                        <h4 class="card-title text-dark">{{ car.reg_no }}</h4>
+                        <small class="text-primary text-muted">{{ car.vehicle_type }}</small>
+                    </div>
+                </div>
+                <div class="card-body text-danger">
+                    <p>Car</p>
+                    {% if car.is_hired %}
+                        <p class="badge badge-pill badge-primary h4">Hired</p>
+                    {% else %}
+                        <p class="badge badge-pill badge-primary h4">Available</p>
+                    {% endif %}
+                  
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                {% if user.is_authenticated %}
+                    {% if user.id == car.owner.id or user.is_staff %}
+                    <div>
+                        <a class="btn btn-outline-success mr-auto" href="{% url 'vehicle:update_vehicle' car.pk %}">Update Vehicle</a>
+                        <a class="btn btn-outline-warning" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete Vehicle</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                </div>
+            </div> -->

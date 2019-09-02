@@ -13,10 +13,12 @@ class VehicleListView(generic.ListView):
     model = models.Vehicle
     template_name = 'vehicle/vehicle_list.html'
     queryset = models.Vehicle.objects.all()
+    context_object_name = 'CarsList'
 
 
 class VehicleDetaileView(generic.DetailView):
     model = models.Vehicle
+    context_object_name = 'car'
 
     def get_object(self):
         _id = self.kwargs.get("pk")
@@ -28,7 +30,7 @@ class VehicleRegisterView(generic.CreateView):
     form_class = forms.vehicle_reg_form
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.owner = self.request.user
         return super(VehicleRegisterView, self).form_valid(form)
 
 
