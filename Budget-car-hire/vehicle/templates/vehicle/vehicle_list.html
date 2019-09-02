@@ -20,22 +20,12 @@
                             <p class="col-4"> {{ car.model_year }} </p>
                         </div>
                         <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Registration No:</p>
+                            <p class="col-4 offset-1">Reg No:</p>
                             <p class="col-4"> {{ car.reg_no }} </p>
                         </div>
                         <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Vehicle Type:</p>
-                            <p class="col-4">
-                                {% if car.vehicle_type == 0  %} 
-                                    <span class="text-dark"> Small </span>
-                                {% elif car.vehicle_type == 1  %}
-                                    <span class="text-dark"> Medium </span>
-                                {% elif car.vehicle_type == 2  %} 
-                                    <span class="text-dark"> Large </span>
-                                {% else  %} 
-                                    <span class="text-dark"> Van </span>
-                                {% endif %}
-                            </p>
+                            <p class="col-4 offset-1">Category:</p>
+                            <p class="col-4">{{car.get_vehicle_type_display}}</p>
                         </div>
                 </div>
         </div>
@@ -53,32 +43,5 @@
         <li class="list-group-item"> <a href="#"> Van </a></li>
     </ul>
 </div>
-
-
-
-<!-- <p class="table table-striped d-flex justify-content-between">
-        <tr>
-            <td>Model: </td>
-            <td class="font-weight-bolder">{{ car.model_name }}</td>
-        </tr>
-        <tr>
-            <td>Registration No: </td>
-            <td>{{ car.reg_no }}</td>
-        </tr>
-        <tr>
-            <td class="font-weight-bolder">Vehicle Type: </td>
-            <td>{% if car.vehicle_type == 0  %} 
-                    <span class="text-dark"> Small </span>
-                {% elif car.vehicle_type == 1  %}
-                    <span class="text-dark"> Medium </span>
-                {% elif car.vehicle_type == 2  %} 
-                    <span class="text-dark"> Large </span>
-                {% else  %} 
-                    <span class="text-dark"> Van </span>
-                {% endif %}
-            </td> -->
-
-
-
 
 {% endblock  %}

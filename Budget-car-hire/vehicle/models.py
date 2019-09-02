@@ -23,6 +23,7 @@ class Vehicle(models.Model):
     vehicle_type = models.IntegerField(choices=VEHICLE_CATEGORIES, default=SM)
     added_on = models.DateField(auto_now=True)
     rent_per_month = models.PositiveIntegerField(default = 2000)
+    capacity = models.PositiveIntegerField(default=2)
     is_freezed = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_hired = models.BooleanField(default=False)
@@ -37,21 +38,23 @@ class Vehicle(models.Model):
 
 
     def approve_vehicle(self):
-        self.is_approved = True
+        self.is_approved = not self.is_approved
         self.save()
 
+    def delete_vehicle(self):
+        self.delete()
 
-    def freez_vehicle(self):
-        self.is_freezed = True
+    def freeze_vehicle(self):
+        self.is_freezed = not self.is_freezed
         self.save()
 
 
     def hire_vehicle(self):
-        self.is_hired = True
+        self.is_hired
         self.save()
 
 
     def __str__(self):
-        return self.reg_no
+        return  self.model_name + '  ' + self.reg_no
         
         

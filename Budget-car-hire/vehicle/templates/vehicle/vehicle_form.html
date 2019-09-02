@@ -9,14 +9,14 @@
             {% csrf_token %}
                 {{ form|crispy }}
         </fieldset>
-        <button class="btn btn-success btn-block" type="submit">Submit</button>
-    </form>
+        <button class="btn btn-outline-success btn-block" type="submit">Submit</button>
 
         {% if vehicle.pk %}
-            <div class="card-footer">
-                <a class="btn btn-outline-primary" href="{% url 'vehicle:vehicle_detail' object.pk %}">Cancel</a>
-            </div>
+            <!-- <div class="card-footer"> -->
+                <a class="btn btn-outline-primary btn-block" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
+            <!-- </div> -->
         {% endif%}
+    </form>
 </div>
 
 {% endblock %}

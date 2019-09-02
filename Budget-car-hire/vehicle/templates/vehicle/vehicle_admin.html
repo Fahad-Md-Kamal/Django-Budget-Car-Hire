@@ -1,1 +1,83 @@
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid eligendi cum corrupti ullam non dolorum inventore maiores consequuntur sint ratione?
+{% extends 'vehicle/vehicle_base.html' %}
+
+{% block vehicle_content%}
+
+
+<div class="col-10 my-2 col-sm-12">
+    <div class="h3 text-light">Cars Admin's View</div>
+    {% if cars_list %}
+        {% for car in cars_list %}
+        <div class="card my-3 text-decoration-none text-dark">
+            <div class="d-flex">
+                <div class="p-2">
+                    <a class="text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+                        <img class="rounded" src="https://via.placeholder.com/150" alt="">
+                    </a>
+                </div>
+        
+                <div class="container p-3">
+                        <a class="text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+                            <div class="row font-weight-bolder">
+                                <p class="col-4 offset-1">Model:</p>
+                                <p class="col-4 text-uppercase">{{car.model_name}}</p>
+                            </div>
+                        </a>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Model Year:</p>
+                            <p class="col-4"> {{car.model_year}}</p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Registration No:</p>
+                            <p class="col-4"> {{car.reg_no}}</p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Owner Name:</p>
+                            <p class="col-4"> {{car.owner.username}}</p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Vehicle Type:</p>
+                            <p class="col-4"> {{car.get_vehicle_type_display}}</p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Rent/month:</p>
+                            <p class="col-4"> {{car.rent_per_month}} </p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Joined On:</p>
+                            <p class="col-4"> {{car.added_on|date}} </p>
+                        </div>
+                </div>
+                
+            </div>
+            
+            <div class="btn-group mb-2">
+                {% if not car.is_approved %}
+                    <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}"><i class="fas fa-clipboard-check"></i> Approve </a>
+                    <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="fas fa-ban"></i> Reject </a>
+                {% endif%}
+
+                {% if not car.is_freezed %}
+                    <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}"><i class="fas fa-power-off"></i> Freeze </a>
+                {% else %}
+                    <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}"> <i class="fas fa-power-off"></i> Free </a>
+                {% endif%}
+                
+                {% if user.is_superuser%}
+                        <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
+                {% endif%}
+            </div>
+        </div>
+    {% endfor %}
+
+{% else %}
+
+    <p class="display-1 text-light">
+        Sorry!! There is nothing to show at this moment.
+    </p>
+
+{% endif %}
+
+</div>
+
+
+{% endblock  %}

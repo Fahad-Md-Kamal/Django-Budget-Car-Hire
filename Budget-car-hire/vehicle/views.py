@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from . import models, forms
 
@@ -40,11 +41,28 @@ class VehicleUpdateView(generic.UpdateView):
     form_class = forms.vehicle_reg_form
     
     def get_object(self):
-        # _id = self.kwargs.get("pk")
-        return get_object_or_404(models.Vehicle, id = self.request.id)
+        _id = self.kwargs.get("pk")
+        return get_object_or_404(models.Vehicle, id = _id)
 
 
 
 class VehicleDeleteView(generic.DeleteView):
     model = models.Vehicle
     success_url = reverse_lazy('vehicle:vehicle_list')
+
+
+class AdminVehicleView(generic.ListView):
+    model = models.Vehicle
+    template_name = 'vehicle/vehicle_admin.html'
+    context_object_name = 'cars_list'
+
+def approve_vehicle(self, pk):
+    vehicle = get_object_or_404(models.Vehicle, pk =pk)
+    vehicle.approve_vehicle()
+    return redirect('vehicle:admin_vehicle')
+
+
+def freeze_vehicle(self, pk):
+    vehicle = get_object_or_404(models.Vehicle, pk =pk)
+    vehicle.freeze_vehicle()
+    return redirect('vehicle:admin_vehicle')
