@@ -5,6 +5,10 @@ from . import models
 
 
 
+class DateInputForm(forms.DateTimeInput):
+    input_type = 'date'
+
+
 class vehicle_reg_form(forms.ModelForm):
 
     model_name = forms.CharField(
@@ -38,5 +42,6 @@ class vehicle_reg_form(forms.ModelForm):
                     {'class':'form-control', 'placeholder':'Reg No: VMX 19654'}),
             'model_name': forms.TextInput (
                     attrs=
-                    {'class':'form-control', 'placeholder': 'Model Name: e.g Ford Mustung'})
+                    {'class':'form-control', 'placeholder': 'Model Name: e.g Ford Mustung'}),
+            'model_year': DateInputForm()
         }

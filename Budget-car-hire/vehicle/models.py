@@ -21,7 +21,7 @@ class Vehicle(models.Model):
     model_year = models.DateField(blank=True, null=True)
     reg_no = models.CharField(max_length=20, unique=True)
     vehicle_type = models.IntegerField(choices=VEHICLE_CATEGORIES, default=SM)
-    added_on = models.DateField(auto_now=True)
+    added_on = models.DateField(auto_now_add=True)
     rent_per_month = models.PositiveIntegerField(default = 2000)
     capacity = models.PositiveIntegerField(default=2)
     is_freezed = models.BooleanField(default=False)
