@@ -1,0 +1,31 @@
+{% extends 'vehicle/vehicle_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block vehicle_content%}
+
+<div class="col-sm-12 col-md-8 offset-md-2 ">
+        <div class="card my-3 text-decoration-none text-dark">
+
+            {% include 'fleets/_fleet.html' %}
+            
+            <div class="btn-group mb-2">
+                {% if not car.is_approved %}
+                    <a class="btn btn-success" href=""><i class="fas fa-clipboard-check"></i> Approve </a>
+                    <a class="btn btn-danger" href=""> <i class="fas fa-ban"></i> Reject </a>
+                {% else %}
+                    <a class="btn btn-danger" href=""><i class="fas fa-power-off"></i> Dismiss </a>
+                {% endif%}
+                {% if user.is_superuser%}
+                        <a class="btn btn-danger" href=""> <i class="far fa-trash-alt"></i> Delete </a>
+                {% endif%}
+            </div>
+        </div>
+
+    <p class="display-1 text-light">
+        Sorry!! There is nothing to show at this moment.
+    </p>
+
+</div>
+
+{% endblock  %}
+

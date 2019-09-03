@@ -19,9 +19,12 @@
       <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
     </li>
     {% endif %}
-      <li class="nav-item">
-        <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:reg_vehicle' %}">Register Car</a>
-      </li>
+    <li class="nav-item">
+      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:reg_vehicle' %}">Register Car</a>
+    </li>
+    <li class="nav-item">
+      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'fleets:show_fleets' %}">Fleet</a>
+    </li>
   </ul>
     <form class="form-inline my-2 my-lg-0 ml-auto">
       <input class="form-control" type="search" placeholder="Search" aria-label="Search">
