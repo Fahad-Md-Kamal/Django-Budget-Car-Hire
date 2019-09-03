@@ -5,15 +5,15 @@
 
 {% block content %}
 
-<div class="container">
-    <form method="post">
+<div class="jumbotron col-sm-10 col-md-4 offset-sm-1 offset-md-4 mt-5">
+        <form method="post">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Registr Now</legend>
+            <legend class="border-bottom mb-4">Join Now</legend>
             {{ form|crispy }}
         </fieldset>
         <div class="form-group">
-            <button type="submit" class="btn btn-outline-info">REGISTER</button>
+            <button type="submit" class="btn btn-outline-info btn-block">SUBMIT</button>
         </div>
     </form>
     <div class="border-top pt-3">

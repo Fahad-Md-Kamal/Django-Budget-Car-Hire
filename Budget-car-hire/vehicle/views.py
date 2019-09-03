@@ -13,8 +13,9 @@ class Vehicles_template_view(generic.TemplateView):
 class VehicleListView(generic.ListView):
     model = models.Vehicle
     template_name = 'vehicle/vehicle_list.html'
-    queryset = models.Vehicle.objects.all()
+    queryset = models.Vehicle.objects.filter(is_freezed = False, is_approved = True, is_hired = False)
     context_object_name = 'CarsList'
+
 
 
 class VehicleDetaileView(generic.DetailView):
@@ -34,6 +35,11 @@ class VehicleRegisterView(generic.CreateView):
         form.instance.owner = self.request.user
         return super(VehicleRegisterView, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['state'] = 'Register'
+        return context
+
 
 
 class VehicleUpdateView(generic.UpdateView):
@@ -43,6 +49,11 @@ class VehicleUpdateView(generic.UpdateView):
     def get_object(self):
         _id = self.kwargs.get("pk")
         return get_object_or_404(models.Vehicle, id = _id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['state'] = 'Update'
+        return context
 
 
 

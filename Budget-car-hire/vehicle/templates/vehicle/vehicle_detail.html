@@ -6,8 +6,8 @@
 
 <!-- Jumbotron -->
 <div class="jumbotron col-10 offset-1">
-        <p class="h3">Model model_year Details</p>
-        <table class="table table-striped table-dark">
+        <p class="h3">Details of - {{car.model_name}} {{car.model_year|date:"Y"}}</p>
+        <table class="table table-striped">
                 <tbody>
                   <tr>
                     <td>Owner:</td>
@@ -19,7 +19,7 @@
                   </tr>
                   <tr>
                     <td>Model Year: </td>
-                    <td>{{car.model_year}}</td>
+                    <td>{{car.model_year|date:"Y"}}</td>
                   </tr>
                   <tr>
                     <td>Registration No: </td>
@@ -42,16 +42,27 @@
                     <td>{{car.rent_per_month}}</td>
                   </tr>
                   <tr>
-                    <td>Registared</td>
+                    <td>Registared Since</td>
                     <td>{{ car.added_on|date:"d M Y" }}</td>
                   </tr>
                 </tbody>
               </table>
               <div class="btn-group d-flex justify-content-end">
+                {%if not user.is_staff %}
                   <a class="btn btn-lg btn-success" href="#">Hire</a>
+                {% endif %}
+
+                {% if user.is_staff %}
+                  <a class="btn btn-lg btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Freeze</a>
+                {%endif%}
+                
+                {% if car.owner == user or user.is_staff %}
                   <a class="btn btn-lg btn-primary" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit Info</a>
-                  <a class="btn btn-lg btn-warning" href="#">Freeze</a>
-                  <a class="btn btn-lg btn-danger" href="#">Delete</a>
+                  {% endif %}
+
+                {% if user.is_superuser %}
+                  <a class="btn btn-lg btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete</a>
+                {% endif %}
               </div>
       </div>
       <!-- Jumbotron -->

@@ -14,9 +14,11 @@
     <li class="nav-item">
       <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:vehicle_list' %}">Cars</a>
     </li>
+    {% if user.is_superuser or user.is_staff %}
     <li class="nav-item">
       <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
     </li>
+    {% endif %}
       <li class="nav-item">
         <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:reg_vehicle' %}">Register Car</a>
       </li>

@@ -45,3 +45,4 @@ class vehicle_reg_form(forms.ModelForm):
                     {'class':'form-control', 'placeholder': 'Model Name: e.g Ford Mustung'}),
             'model_year': DateInputForm()
         }
+    

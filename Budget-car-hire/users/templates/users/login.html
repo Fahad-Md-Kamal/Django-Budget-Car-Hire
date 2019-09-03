@@ -4,15 +4,15 @@
 {% block title %} User Login {% endblock %}
 
 {% block users_content %}
-<div class="jumbotron col-4 offset-4 mt-5">
-    <form method="post">
+<div class="jumbotron col-sm-10 col-md-4 offset-sm-1 offset-md-4 mt-5">
+    <form method="post" class="my-3">
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Log In</legend>
             {{ form|crispy }}
         </fieldset>
         <div class="lead">
-            <button type="submit"  class="btn btn-primary btn-lg">Login</button>
+            <button type="submit"  class="btn btn-success btn-lg btn-block">Login</button>
         </div>
     </form>
     <small class="text-muted">

@@ -3,6 +3,11 @@
 {% block vehicle_content%}
 
 
+{% if not user.is_staff %}
+    Sorry !! Only admins and moderators can visit this page
+{% endif %}
+
+
 <div class="col-10 my-2 col-sm-12">
     <div class="h3 text-light">Cars Admin's View</div>
     {% if cars_list %}
