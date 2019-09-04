@@ -12,7 +12,7 @@ class FleetRegisterForm(forms.ModelForm):
     
     class Meta:
         model = models.Fleet
-        fields = ('fleet_start','fleet_duration', 'fleet_vehicles')
+        fields = ('fleet_start','fleet_duration')
 
         widgets = {
             'fleet_start': DateInputForm(),

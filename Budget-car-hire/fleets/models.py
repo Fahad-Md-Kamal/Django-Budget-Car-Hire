@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse_lazy
 
 from vehicle.models import Vehicle
 
@@ -12,6 +13,7 @@ class Fleet(models.Model):
     fleet_duration = models.DateTimeField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True)
 
 
     def __str__(self):
@@ -26,8 +28,8 @@ class Fleet(models.Model):
         self.is_paid = not is_paid
         self.save()
 
-
+    def get_absolute_url(self):
+        # return reverse_lazy('fleets:fleet_detail', kwargs={'slug': self.slug})
+        return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.pk})
 
     ## Check on save if the fleet duration is entered for past time?
-    
-    

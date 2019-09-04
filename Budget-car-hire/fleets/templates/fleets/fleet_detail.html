@@ -1,6 +1,12 @@
-{% extends 'vehicle/vehicle_base.html' %}
+{% extends 'fleets/fleets_base.html' %}
 {% load crispy_forms_tags %}
 
-{% block vehicle_content%}
+{% block title %} Fleets Detail {% endblock %}
+{% block fleet_content%}
+
+    {% if fleet %}
+        {{fleet.id}}
+    {% endif %}
+
 {% endblock  %}
 

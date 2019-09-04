@@ -15,6 +15,9 @@
               </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'fleets:fleet_list' %}"> Fleet </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'blogs:blog_list' %}"> Blogs </a>
             </li>
             {% endif %}
