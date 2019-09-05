@@ -13,7 +13,7 @@ class Fleet(models.Model):
     fleet_duration = models.DateTimeField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
-    slug = models.SlugField(unique=True)
+    # slug = models.SlugField(unique=True)
 
 
     def __str__(self):
@@ -29,7 +29,6 @@ class Fleet(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        # return reverse_lazy('fleets:fleet_detail', kwargs={'slug': self.slug})
         return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.pk})
 
     ## Check on save if the fleet duration is entered for past time?

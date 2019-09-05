@@ -3,11 +3,11 @@
 {% block content %}
 
 <!--Navbar-->
-<nav class="navbar navbar-dark">
+<nav class="navbar navbar-dark bg-primary">
   <ul class="nav">
     {% if user.is_staff %}
     <li class="nav-item">
-      <a class="btn text-light mr-2 text-decoration-none" href="">Admin View</a>
+      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'fleets:admin_fleets' %}">Admin View</a>
     </li>
     {% endif %}
     <li class="nav-item">

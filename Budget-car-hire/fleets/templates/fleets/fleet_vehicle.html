@@ -1,9 +1,3 @@
-{% extends 'fleets/fleets_base.html' %}
-{% load crispy_forms_tags %}
-
-{% block title %} Fleet Detail {% endblock %}
-{% block fleet_content%}
-
 
 <div class="col-sm-12 col-md-8 offset-md-2 py-2">
     {% if fleets_list %}
@@ -16,13 +10,10 @@
         {% endfor %}
     {% else %}
 
-        <p class="card h3 p-5 text-center">
-            There is not fleet record to show
+        <p class="h3 p-5 text-center card">
+            Sorry....!!!! <br> You haven't registared any fleet yet.
         </p>
-    {% endif %}
-</div>
+            <a class="btn btn-success" href="{% url 'fleets:fleet_register' %}">Register Fleet Now</a>
+            {% endif %}
 
-        
-
-{% endblock  %}
 

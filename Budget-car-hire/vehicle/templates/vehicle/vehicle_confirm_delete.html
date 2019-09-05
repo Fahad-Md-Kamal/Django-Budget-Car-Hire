@@ -12,7 +12,7 @@
         <hr class="my-4 bg-light" >
         <form method="post">
             {% csrf_token %}
-                <button class="btn btn-lg btn-success" type="submit">Confirm</button>
+                <button class="btn btn-lg btn-success" type="submit"><i class="fas fa-trash"></i>Confirm</button>
         <a class="btn btn-lg btn-success" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
     </form>
     </div>

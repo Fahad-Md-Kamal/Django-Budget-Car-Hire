@@ -7,16 +7,15 @@
 <div class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 my-5">
         <form method="post">
             <fieldset>
-                <legend class="border-bottom mb-4 h1 text-center">Vehicle {{state}} Form</legend>
+                <legend class="border-bottom mb-4 h1 text-center">Fleet {{state}} Form</legend>
                 {% csrf_token %}
                     {{ form|crispy }}
             </fieldset>
+
             <button class="btn btn-outline-success btn-block" type="submit">{{state}}</button>
     
             {% if vehicle.pk %}
-                <!-- <div class="card-footer"> -->
-                    <a class="btn btn-outline-primary btn-block" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
-                <!-- </div> -->
+                <a class="btn btn-outline-primary btn-block" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
             {% endif%}
         </form>
     </div>

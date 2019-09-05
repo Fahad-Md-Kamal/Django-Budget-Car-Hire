@@ -5,29 +5,23 @@
 
 {% block fleet_content%}
 
-<div class="col-sm-12 col-md-8 offset-md-2 ">
+
+<div class="col-sm-12 col-md-8 offset-md-2 py-2">
+{% if fleets_list %}
+    {% for fleet in fleets_list %}
         <div class="card my-3 text-decoration-none text-dark">
-
+            <a class="text-dark text-decoration-none" href="{% url 'fleets:fleet_detail' fleet.pk %}">
             {% include 'fleets/_fleet_list.html' %}
-            
-            <div class="btn-group mb-2">
-                {% if not car.is_approved %}
-                    <a class="btn btn-success" href=""><i class="fas fa-clipboard-check"></i> Approve </a>
-                    <a class="btn btn-danger" href=""> <i class="fas fa-ban"></i> Reject </a>
-                {% else %}
-                    <a class="btn btn-danger" href=""><i class="fas fa-power-off"></i> Dismiss </a>
-                {% endif%}
-                {% if user.is_superuser%}
-                        <a class="btn btn-danger" href=""> <i class="far fa-trash-alt"></i> Delete </a>
-                {% endif%}
-            </div>
+        </a>
         </div>
+    {% endfor %}
+{% else %}
 
-    <p class="display-1 text-light">
-        Sorry!! There is nothing to show at this moment.
+    <p class="h3 p-5 text-center card">
+        Sorry....!!!! <br> You haven't registared any fleet yet.
     </p>
-
-</div>
+      <a class="btn btn-success" href="{% url 'fleets:fleet_register' %}">Register Fleet Now</a>
+      {% endif %}
 
 
 

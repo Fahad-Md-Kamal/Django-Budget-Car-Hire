@@ -2,40 +2,23 @@
 
 {% block vehicle_content%}
 
-<div class="col-md-8 my-2 col-sm-12">
-    <div class="h3 text-light">All Available Cars</div>
-        {% for car in CarsList %}
-        <a class="card my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
-            <div class="d-flex">
-                <div class="p-2">
-                    <img class="rounded" src="https://via.placeholder.com/150" alt="">
-                </div>
-                <div class="container p-3">
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Model:</p>
-                            <p class="col-4 text-uppercase"> {{ car.model_name }} </p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Model Year:</p>
-                            <p class="col-4"> {{ car.model_year }} </p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Reg No:</p>
-                            <p class="col-4"> {{ car.reg_no }} </p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Category:</p>
-                            <p class="col-4">{{car.get_vehicle_type_display}}</p>
-                        </div>
-                </div>
-        </div>
-        </a>
-    {% endfor %}
+<div class="col-md-8 my-2 col-sm-12 pt-5">
+        
+{% if CarsList %}
+    {% for car in CarsList %}
+        <div class="h3">All Available Cars</div>
+        {% include './_list_vehicle.html' %}
+        {% endfor %}
+
+
+    {% else %}
+        <p class="h2 text-info">Sorry !!! <br> Currently we have no cars left for hire</p>
+    {% endif %}
 </div>
 
 <div class="col-md-4 d-sm-none d-md-block my-2">
-    <div class="h3 text-light">All Categories</div>
-    <p class="h4 text-light mt-5">Vehicle Type</p>
+    <div class="h3">All Categories</div>
+    <p class="h4 mt-5">Vehicle Type</p>
     <ul class="list-group">
         <li class="list-group-item"> <a href="#"> Small Car </a></li>
         <li class="list-group-item"> <a href="#"> Medium Car </a></li>

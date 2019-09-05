@@ -2,28 +2,47 @@
         
         <div class="container p-3">
                 <div class="row font-weight-bolder d-flex justify-content-between">
-                    <p class="col-4 offset-1">Fleet No:</p>
-                    <p class="col-4"> username </p>
-                </div>
+                        <p class="col-4 offset-1">Fleet Owner:</p>
+                        <p class="col-4"> {{fleet.owner}} </p>
+                    </div>
+                    <div class="row font-weight-bolder d-flex justify-content-between">
+                            <p class="col-4 offset-1">Fleet No:</p>
+                            <p class="col-4"> {{fleet.id}} </p>
+                        </div>
+                    <div class="row font-weight-bolder d-flex justify-content-between">
+                        <p class="col-4 offset-1">Start Date:</p>
+                        <p class="col-4"> {{fleet.fleet_start|date:'d M Y'}} </p>
+                    </div>
+                    <div class="row font-weight-bolder d-flex justify-content-between">
+                        <p class="col-4 offset-1">End Date:</p>
+                        <p class="col-4"> {{fleet.fleet_duration|date:'d M Y'}} </p>
+                    </div>
+                    <div class="row font-weight-bolder d-flex justify-content-between">
+                        <p class="col-4 offset-1">Total vehicles:</p>
+                        <p class="col-4"> {{fleet.fleet_vehicles.count}} </p>
+                    </div>
                 <div class="row font-weight-bolder d-flex justify-content-between">
-                    <p class="col-4 offset-1">Start Date:</p>
-                    <p class="col-4"> 03-Sep-2019 </p>
-                </div>
-                <div class="row font-weight-bolder d-flex justify-content-between">
-                    <p class="col-4 offset-1">End Date:</p>
-                    <p class="col-4"> 03-Sep-2019 </p>
-                </div>
-                <div class="row font-weight-bolder d-flex justify-content-between">
-                    <p class="col-4 offset-1">Total vehicles:</p>
-                    <p class="col-4"> 20 </p>
-                </div>
-                <div class="row font-weight-bolder d-flex justify-content-between">
-                    <p class="col-4 offset-1">Total amount:</p>
+                    <p class="col-4 offset-1">Fleet Rent/ month:</p>
                     <p class="col-4">$ 120000/- </p>
                 </div>
+
                 <div class="row font-weight-bolder d-flex justify-content-between">
+                        <p class="col-4 offset-1">Total vehicles:</p>
+                        <p class="col-4"> {{fleet.fleet_vehicles.count}} </p>
+                    </div>
+                {% for car in fleet.fleet_vehicles.all %}
+                    <div class="card mt-3 col-10 offset-1"> <a class="btn text-left" class="text-dark text-decoration-none" href="{% url 'vehicle:detail_vehicle' car.pk %}">{{car.model_name}} - {{car.model_year|date:"Y"}} - {{car.get_vehicle_type_display}}</a></div>
+                {% endfor %}
+                <div class="row font-weight-bolder d-flex justify-content-between mt-3">
                     <p class="col-4 offset-1">Payment State:</p>
-                    <p class="col-4"> paid </p>
+                    <p class="col-4"> 
+                        {% if fleet.is_paid %} 
+                            Paid 
+                        {%else%}
+                        <a class="btn btn-success" href="#">
+                            Pay {% endif %}
+                        </a>
+                    </p>
                 </div>
         </div>
     </div>

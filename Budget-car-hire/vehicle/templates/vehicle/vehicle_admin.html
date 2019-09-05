@@ -9,7 +9,7 @@
 
 
 <div class="col-10 my-2 col-sm-12">
-    <div class="h3 text-light">Cars Admin's View</div>
+    <div class="h3 my-5">Cars Admin's View</div>
     {% if cars_list %}
         {% for car in cars_list %}
         <div class="card my-3 text-decoration-none text-dark">
@@ -50,6 +50,10 @@
                         <div class="row font-weight-bolder">
                             <p class="col-4 offset-1">Joined On:</p>
                             <p class="col-4"> {{car.added_on|date}} </p>
+                        </div>
+                        <div class="row font-weight-bolder">
+                            <p class="col-4 offset-1">Hiring Stated</p>
+                            <p class="col-4"> {%if car.is_hired == 1%} Hired {% else %} Available {% endif%} </p>
                         </div>
                 </div>
                 

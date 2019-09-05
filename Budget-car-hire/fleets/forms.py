@@ -9,7 +9,6 @@ class DateInputForm(forms.DateTimeInput):
 
 
 class FleetRegisterForm(forms.ModelForm):
-    
     class Meta:
         model = models.Fleet
         fields = ('fleet_start','fleet_duration')

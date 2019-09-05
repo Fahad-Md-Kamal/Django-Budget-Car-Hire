@@ -1,0 +1,25 @@
+<a class="card my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+        <div class="d-flex">
+            <div class="p-2">
+                <img class="rounded" src="https://via.placeholder.com/150" alt="">
+            </div>
+            <div class="container p-3">
+                    <div class="row font-weight-bolder">
+                        <p class="col-4 offset-1">Model:</p>
+                        <p class="col-4 text-uppercase"> {{ car.model_name }} </p>
+                    </div>
+                    <div class="row font-weight-bolder">
+                        <p class="col-4 offset-1">Model Year:</p>
+                        <p class="col-4"> {{ car.model_year }} </p>
+                    </div>
+                    <div class="row font-weight-bolder">
+                        <p class="col-4 offset-1">Reg No:</p>
+                        <p class="col-4"> {{ car.reg_no }} </p>
+                    </div>
+                    <div class="row font-weight-bolder">
+                        <p class="col-4 offset-1">Category:</p>
+                        <p class="col-4">{{car.get_vehicle_type_display}}</p>
+                    </div>
+            </div>
+    </div>
+    </a>

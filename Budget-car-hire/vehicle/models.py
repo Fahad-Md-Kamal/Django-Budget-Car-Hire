@@ -48,9 +48,9 @@ class Vehicle(models.Model):
         self.is_freezed = not self.is_freezed
         self.save()
 
-
+    @staticmethod
     def hire_vehicle(self):
-        self.is_hired
+        self.is_hired = not self.is_hired
         self.save()
 
 

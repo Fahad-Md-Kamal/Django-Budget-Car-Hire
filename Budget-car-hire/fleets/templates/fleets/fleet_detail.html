@@ -4,9 +4,25 @@
 {% block title %} Fleets Detail {% endblock %}
 {% block fleet_content%}
 
-    {% if fleet %}
-        {{fleet.id}}
-    {% endif %}
+    <div class="col-sm-12 col-md-8 offset-md-2 ">
+        <div class="card my-3 text-decoration-none text-dark">
+
+    {% include "./_fleet_detail.html" %}
+
+
+        <div class="btn-group mb-2">
+            {% if user.is_staff and not car.is_approved %}
+                <a class="btn btn-success" href=""><i class="fas fa-clipboard-check"></i> Approve </a>
+                <a class="btn btn-danger" href=""> <i class="fas fa-ban"></i> Reject </a>
+                {% else %}
+                <a class="btn btn-danger" href="{% url 'fleets:fleet_delete' fleet.pk %}"><i class="fas fa-power-off"></i> Dismiss </a>
+            {% endif%}
+            {% if user.is_superuser%}
+                    <a class="btn btn-danger" href="{% url 'fleets:fleet_delete' fleet.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
+            {% endif%}
+        </div>
+    </div>
+</div>
 
 {% endblock  %}
 

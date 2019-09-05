@@ -6,47 +6,7 @@
 
 <!-- Jumbotron -->
 <div class="jumbotron col-10 offset-1">
-        <p class="h3">Details of - {{car.model_name}} {{car.model_year|date:"Y"}}</p>
-        <table class="table table-striped">
-                <tbody>
-                  <tr>
-                    <td>Owner:</td>
-                    <td>{{car.owner.username}}</td>
-                  </tr>
-                  <tr>
-                    <td>Model Name: </td>
-                    <td>{{car.model_name}}</td>
-                  </tr>
-                  <tr>
-                    <td>Model Year: </td>
-                    <td>{{car.model_year|date:"Y"}}</td>
-                  </tr>
-                  <tr>
-                    <td>Registration No: </td>
-                    <td>{{car.added_on}}</td>
-                  </tr>
-                  <tr>
-                    <td>Category</td>
-                    <td>{{car.get_vehicle_type_display}}</td>
-                  </tr>
-                  <tr>
-                    <td>Status</td>
-                    <td>{{car.is_hired}}</td>
-                  </tr>
-                  <tr>
-                    <td>Capacity</td>
-                    <td>3 Person</td>
-                  </tr>
-                  <tr>
-                    <td>Rent/month</td>
-                    <td>{{car.rent_per_month}}</td>
-                  </tr>
-                  <tr>
-                    <td>Registared Since</td>
-                    <td>{{ car.added_on|date:"d M Y" }}</td>
-                  </tr>
-                </tbody>
-              </table>
+        {% include './_detail_vehicle.html' %}
               <div class="btn-group d-flex justify-content-end">
                 {%if not user.is_staff %}
                   <a class="btn btn-lg btn-success" href="#">Hire</a>

@@ -22,7 +22,7 @@
                 {% if user.id == article.author.id or user.is_staff %}
                 <div>
                     <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
-                    <a class="btn btn-outline-warning" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
+                    <a class="btn btn-outline-danger" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
                 </div>
                 {% endif %}
             {% endif %}
@@ -48,7 +48,7 @@
                   <div class="card-footer">
                         <!-- Comment Option will be delveloped letter -->
                           <!-- <a class="btn btn-secondary" href="{ url 'blogs:edit_blog_comment' cmt.pk }">Edit</a> -->
-                          <a class="btn btn-warning" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
+                          <a class="btn btn-danger" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete Comment</a>
                   </div>
                   {% endif %}
                 </div>
@@ -61,7 +61,7 @@
         <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+            <button type="submit" class="btn btn-success mr-2">Submit</button>
         </form>
     </div>
 </div>

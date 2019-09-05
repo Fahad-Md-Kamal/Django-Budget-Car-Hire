@@ -5,13 +5,13 @@
 
 {% for post in object_list %}
 <div class="col-md-8 col-sm-12 offset-md-2">
-    <article class="text-secondary bg-light mb-3">
+    <article class="bg-light mb-3">
             <div class="card-header d-flex justify-content-start">
                 <img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" alt="" srcset="">
                 <div class="mt-3">
                     <a class="mr-2" href="#">@{{post.author.username}}</a>
                     <small class="text-muted">{{ post.posted_date }}</small><br>
-                    <a class="card-title text-secondary text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a>
+                    <a class="card-title text-dark text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a>
                 </div>
             </div>
                 {% if post.comments.count > 0 %}
