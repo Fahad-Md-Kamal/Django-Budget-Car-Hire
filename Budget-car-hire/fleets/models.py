@@ -13,15 +13,21 @@ class Fleet(models.Model):
     fleet_duration = models.DateTimeField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
+    is_freezed = models.BooleanField(default=False)
     # slug = models.SlugField(unique=True)
 
 
     def __str__(self):
         return f"{self.owner.username }'s Fleet no {self.id}"
 
-
+    @staticmethod
     def approve(self):
-        self.is_approved = not is_approved
+        self.is_approved = not self.is_approved
+        self.save()
+
+    @staticmethod
+    def freezed(self):
+        self.is_freezed = not self.is_freezed
         self.save()
 
     def paid(self):
@@ -30,5 +36,9 @@ class Fleet(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.pk})
+
+
+    class Meta:
+        ordering = ['is_approved',]
 
     ## Check on save if the fleet duration is entered for past time?

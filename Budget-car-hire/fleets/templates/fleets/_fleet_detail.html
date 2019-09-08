@@ -17,13 +17,9 @@
                         <p class="col-4 offset-1">End Date:</p>
                         <p class="col-4"> {{fleet.fleet_duration|date:'d M Y'}} </p>
                     </div>
-                    <div class="row font-weight-bolder d-flex justify-content-between">
-                        <p class="col-4 offset-1">Total vehicles:</p>
-                        <p class="col-4"> {{fleet.fleet_vehicles.count}} </p>
-                    </div>
                 <div class="row font-weight-bolder d-flex justify-content-between">
                     <p class="col-4 offset-1">Fleet Rent/ month:</p>
-                    <p class="col-4">$ 120000/- </p>
+                    <p class="col-4">$ {{total}} </p>
                 </div>
 
                 <div class="row font-weight-bolder d-flex justify-content-between">
@@ -31,7 +27,18 @@
                         <p class="col-4"> {{fleet.fleet_vehicles.count}} </p>
                     </div>
                 {% for car in fleet.fleet_vehicles.all %}
-                    <div class="card mt-3 col-10 offset-1"> <a class="btn text-left" class="text-dark text-decoration-none" href="{% url 'vehicle:detail_vehicle' car.pk %}">{{car.model_name}} - {{car.model_year|date:"Y"}} - {{car.get_vehicle_type_display}}</a></div>
+                    <div class="card mt-3 col-10 offset-1 bg-dark">
+                         <a class="text-decoration-none" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+                                {{car.model_name}} - {{car.model_year|date:"Y"}} - 
+                                {{car.get_vehicle_type_display}}
+                        </a> 
+                        <!-- Remove vehicle from the Fleet -->
+                        <!-- { if not fleet.is_approved %} -->
+                         <a class=" text-right text-decoration-none" href="{% url 'fleets:remove_fleet_car' fleetpk=fleet.pk carpk=car.pk %}">
+                            <i class="fas fa-times-circle"></i>Remove
+                        </a>
+                        <!-- { endif %} -->
+                    </div>
                 {% endfor %}
                 <div class="row font-weight-bolder d-flex justify-content-between mt-3">
                     <p class="col-4 offset-1">Payment State:</p>

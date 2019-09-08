@@ -1,11 +1,7 @@
-<p class="h3">Details of - {{car.model_name}} {{car.model_year|date:"Y"}}</p>
+<p class="h3">{{car.model_name}} - {{car.model_year|date:"Y"}}</p>
         <table class="table table-striped">
                 <tbody>
-                  <tr>
-                    <td>Owner:</td>
-                    <td>{{car.owner.username}}</td>
-                  </tr>
-                  <tr>
+                  <tr >
                     <td>Model Name: </td>
                     <td>{{car.model_name}}</td>
                   </tr>
@@ -22,20 +18,12 @@
                     <td>{{car.get_vehicle_type_display}}</td>
                   </tr>
                   <tr>
-                    <td>Status</td>
-                    <td>{{car.is_hired}}</td>
-                  </tr>
-                  <tr>
                     <td>Capacity</td>
                     <td>3 Person</td>
                   </tr>
-                  <tr>
+                  <tr >
                     <td>Rent/month</td>
                     <td>{{car.rent_per_month}}</td>
-                  </tr>
-                  <tr>
-                    <td>Registared Since</td>
-                    <td>{{ car.added_on|date:"d M Y" }}</td>
-                  </tr>
+                  </td>
                 </tbody>
               </table>

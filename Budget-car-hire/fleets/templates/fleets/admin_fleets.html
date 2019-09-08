@@ -12,6 +12,21 @@
                 <a class="text-dark text-decoration-none" href="{% url 'fleets:fleet_detail' fleet.pk %}">
                 {% include 'fleets/_fleet_list.html' %}
             </a>
+            
+        <div class="btn-group mb-2">
+            {% if user.is_staff and not fleet.is_approved %}
+                <a class="btn btn-success" href="{% url 'fleets:fleet_approve' fleet.pk %}"><i class="fas fa-clipboard-check"></i> Approve </a>
+                <a class="btn btn-danger" href="{% url 'fleets:fleet_delete' fleet.pk %}"> <i class="fas fa-ban"></i> Reject </a>
+            {% elif not fleet.is_freezed %}
+                <a class="btn btn-dark" href="{% url 'fleets:fleet_freeze' fleet.pk %}"><i class="fas fa-ban"></i> Freeze </a>
+            {% else %}
+                <a class="btn btn-success" href="{% url 'fleets:fleet_freeze' fleet.pk %}"><i class="far fa-check-circle"></i> Free </a>
+            {% endif%}
+
+            {% if user.is_superuser and fleet.is_approved %}
+                    <a class="btn btn-danger" href="{% url 'fleets:fleet_delete' fleet.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
+            {% endif%}
+        </div>
             </div>
         {% endfor %}
     {% else %}

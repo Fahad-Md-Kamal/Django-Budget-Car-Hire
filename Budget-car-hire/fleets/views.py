@@ -18,7 +18,7 @@ class FleetListView(generic.ListView):
     context_object_name = 'fleets_list'
 
     def get_queryset(self):
-        return models.Fleet.objects.filter(owner = self.request.user)
+        return get_list_or_404(models.Fleet.objects.filter(owner = self.request.user))
 
 
 class FleetDetailView(generic.DetailView):
@@ -29,9 +29,19 @@ class FleetDetailView(generic.DetailView):
     def get_object(self):
         _id = self.kwargs.get("pk")
         return get_object_or_404(models.Fleet, id = _id)
-    
-    def get_queryset(self):
-        return get_list_or_404(models.Fleet.objects.filter(owner = self.request.user))
+
+    def get_context_data(self, **kwargs):
+        context = super(FleetDetailView, self).get_context_data(**kwargs)
+        context['vehicles'] = Vehicle.objects.filter(is_freezed = False, is_approved=True, is_hired = False)
+        
+        print(context['vehicles'])
+        
+        _id = self.kwargs.get("pk")
+        fleet = get_object_or_404(models.Fleet, id = _id)
+        context['total'] = 0
+        for car in fleet.fleet_vehicles.all():
+            context['total'] += car.rent_per_month
+        return context
 
 
 class FleetCreateView(generic.CreateView):
@@ -44,7 +54,6 @@ class FleetCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(FleetCreateView, self).get_context_data(**kwargs)
-        context['vehicles'] = Vehicle.objects.filter(is_freezed = True, is_approved=True, is_hired = False)
         context['state'] = 'Register'
         return context
 
@@ -68,11 +77,30 @@ class FleetDeleteView(generic.DeleteView):
     success_url = reverse_lazy('fleets:fleet_list')
 
 
+def fleet_approve(request, pk):
+    fleet = get_object_or_404(models.Fleet.objects.filter(pk = pk))
+    models.Fleet.approve(fleet)
+    return redirect('fleets:fleet_detail', pk = fleet.pk)
+
+
+def fleet_freeze(request, pk):
+    fleet = get_object_or_404(models.Fleet.objects.filter(pk = pk))
+    models.Fleet.freezed(fleet)
+    return redirect('fleets:admin_fleets')
+
 
 def add_fleet_car(request, carpk, fleetpk):
     car = get_object_or_404(Vehicle.objects.filter(pk = carpk))
     fleet = get_object_or_404(models.Fleet.objects.filter(pk = fleetpk))
     car.hire_vehicle(car)
+    if fleet.is_approved == True:
+        fleet.approve(fleet)
     fleet.fleet_vehicles.add(car)
+    return redirect('fleets:fleet_detail', pk = fleet.pk)
 
+def remove_fleet_car(request, carpk, fleetpk):
+    car = get_object_or_404(Vehicle.objects.filter(pk = carpk))
+    fleet = get_object_or_404(models.Fleet.objects.filter(pk = fleetpk))
+    car.hire_vehicle(car)
+    fleet.fleet_vehicles.remove(car)
     return redirect('fleets:fleet_detail', pk = fleet.pk)
