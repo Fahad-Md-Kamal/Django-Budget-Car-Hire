@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'vehicle.apps.VehicleConfig',
     'fleets.apps.FleetsConfig',
-    'multiselectfield'
+    'payment.apps.PaymentConfig',
 ]
 
 MIDDLEWARE = [
