@@ -34,9 +34,19 @@ class Fleet(models.Model):
         self.is_paid = not is_paid
         self.save()
 
+
+    @staticmethod
+    def get_fleet_total(self):
+        return sum([Vehicle.rent_per_month for Vehicle in self.fleet_vehicles.all()])
+
+
+    @staticmethod
+    def get_fleet_vehicle(self):
+        return self.fleet_vehicles.all()
+
+
     def get_absolute_url(self):
         return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.pk})
-
 
     class Meta:
         ordering = ['is_approved',]

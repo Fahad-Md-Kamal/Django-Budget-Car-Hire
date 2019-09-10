@@ -1,11 +1,22 @@
-
-{% block content %}
-
+{% extends './base_payment.html' %}
 
 
 
-    {% block payment_block %}
-        {{msg}}
-    {% endblock payment_block %}
+{% block payment_block %}
+{% load crispy_forms_tags %}
 
-{% endblock %}
+    <div class="jumbotron col-sm-10 col-md-8 offset-sm-1 offset-md-2 bg-dark">
+
+        <form method="post" class="text-light">{% csrf_token %}
+            <hr class="bg-light w-50">
+            <legend class="text-center">Fleet Payment</legend>
+            <hr class="bg-light w-50">
+
+            <label> Fleet Id: <span class="ml-3 h5"> {{fleetId}} </span></label><br>
+            {{ form|crispy }}
+            <label> Total Amount: <span class="ml-3 h5"> &#2547; {{total}} </span></label>
+            <button class="btn btn-block btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+
+{% endblock payment_block %}

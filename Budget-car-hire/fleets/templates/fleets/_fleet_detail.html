@@ -46,7 +46,7 @@
                         {% if fleet.is_paid %} 
                             Paid 
                         {%else%}
-                        <a class="btn btn-success" href="#">
+                        <a class="btn btn-success" href="{% url 'payment:make_payment' fleet.pk %}">
                             Pay {% endif %}
                         </a>
                     </p>

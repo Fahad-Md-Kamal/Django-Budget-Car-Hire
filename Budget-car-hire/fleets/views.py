@@ -26,21 +26,13 @@ class FleetDetailView(generic.DetailView):
     template_name = 'fleets/fleet_detail.html'
     context_object_name = 'fleet'
 
-    def get_object(self):
-        _id = self.kwargs.get("pk")
-        return get_object_or_404(models.Fleet, id = _id)
 
     def get_context_data(self, **kwargs):
         context = super(FleetDetailView, self).get_context_data(**kwargs)
-        # Returns only hireable vehicles 
         context['vehicles'] = Vehicle.objects.filter(is_freezed = False, is_approved=True, is_hired = False)
-        
-        ## Calculates all the vehicles monthly payable rent
         _id = self.kwargs.get("pk")
         fleet = get_object_or_404(models.Fleet, id = _id)
-        context['total'] = 0
-        for car in fleet.fleet_vehicles.all():
-            context['total'] += car.rent_per_month
+        context['total'] = models.Fleet.get_fleet_total(fleet)
         return context
 
 

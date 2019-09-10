@@ -5,5 +5,5 @@ app_name='payment'
 
 
 urlpatterns = [
-    path('', views.MakePayment.as_view(), name='pay' )
+    path('fleet/<int:pk>/', views.MakePayment.as_view(), name='make_payment' )
 ]
