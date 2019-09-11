@@ -13,7 +13,7 @@ class Vehicles_template_view(generic.TemplateView):
 class VehicleListView(generic.ListView):
     model = models.Vehicle
     template_name = 'vehicle/vehicle_list.html'
-    queryset = models.Vehicle.objects.filter(is_freezed = False, is_approved = True, is_hired = False)
+    queryset = models.Vehicle.objects.filter(is_freezed = False, is_approved = True)
     context_object_name = 'CarsList'
 
 

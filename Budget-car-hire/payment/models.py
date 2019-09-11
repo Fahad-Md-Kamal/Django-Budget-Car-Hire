@@ -25,7 +25,7 @@ class FleetPayment(models.Model):
     payment_medium = models.IntegerField(choices= PAYMENT_METHOD, default= CASH)
     paid_amount = models.PositiveIntegerField(default=0)
     paid_on = models.DateField(auto_now_add=True)
-    transection_id = models.CharField(max_length=50, blank=True, null=True)
+    transection_id = models.CharField(max_length=50, blank=True, null=True, unique=True)
     card_number = models.CharField(max_length=16, blank=True, null=True)
     account_name = models.CharField(max_length=50, blank=True, null=True, )
     is_verified = models.BooleanField(default= False)

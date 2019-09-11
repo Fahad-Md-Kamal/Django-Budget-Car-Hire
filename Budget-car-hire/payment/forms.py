@@ -13,7 +13,7 @@ class FleetPaymentForm(forms.ModelForm):
         model = models.FleetPayment
         fields = (
                 'payment_medium', 
-                # 'paid_amount',
+                'account_name',
                 'card_number',
                 'transection_id',
                 )
