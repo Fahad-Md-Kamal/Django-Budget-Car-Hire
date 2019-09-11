@@ -7,37 +7,28 @@ from fleets.models import Fleet
 class MakePayment(generic.CreateView):
     template_name = 'payment/payment_user.html'
     form_class = forms.FleetPaymentForm
-    
+
+
     def get_context_data(self, **kwargs):
         context = super(MakePayment, self).get_context_data(**kwargs)
-        
-        ## Calculates all the vehicles monthly payable rent
+
+        # Calculates all the vehicles monthly payable rent
         _id = self.kwargs.get("pk")
         context['fleetId'] = _id
         fleet = get_object_or_404(Fleet, id = _id)
-        context['total'] = 0
-        for car in fleet.fleet_vehicles.all():
-            context['total'] += car.rent_per_month
+        context['total'] = Fleet.get_fleet_total(fleet)
         return context
     
-    def post(self, request, *args, **kwargs ):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
+
+    def form_valid(self, form):
+        _id = self.kwargs.get("pk")
+        fleet = get_object_or_404(Fleet, id = _id)
+        form.instance.fleet = fleet
+        form.instance.paid_amount = Fleet.get_fleet_total(fleet)
+        fleet.paid(fleet)
+        return super(MakePayment, self).form_valid(form)
+
             
-
-    # def post(self, *args, **kwargs):
-    #     payment = super(MakePayment, self).save(commit=False) 
-    #     _id = self.kwargs.get("pk")
-    #     fleet = get_object_or_404(Fleet, id = _id)
-    #     total = 0
-    #     for car in fleet.fleet_vehicles.all():
-    #         total += car.rent_per_month
-    #     payment.fleet = fleet
-    #     payment.paid_amount = total
-    #     payment.save()
-
-
 
 
     

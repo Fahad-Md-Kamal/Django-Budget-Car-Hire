@@ -33,11 +33,11 @@
                                 {{car.get_vehicle_type_display}}
                         </a> 
                         <!-- Remove vehicle from the Fleet -->
-                        <!-- { if not fleet.is_approved %} -->
+                        {% if not fleet.is_paid %}
                          <a class=" text-right text-decoration-none" href="{% url 'fleets:remove_fleet_car' fleetpk=fleet.pk carpk=car.pk %}">
-                            <i class="fas fa-times-circle"></i>Remove
+                            <i class="fas fa-times-circle mr-2"></i>Remove
                         </a>
-                        <!-- { endif %} -->
+                        {% endif %}
                     </div>
                 {% endfor %}
                 <div class="row font-weight-bolder d-flex justify-content-between mt-3">

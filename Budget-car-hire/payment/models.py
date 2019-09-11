@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse_lazy
 
 from fleets.models import Fleet
 
@@ -28,3 +29,8 @@ class FleetPayment(models.Model):
     card_number = models.CharField(max_length=16, blank=True, null=True)
     account_name = models.CharField(max_length=50, blank=True, null=True, )
     is_verified = models.BooleanField(default= False)
+
+
+
+    def get_absolute_url(self):
+        return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.fleet.pk})

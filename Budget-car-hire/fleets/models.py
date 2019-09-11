@@ -30,8 +30,9 @@ class Fleet(models.Model):
         self.is_freezed = not self.is_freezed
         self.save()
 
+    @staticmethod
     def paid(self):
-        self.is_paid = not is_paid
+        self.is_paid = not self.is_paid
         self.save()
 
 
