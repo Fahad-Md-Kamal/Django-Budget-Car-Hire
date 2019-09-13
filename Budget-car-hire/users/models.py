@@ -14,9 +14,6 @@ def photo_path(instance, filename):
                                                             ext= file_extension)
 
 
-
-
-
 class profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     house = models.CharField(max_length=20)

@@ -1,44 +1,28 @@
-     <nav class="navbar navbar-dark navbar-expand-lg  bg-dark">
-        <div class="container">  
-            <a class="navbar-brand my-style" href="{% url 'home' %}">Budget Car Hire</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarColor02">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'vehicle:index' %}">Vehicles</a>
-              </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'fleets:fleet_list' %}"> Fleet </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'blogs:blog_list' %}"> Blogs </a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-          </ul>
 
-          <div class="ml-sm-0 d-lg-flex justify-content-end align-items-center my-nav-style">
-            {% if user.is_authenticated %}
-                <a class="btn btn-secondary" href="{% url 'profile' %}"><i class="fas fa-user-tie"></i> {{ user.username }}</a>
-                <a class="btn btn-warning" href="{% url 'logout' %}">Sign Out</a>
-            {% else %}
-                <a class="btn btn-outline-info " href="{% url 'login' %}">Sign in</a>
-                <a class="btn btn-outline-success" href="{% url 'register' %}">Sign up</a>
-            {% endif %}
-            </div>
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+<div class="container">
+  <!-- Navbar brand -->
+  <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
+  <span class="ml-auto text-light" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    <div id="mySidenav" class="sidenav">
+      <a class="text-right" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
+        <a class="dropdown-btn">Dropdown 
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
         </div>
-      </div>
-    </nav>
- 
+        <a href="#contact">Search</a>
+    </div>
+
+</div>
+</nav>
+<!--/.Navbar-->
+
