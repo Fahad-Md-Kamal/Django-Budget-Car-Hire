@@ -4,22 +4,53 @@
 <div class="container">
   <!-- Navbar brand -->
   <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
-  <span class="ml-auto text-light" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+  
+  <span class="nav-item dropdown ml-auto">
+      <a class="nav-link text-light  {% if user.is_authenticated %}  btn-dark-green {% else %} btn-blue-grey {% endif %} px-3 rounded-circle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
+      </a>
+      <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+        {% if user.is_authenticated %}
+        <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+        <a class="dropdown-item" href="{% url 'register' %}">Join Now</a>
+        {% endif %}
+      </div>
+    </span>
+  
+  <span class="text-light ml-3 " style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
     <div id="mySidenav" class="sidenav">
       <a class="text-right" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#clients">Clients</a>
-        <a href="#contact">Contact</a>
-        <a class="dropdown-btn">Dropdown 
+      
+      <a class="dropdown-btn text-light">Vehicle
           <i class="fa fa-caret-down"></i>
         </a>
-        <div class="dropdown-container">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
+        <div class="dropdown-container bg-white text-muted">
+          <a href="#">All Vehicle</a>
+          <a href="#">Register New</a>
+          <a href="#">Admin View</a>
         </div>
-        <a href="#contact">Search</a>
+        
+      <a class="dropdown-btn text-light">Fleet
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container bg-white text-muted">
+          <a href="#">My Fleet</a>
+          <a href="#">Admin View</a>
+        </div>
+        <a class="dropdown-btn text-light">Blog
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container bg-white text-muted">
+          <a href="{% url 'blogs:blog_list' %}">All Blog</a>
+          <a href="#">New Blog</a>
+          <a href="#">Admin View</a>
+        </div>
+        
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
     </div>
 
 </div>

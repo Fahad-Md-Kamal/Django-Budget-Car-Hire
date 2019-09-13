@@ -138,3 +138,10 @@ body {
   .sidenav {padding-top: 15px;}
   /* .sidenav a {font-size: 1em;} */
 }
+
+.dropdown-container a{
+  color: darkslateblue;
+}
+
+.card-comments img {
+  width: 4rem; }

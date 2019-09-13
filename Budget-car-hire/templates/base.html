@@ -25,10 +25,10 @@
         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
       {% endfor %}
     {% endif %}
+  </div>
 
     {% block content%}
     {% endblock %}
-</div>
 
 {% include 'footer.html' %}
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>

@@ -3,14 +3,18 @@
 {% block title %} Blogs {% endblock %}
 
 {% block content %}
-    <nav class="navbar navbar-dark bg-primary mb-3">
+    <nav class="navbar bg-primary mb-3">
+      <div class="container">
         <ul class="nav">
             <a class="btn text-light mr-2 text-decoration-none" href="{% url 'blogs:blog_list' %}">Blogs</a>
             <a class="btn text-light text-decoration-none" href="{% url 'blogs:blog_create' %}">Write Blog</a>
         </ul>
+      </div>
         </nav>
-<div class="row">
-  {% block blog_content%}
-  {% endblock %}
+<div class="container">
+  <div class="row">
+    {% block blog_content%}
+    {% endblock %}
+  </div>
 </div>
 {% endblock content %}

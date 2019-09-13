@@ -2,68 +2,200 @@
 {% load crispy_forms_tags %}
 
 {% block blog_content%}
-<div class="col-md-8 col-sm-12 offset-md-2">
-    <article class=" text-white bg-light mb-3">
-            <div class="card-header d-flex justify-content-start">
-                <img class="rounded-circle article-img mr-2" src="{{ article.author.profile.image.url }}" alt="" srcset="">
-                <div class="mt-3 ml-3">
-                    <a class="mr-2 text-primary" href="#">@ {{ article.author }}</a>
-                    <small class="text-primary text-muted">{{ article.posted_date }}</small>
-                    <h4 class="card-title text-dark">{{ article.title }}</h4>
+
+
+  <!--Main layout-->
+  <main class="mt-5 pt-5">
+        <div class="container">
+    
+          <!--Section: Post-->
+          <section class="mt-4">
+    
+            <!--Grid row-->
+            <div class="row">
+    
+              <!--Grid column-->
+              <div class="col-md-8 mb-4">
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <blockquote class="blockquote">
+                      <p class="mb-0">{{ article.title }}</p>
+                      <footer class="blockquote-footer">by @ {{ article.author }}<br>
+                        <cite title="Source Title">{{ article.posted_date }}</cite>
+                      </footer>
+                    </blockquote>
+    
+                    <p>{{ article.content }}</p>
+    
+                  </div>
+                <div class="card-footer">
+                    {% if user.is_authenticated %}
+                        {% if user.id == article.author.id or user.is_staff %}
+                        <div>
+                            <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
+                            <a class="btn btn-outline-danger" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
-            </div>
-            <div class="card-body text-danger">
-                <p>Article</p>
-              <p class="card-text py-3 px-2 text-dark table-active">{{ article.content }}</p>
-              
-            </div>
-            <div class="card-footer d-flex justify-content-between">
-            {% if user.is_authenticated %}
-                {% if user.id == article.author.id or user.is_staff %}
-                <div>
-                    <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' article.pk %}">Edit Post</a>
-                    <a class="btn btn-outline-danger" href="{% url 'blogs:blog_delete' article.pk %}">Delete Post</a>
                 </div>
-                {% endif %}
-            {% endif %}
-            </div>
-            <div class="text-dark p-2">
-            {% if article.comments %}
-                <div class="my-2"> Comment(s): 
-                    <span class="badge badge-primary badge-pill">{{article.comments.count}}</span>
-                </div>
-                {% endif %}
-            {% for cmt in article.comments.all %}
-                   <div class="mb-2"> 
-                    <div class="mt-3 ml-3">
-                        <img class="rounded-circle comment-img mr-2" src="{{ cmt.user.profile.image.url }}">
-                        <a class="mr-2 text-primary" href="#">@ {{cmt.user.username}}</a>
-                        <small class="text-muted">{{cmt.comment_date}}</small>
+                <!--/.Card-->
+    
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <div class="card-header font-weight-bold">
+                    <span>About author</span>
+                    <span class="pull-right">
+                      <a href="">
+                        <i class="fab fa-facebook-f mr-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="fab fa-twitter mr-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="fab fa-instagram mr-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="fab fa-linkedin-in mr-2"></i>
+                      </a>
+                    </span>
+                  </div>
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <div class="media d-block d-md-flex mt-3">
+                    <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ article.author.profile.image.url }}"
+                        alt="Generic placeholder image" style="width: 100px;">
+                      <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                        <h5 class="mt-0 font-weight-bold">{{ article.author }}
+                        </h5>
+                        {{article.author.profile.first_name}}
+                      </div>
                     </div>
-                    
-                    <div class="card-body table-active">
-                        <p class="card-text text-dark">{{ cmt.comment }}</p>
+    
                   </div>
-                  {% if user.id == cmt.user.id or user.is_staff %}
-                  <div class="card-footer">
-                        <!-- Comment Option will be delveloped letter -->
-                          <!-- <a class="btn btn-secondary" href="{ url 'blogs:edit_blog_comment' cmt.pk }">Edit</a> -->
-                          <a class="btn btn-danger" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete Comment</a>
-                  </div>
-                  {% endif %}
+    
                 </div>
-            {% endfor %}
+                <!--/.Card-->
 
+                <!--Comments-->
+                <div class="card card-comments mb-3 wow fadeIn">
+                  <div class="card-header font-weight-bold">{{article.comments.count}} comment(s)</div>
+                  <div class="card-body">
+    
+                {% for cmt in article.comments.all %}
+                <div class="media d-block d-md-flex mt-4">
+                      <img class="d-flex mb-3 mx-auto " src="{{ cmt.user.profile.image.url }}" alt="Generic placeholder image">
+                      <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                        <h5 class="mt-0 font-weight-bold">@ {{cmt.user.username}}
+                                <small class="text-muted">{{cmt.comment_date}}</small>
+                          <a href="" class="pull-right">
+                            <i class="fas fa-reply"></i>
+                          </a>
+                        </h5>
+                        {{cmt.comment}}
+                        {% if user.id == cmt.user.id or user.is_staff %}
+                        <div class="card-footer">
+                                <a class="btn btn-danger" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete Comment</a>
+                            </div>
+                            {% endif %}
+                        
+    
 
-        </article>
+                      </div>
+                    </div>
+                    {% endfor %}
+  
+                  </div>
+                </div>
+                <!--/.Comments-->
+    
+                <!--Reply-->
+                <div class="card mb-3 wow fadeIn">
+                  <div class="card-header font-weight-bold">Leave a reply</div>
+                  <div class="card-body">
+    
+                    <!-- Default form reply -->
+                    <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                        </form>
+    
+                    <!-- Default form reply -->
+    
+    
+    
+                  </div>
+                </div>
+                <!--/.Reply-->
+    
+              </div>
+              <!--Grid column-->
+    
+              <!--Grid column-->
+              <div class="col-md-4 mb-4">
 
-        <div class="table-danger p-3">
-        <form action="{% url 'blogs:add_blog_comment' article.pk %}" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-success mr-2">Submit</button>
-        </form>
-    </div>
-</div>
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <div class="card-header">Related articles</div>
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <ul class="list-unstyled">
+                      <li class="media">
+                        <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.jpg" alt="Generic placeholder image">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1 font-weight-bold">List-based media object</h5>
+                          </a>
+                          Cras sit amet nibh libero, in gravida nulla (...)
+                        </div>
+                      </li>
+                      <li class="media my-4">
+                        <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder6.jpg" alt="An image">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1 font-weight-bold">List-based media object</h5>
+                          </a>
+                          Cras sit amet nibh libero, in gravida nulla (...)
+                        </div>
+                      </li>
+                      <li class="media">
+                        <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder5.jpg" alt="Generic placeholder image">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1 font-weight-bold">List-based media object</h5>
+                          </a>
+                          Cras sit amet nibh libero, in gravida nulla (...)
+                        </div>
+                      </li>
+                    </ul>
+    
+                  </div>
+    
+                </div>
+                <!--/.Card-->
+    
+              </div>
+              <!--Grid column-->
+    
+            </div>
+            <!--Grid row-->
+    
+          </section>
+          <!--Section: Post-->
+    
         </div>
+      </main>
+      <!--Main layout-->
+
 {% endblock  %}
