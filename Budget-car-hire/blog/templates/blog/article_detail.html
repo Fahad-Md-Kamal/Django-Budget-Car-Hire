@@ -85,6 +85,7 @@
                 <!--/.Card-->
 
                 <!--Comments-->
+                {% if article.comments.all %} 
                 <div class="card card-comments mb-3 wow fadeIn">
                   <div class="card-header font-weight-bold">{{article.comments.count}} comment(s)</div>
                   <div class="card-body">
@@ -114,6 +115,7 @@
   
                   </div>
                 </div>
+                {% endif %}
                 <!--/.Comments-->
     
                 <!--Reply-->

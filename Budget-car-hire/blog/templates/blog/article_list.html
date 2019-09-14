@@ -3,29 +3,64 @@
 
 {% block blog_content%}
 
-{% for post in object_list %}
-<div class="col-md-8 col-sm-12 offset-md-2">
-    <article class="bg-light mb-3">
-            <div class="card-header d-flex justify-content-start">
-                <img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" alt="" srcset="">
-                <div class="mt-3">
-                    <a class="mr-2" href="#">@{{post.author.username}}</a>
-                    <small class="text-muted">{{ post.posted_date }}</small><br>
-                    <a class="card-title text-dark text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a>
-                </div>
-            </div>
-                {% if post.comments.count > 0 %}
-                <div class="card-footer d-flex justify-content-between">
-            <div>
-                <a class="card-title table-warning text-decoration-none" href="{% url 'blogs:blog_detail' post.id%}">
-                    <div class="my-2"> Comment(s): 
-                        <span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span>
-                    </div>
-            </div>
-            </div>
-                {% endif %}</a>
-            </article>
+<div class="col-md-8">
+    {% for post in object_list %}
+
+
+  
+  <!-- Card -->
+  <div class="card card-cascade wider mb-3">
+  
+    <!-- Card image -->
+    <div class="p-3 d-flex view view-cascade gradient-card-header peach-gradient">
+        <img class="rounded-circle article-img mr-3" src="{{ post.author.profile.image.url }}" alt="" srcset="">
+    <div class="mt-4">
+        <span>@{{post.author.username}}</span>
+        <!-- Title -->
+      <!-- Text -->
+      <p class="text-muted">on: {{ post.posted_date|date:'d-M-Y' }}</p>
     </div>
-    {% endfor %}
+    </div>
+  
+    <!-- Card content -->
+    <div class="card-body card-body-cascade text-center">
+  
+      <h2 class="card-header-title mb-3"><a class="card-title text-dark text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a></h2>
+      <!-- Link -->
+      <a href="{% url 'blogs:blog_detail' post.id%}" class="orange-text p-2">
+        <h5 class="waves-effect waves-light">Read more<i class="fas fa-angle-double-right ml-2"></i></h5>
+      </a>
+  
+    </div>
+    <!-- Card content -->
+    {% if post.comments.count > 0 %}
+    <div class="card-footer d-flex justify-content-between">
+<div>
+    <a class="card-title table-warning text-decoration-none" href="{% url 'blogs:blog_detail' post.id%}">
+        <div class="my-2"><span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span> Comment(s)
+            
+        </div>
+</div>
+</div>
+    {% endif %}</a>
+  </div>
+  <!-- Card -->
+
+{% endfor %}
+</div>
+
+<div class="col-md-4">
+
+<div class="card">
+    <p class="h3 px-2 text-dark card-title tempting-azure-gradient">
+        Category Search
+    </p>
+    <div class="card-body">
+        <a class="btn btn-deep-orange" href="#">Latest Ones</a>
+    </div>
+</div>
+
+</div>
+
 
 {% endblock  %}
