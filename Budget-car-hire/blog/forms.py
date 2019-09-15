@@ -20,7 +20,7 @@ class article_form(forms.ModelForm):
 
     class Meta:
         model = models.Article
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'topic')
 
         widgets = {
             'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Title'}),

@@ -1,19 +1,40 @@
-<table id="table_id" class="display">
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block blog_content%}
+
+{% if user.is_staff %}
+
+<table id="table_id" class="display my-5">
         <thead>
             <tr>
-                <th>Column 1</th>
-                <th>Column 2</th>
+                <th>Author</th>
+                <th>Title</th>
+                <th>Topic</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Row 1 Data 1</td>
-                <td>Row 1 Data 2</td>
-            </tr>
-            <tr>
-                <td>Row 2 Data 1</td>
-                <td>Row 2 Data 2</td>
-            </tr>
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <tr>
+                        <td>{{ blog.author }}</td>
+                        <td><a class="text-dark" href="{% url 'blogs:admins_blog_detail' blog.pk %}">{{ blog.title }}</a></td>
+                        <td>{{ blog.get_topic_display }}</td>
+                        <td>
+                            <div class="btn-group"> 
+                                <a class="btn btn-primary" href="{% url 'blogs:blog_update' blog.pk %}">Edit</a>
+                                <a class="btn btn-danger" href="#">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
+
+{% else %}
+    <p class="display-1">You don't have permission</p>
+{% endif %}
+{% endblock blog_content%}
   

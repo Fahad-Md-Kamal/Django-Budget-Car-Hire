@@ -4,10 +4,17 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 class Article(models.Model):
+    OT = 0
+    VH = 1
+    ARTICLE_TOPICS = [
+        (OT, 'Others'),
+        (VH, 'Vehicle Related'),
+    ]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField (max_length=250)
     content = models.TextField(max_length=600)
-    posted_date = models.DateTimeField(auto_now=True)
+    topic = models.IntegerField(choices=ARTICLE_TOPICS, default=OT)
+    posted_date = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
