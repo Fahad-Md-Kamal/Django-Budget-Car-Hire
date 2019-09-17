@@ -10,15 +10,16 @@ from django.contrib.auth.models import User
 
 from . import models, forms
 
-
+#  Show all Blogs
 def blog_list(request):
     template = 'blog/blog_list.html'
+    blogs = models.Blog.objects.filter(is_approved=True).order_by('-posted_date')
     context = {
-        'blogs' : models.Blog.objects.all().order_by('-posted_date') ## This helps to show data last created order
+        'blogs' :  blogs
         }
     return render(request, template, context=context)
 
-
+# Show all data for admin
 def admin_blog_list(request):
     template = 'blog/admin_blog_list.html'
     if not request.user.is_staff:
@@ -72,15 +73,12 @@ def write_blog_view(request):
 def blog_update_view(request, pk):
     blog = get_object_or_404(models.Blog, pk=pk)
     user = request.user
-
     if not user.is_authenticated:
         messages.error(request, 'You have need to be logged in first')
         redirect('login')    
-
     if not user == blog.author:
         messages.error(request, 'You are not allowed to update this post')
         redirect('blogs:blog_list')
-
     if request.method == 'POST':
         form = forms.blog_form(request.POST or None, instance=blog)
         if form.is_valid():
@@ -95,24 +93,15 @@ def blog_update_view(request, pk):
     return render(request, 'blog/blog_form.html', context)
 
 
-
-class BlogDeteleView(LoginRequiredMixin, generic.DeleteView):
-    model = models.Blog
-    success_url = reverse_lazy ('blogs:blog_list')
-
-
 def blog_delete(request, pk):
     blog = get_object_or_404(models.Blog, pk=pk)
     user = request.user
-
     if not user.is_authenticated:
         messages.error(request, 'You have to be logged in first')
         redirect ('login')
-    
     if not user == blog.author or not user.is_superuser:
         messages.error(request, 'You cannot perform delete action on this form')
         return HttpResponseRedirect(reverse_lazy('blogs:blog_detail', kwargs={'pk':blog.id}))
-    
     if request.method == 'POST':
         blog.delete()
         messages.info(request, 'Blog has been deleted, successfully')
@@ -138,15 +127,26 @@ def create_comment(request, pk):
             messages.success(request, f'Comment added for - {blog.title} ')
             return redirect('blogs:blog_detail', pk = blog.pk)
 
+
 @login_required
 def comment_delete(request, pk):
-    comment = get_object_or_404(models.Comment, pk = pk)
+    comment = get_object_or_404(models.Comment, pk=pk)
     blog_pk = comment.blog.pk
     if comment.user == request.user or request.user.is_staff:
         comment.delete()
         messages.success(request, 'Comment Deleted')
     else:
         messages.error(request, 'You are not allowed to delete other peoples comment')
-
     return redirect('blogs:blog_detail', pk = blog_pk)
 
+
+# Approve blog list
+def blog_approval(request, pk):
+    template = 'blog/admin_blog_list.html'
+    blog = get_object_or_404(models.Blog, pk=pk)
+    if not request.user.is_staff:
+        messages.success(request, 'Only Staffs can perform the action')
+    blog.approve(blog)
+    admin_blog_list(request)
+    context = {'blogs':models.Blog.objects.all().order_by('-is_approved')}
+    return render (request, template, context) 

@@ -40,7 +40,8 @@ def add_blog():
     blog = Blog.objects.get_or_create( author= user,
                                 title= fake_title, 
                                 content= fake_content, 
-                                topic = fake_topic, 
+                                topic = fake_topic,
+                                is_approved = True
                                 posted_date = fake_posted_date)[0]
     return blog
 

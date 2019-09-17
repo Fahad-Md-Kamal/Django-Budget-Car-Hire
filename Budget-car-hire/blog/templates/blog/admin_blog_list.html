@@ -23,6 +23,11 @@
                         <td>{{ blog.get_topic_display }}</td>
                         <td>
                             <div class="btn-group"> 
+                                {% if not blog.is_approved%}
+                                    <a class="btn btn-success" href="{% url 'blogs:blog_approval' blog.pk %}">Approve</a>
+                                {% else%}
+                                    <a class="btn btn-warning" href="{% url 'blogs:blog_approval' blog.pk %}">Block</a>
+                                {% endif %}
                                 <a class="btn btn-primary" href="{% url 'blogs:blog_update' blog.pk %}">Edit</a>
                                 <a class="btn btn-danger" href="#">Delete</a>
                             </div>

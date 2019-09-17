@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin-view/<int:pk>/detail', views.admin_blog_detail, name='admins_blog_detail'),
     path('<int:pk>/update', views.blog_update_view, name='blog_update'),
     path('<int:pk>/delete', views.blog_delete, name='blog_delete'),
+    path('<int:pk>/approve', views.blog_approval, name='blog_approval'),
     path('comment/<int:pk>/comment', views.create_comment, name='add_blog_comment'),
     path('comment/<int:pk>/delete', views.comment_delete, name='delete_blog_comment'),
 ]

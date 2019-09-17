@@ -17,10 +17,16 @@ class Blog(models.Model):
     content = models.TextField(max_length=600)
     topic = models.IntegerField(choices=blog_TOPICS, default=OT)
     posted_date = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
 
 
     def __str__(self):
         return self.title
+
+    @staticmethod
+    def approve(self):
+        self.is_approved = not self.is_approved
+        self.save()
         
         
     def get_absolute_url(self):
