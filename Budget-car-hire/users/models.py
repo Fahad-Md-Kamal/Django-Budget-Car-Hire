@@ -1,21 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import User
-from PIL import Image
+from django.db.models.signals import post_save
+from django.conf import settings
 import os, random, datetime
+from PIL import Image
 
 
 def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     username = instance.user.username
     date = datetime.datetime.now()
-    return 'profile_pics/{userid}/{date}-{username}{ext}'.format(userid= instance.user.id,
-                                                            username = username,
-                                                            date = date,
-                                                            ext= file_extension)
+    # return 'profile_pics/{userid}/{date}-{username}{ext}'.format(userid= instance.user.id,
+    #                                                         username = username,
+    #                                                         date = date,
+    #                                                         ext= file_extension)
+    return f'profile_pics/{instance.user.id}/{date}-{username}{file_extension}'
 
 
-class profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     house = models.CharField(max_length=20)
     road = models.CharField(max_length=100)
     city = models.CharField(max_length=50)
@@ -26,7 +28,7 @@ class profile(models.Model):
         return f'{self.user.username} profile'
 
     def save(self, *args, **kwargs):
-        super(profile, self).save(*args, **kwargs)
+        super(Profile, self).save(*args, **kwargs)
 
         img = Image.open(self.image.path)
         
@@ -34,3 +36,12 @@ class profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+
+
+def create_profile(sender, **kwargs):
+    if kwargs['created']:
+        Profile.objects.create(user=kwargs['instance'])
+
+post_save.connect(create_profile, sender= settings.AUTH_USER_MODEL)

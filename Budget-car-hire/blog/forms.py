@@ -16,10 +16,10 @@ class comment_form(forms.ModelForm):
         }
 
 
-class article_form(forms.ModelForm):
+class blog_form(forms.ModelForm):
 
     class Meta:
-        model = models.Article
+        model = models.Blog
         fields = ('title', 'content', 'topic')
 
         widgets = {

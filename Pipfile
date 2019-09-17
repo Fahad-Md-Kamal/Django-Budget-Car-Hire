@@ -10,6 +10,7 @@ django = "==2.2.4"
 pillow = "*"
 django-bootstrap4 = "*"
 django-crispy-forms = "*"
+faker = "*"
 
 [requires]
 python_version = "3.7"
