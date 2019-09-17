@@ -6,9 +6,11 @@ from django.urls import reverse
 class Blog(models.Model):
     OT = 0
     VH = 1
+    SV = 2
     blog_TOPICS = [
         (OT, 'Others'),
-        (VH, 'Vehicle Related'),
+        (VH, 'Vehicle'),
+        (SV, 'Service'),
     ]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField (max_length=250)
@@ -19,7 +21,8 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
-
+        
+        
     def get_absolute_url(self):
         return reverse('blogs:blog_detail', kwargs={'pk': self.pk})
 

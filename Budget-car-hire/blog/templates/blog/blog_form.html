@@ -2,14 +2,15 @@
 {% load crispy_forms_tags %}
 
 {% block blog_content%}
+
 <div class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 my-5">
     <form method="post">
         <fieldset>
-            <legend class="border-bottom mb-4 h1 text-center">blog Form</legend>
+            <legend class="border-bottom mb-4 h1 text-center">{{state}} Blog</legend>
             {% csrf_token %}
                 {{ form|crispy }}
         </fieldset>
-        <button class="btn btn-success btn-block" type="submit">Submit</button>
+        <button class="btn btn-success btn-block" type="submit">{{state}}</button>
     </form>
 
         {% if blog.pk %}

@@ -5,112 +5,123 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 
 from . import models, forms
 
 
-class BlogListView( generic.ListView):
-    template_name = 'blog/blog_list.html'
-    model = models.Blog
-    queryset = models.Blog.objects.all()
-    ordering = ['-posted_date']
-
-
-# class AdminblogView(LoginRequiredMixin,  generic.ListView, ):
-
-#     template_name = 'blog/admin_blog_list.html'
-#     model = models.blog
-#     queryset = models.blog.objects.all()
-#     context_object_name = 'blogs'
-#     ordering = ['-posted_date']
+def blog_list(request):
+    template = 'blog/blog_list.html'
+    context = {
+        'blogs' : models.Blog.objects.all().order_by('-posted_date') ## This helps to show data last created order
+        }
+    return render(request, template, context=context)
 
 
 def admin_blog_list(request):
+    template = 'blog/admin_blog_list.html'
     if not request.user.is_staff:
         messages.warning(request, 'You have no right to visit this page')
         return redirect('home')
-
-    return render (request, 'blog/admin_blog_list.html', {'blogs':models.blog.objects.all()}) 
-
-    
-
-# class AdminblogDetail(generic.DetailView):
-#     template_name = 'blog/admin_blog_detail.html'
-#     model = models.blog
-#     context_object_name = 'blog'
+    context = {
+        'blogs':models.Blog.objects.all()}
+    return render (request, template, context) 
 
 
 def admin_blog_detail(request, pk):
+    template = 'blog/admin_blog_detail.html'
     if not request.user.is_staff:
         messages.info(request, 'You have no right to visit this page')
         return redirect('home')
-
-    template = 'blog/admin_blog_detail.html'
     context = {
-        'blog':get_object_or_404(models.blog, pk = pk), 
-        'msg': 'Working Fine'}
+        'blog':get_object_or_404(models.Blog, pk = pk)}
     return render(request, template, context)
-
-
-
-# class blogDetailView(generic.DetailView):
-#     model = models.blog
-
-#     def get_object(self):
-#         _id = self.kwargs.get("pk")
-#         return get_object_or_404(models.blog, id=_id)
-
-#     ## Adding additional data to the context data dictionary
-#     def get_context_data(self,  *args, **kwargs):
-#         context = super(blogDetailView, self).get_context_data(**kwargs)
-#         context['form'] = forms.comment_form
-#         return context
-
 
 
 def blog_detail(request, pk):
     template = 'blog/blog_detail.html'
+    context = {
+        'blog':get_object_or_404(models.Blog, pk = pk),
+        'cmt_form': forms.comment_form }
+    return render(request, template, context)
+
+
+def write_blog_view(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to be logged in')
+        return redirect ('login')
+
+    if request.method == 'POST':
+        form = forms.blog_form(request.POST)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.author = request.user
+            blog = form.save()
+            return HttpResponseRedirect (reverse ('blogs:blog_detail', kwargs={'pk':blog.id}))
+    else:
+        form = forms.blog_form()
+        context = {
+            'form':form,
+            'state': 'Create'
+            }
+        return render(request, 'blog/blog_form.html', context)
 
 
 
+def blog_update_view(request, pk):
+    blog = get_object_or_404(models.Blog, pk=pk)
+    user = request.user
+
+    if not user.is_authenticated:
+        messages.error(request, 'You have need to be logged in first')
+        redirect('login')    
+
+    if not user == blog.author:
+        messages.error(request, 'You are not allowed to update this post')
+        redirect('blogs:blog_list')
+
+    if request.method == 'POST':
+        form = forms.blog_form(request.POST or None, instance=blog)
+        if form.is_valid():
+            blog = form.save()
+            return HttpResponseRedirect(blog.get_absolute_url())
+    else:
+        form = forms.blog_form(instance=blog)
+    context = {
+        'form':form,
+        'state': 'Update'
+        }
+    return render(request, 'blog/blog_form.html', context)
 
 
-
-
-class BlogCreateView(LoginRequiredMixin, SuccessMessageMixin, generic.CreateView):
-    template_name = 'blog/blog_form.html'
-    login_url = 'login'
-    form_class = forms.blog_form
-    success_message = "New blog created"
-
-    ## adds user's info with the data
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super(blogCreateView, self).form_valid(form)
-
-
-
-class BlogUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, generic.UpdateView):
-    template_name = 'blog/blog_form.html'
-    form_class = forms.blog_form
-    success_message = "blog Updated"
-    permission_denied_message = 'You don\'t have the permission'
-    
-
-    def get_object(self):
-        _id = self.kwargs.get("pk")
-        return get_object_or_404(models.Blog, id=_id)
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-        
 
 class BlogDeteleView(LoginRequiredMixin, generic.DeleteView):
     model = models.Blog
     success_url = reverse_lazy ('blogs:blog_list')
+
+
+def blog_delete(request, pk):
+    blog = get_object_or_404(models.Blog, pk=pk)
+    user = request.user
+
+    if not user.is_authenticated:
+        messages.error(request, 'You have to be logged in first')
+        redirect ('login')
+    
+    if not user == blog.author or not user.is_superuser:
+        messages.error(request, 'You cannot perform delete action on this form')
+        return HttpResponseRedirect(reverse_lazy('blogs:blog_detail', kwargs={'pk':blog.id}))
+    
+    if request.method == 'POST':
+        blog.delete()
+        messages.info(request, 'Blog has been deleted, successfully')
+        return redirect('blogs:blog_list')
+    else:
+        context = {
+            'blog': blog
+        }
+        return render(request, 'blog/blog_delete.html', context)
 
 
 @login_required

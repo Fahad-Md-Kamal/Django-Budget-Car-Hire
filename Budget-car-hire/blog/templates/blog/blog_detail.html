@@ -24,7 +24,7 @@
     
                     <blockquote class="blockquote">
                       <p class="mb-0">{{ blog.title }}</p>
-                      <footer class="blockquote-footer">by @ {{ blog.author }}<br>
+                      <footer class="blockquote-footer">by @ {{ blog.author }} <br>
                         <cite title="Source Title">{{ blog.posted_date }}</cite>
                       </footer>
                     </blockquote>
@@ -51,16 +51,16 @@
                   <div class="card-header font-weight-bold">
                     <span>About author</span>
                     <span class="pull-right">
-                      <a href="">
+                      <a href="https://www.facebook.com" target="_blank">
                         <i class="fab fa-facebook-f mr-2"></i>
                       </a>
-                      <a href="">
+                      <a href="https://www.twitter.com" target="_blank">
                         <i class="fab fa-twitter mr-2"></i>
                       </a>
-                      <a href="">
+                      <a href="https://www.instagram.com" target="_blank">
                         <i class="fab fa-instagram mr-2"></i>
                       </a>
-                      <a href="">
+                      <a href="https://www.linkedin.com" target="_blank">
                         <i class="fab fa-linkedin-in mr-2"></i>
                       </a>
                     </span>
@@ -126,7 +126,7 @@
                     <!-- Default form reply -->
                     <form action="{% url 'blogs:add_blog_comment' blog.pk %}" method="post">
                             {% csrf_token %}
-                            {{ form|crispy }}
+                            {{ cmt_form|crispy }}
                             <button type="submit" class="btn btn-success mr-2">Submit</button>
                         </form>
     
