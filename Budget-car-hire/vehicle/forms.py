@@ -34,7 +34,9 @@ class vehicle_reg_form(forms.ModelForm):
                   'model_year',
                   'capacity',
                   'rent_per_month',
-                  'vehicle_type')
+                  'image',
+                  'vehicle_type',
+                  )
 
         widgets = {
             'reg_no': forms.TextInput(

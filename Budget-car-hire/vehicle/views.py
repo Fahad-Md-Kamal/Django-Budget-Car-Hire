@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -39,6 +40,27 @@ class VehicleRegisterView(generic.CreateView):
         context = super().get_context_data(**kwargs)
         context['state'] = 'Register'
         return context
+
+
+def vehicle_registration(request):
+    template = 'vehicle/vehicle_form.html'
+    if request.method == 'POST':
+        form = forms.vehicle_reg_form(request.POST, request.FILES)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.owner = request.user
+            vehicle = form.save()
+            messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully.')
+            return HttpResponseRedirect(vehicle.get_absolute_url())
+    else:
+        form = forms.vehicle_reg_form()
+
+    context = {
+        'form': form,
+        'state': 'Register'
+    }
+    return render(request, template, context)
+
 
 
 

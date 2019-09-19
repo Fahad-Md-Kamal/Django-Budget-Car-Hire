@@ -1,6 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+import os, random, datetime
+from PIL import Image
+
+
+def photo_path(instance, filename):
+    basefilename, file_extension= os.path.splitext(filename)
+    print(basefilename, file_extension)
+    vehicle_reg = instance.reg_no
+    date = datetime.datetime.now()
+    return f'vehicle_pics/{vehicle_reg}/{date}-{vehicle_reg}{file_extension}'
+
 
 
 class Vehicle(models.Model):
@@ -15,19 +26,18 @@ class Vehicle(models.Model):
         (VN, 'Van'),
     ]
 
-
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicel_owner')
     model_name = models.CharField(max_length=20,)
     model_year = models.DateField(blank=True, null=True)
     reg_no = models.CharField(max_length=20, unique=True)
     vehicle_type = models.IntegerField(choices=VEHICLE_CATEGORIES, default=SM)
     added_on = models.DateField(auto_now_add=True)
-    rent_per_month = models.PositiveIntegerField(default = 2000)
+    rent = models.PositiveIntegerField(default = 2000)
     capacity = models.PositiveIntegerField(default=2)
     is_freezed = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_hired = models.BooleanField(default=False)
-
+    image = models.ImageField(default='default_vehicle.png', upload_to =photo_path)
 
     class Meta:
         ordering = ['vehicle_type',]
@@ -41,12 +51,24 @@ class Vehicle(models.Model):
         self.is_approved = not self.is_approved
         self.save()
 
+
     def delete_vehicle(self):
         self.delete()
+
 
     def freeze_vehicle(self):
         self.is_freezed = not self.is_freezed
         self.save()
+
+
+    def save(self, *args, **kwargs):
+        super(Vehicle, self).save(*args, **kwargs)
+        img = Image.open(self.image.path)
+        if img.height > 400 or img.width > 450:
+            output_size = (400, 450)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+
 
     @staticmethod
     def hire_vehicle(self):
@@ -57,4 +79,4 @@ class Vehicle(models.Model):
     def __str__(self):
         return  self.model_name + '  ' + self.reg_no
         
-        
+

@@ -2,8 +2,8 @@
 {% load crispy_forms_tags %}
 
 {% block vehicle_content%}
-<div class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 my-5">
-    <form method="post">
+<div class="jumbotron col-sm-10 col-md-8 col-xl-4 offset-sm-1 offset-md-2 offset-xl-4 my-5">
+    <form method="post" enctype="multipart/form-data">
         <fieldset>
             <legend class="border-bottom mb-4 h1 text-center">Vehicle {{state}} Form</legend>
             {% csrf_token %}

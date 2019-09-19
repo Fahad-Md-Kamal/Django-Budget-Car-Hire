@@ -27,8 +27,8 @@
   
       <h2 class="card-header-title mb-3"><a class="card-title text-dark text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a></h2>
       <!-- Link -->
-      <a href="{% url 'blogs:blog_detail' post.id%}" class="orange-text p-2">
-        <h5 class="waves-effect waves-light">Read more<i class="fas fa-angle-double-right ml-2"></i></h5>
+      <a  href="{% url 'blogs:blog_detail' post.id%}" class="orange-text p-2">
+        <h5 class=" tex btn btn-outline-cyan rounded-pill mt-5">Read more<i class="fas fa-angle-double-right ml-2"></i></h5>
       </a>
   
     </div>
@@ -58,13 +58,13 @@
 <div class="col-md-4">
 
 <div class="card">
-    <p class="h3 px-2 text-dark card-title tempting-azure-gradient">
+    <p class="h3 p-2 text-dark card-title tempting-azure-gradient">
         Category Search
     </p>
     <div class="card-body">
-        <a class="btn" href="#">Vehicle's post</a>
-        <a class="btn" href="#">Latest Ones</a>
-        <a class="btn" href="#">Other Posts</a>
+        <a class="btn btn-block rounded-pill" href="#">Latest </a>
+        <a class="btn btn-block rounded-pill" href="#">Vehicle </a>
+        <a class="btn btn-block rounded-pill" href="#">Other </a>
     </div>
 </div>
 

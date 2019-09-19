@@ -17,12 +17,23 @@ def photo_path(instance, filename):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    house = models.CharField(max_length=20)
-    road = models.CharField(max_length=100)
-    city = models.CharField(max_length=50)
-    contact = models.CharField(max_length=20)
-    image = models.ImageField(default='default.png', upload_to =photo_path)
+
+    CU    = 0
+    OW    = 1
+
+    USER_CATEGORY = (
+        (CU, 'CUSTOMER'),
+        (OW, 'OWNER'),
+    )
+
+
+    user        = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    house       = models.CharField(max_length=20)
+    road        = models.CharField(max_length=100)
+    city        = models.CharField(max_length=50)
+    contact     = models.CharField(max_length=20)
+    user_type   = models.IntegerField(choices=USER_CATEGORY, default=CU)
+    image       = models.ImageField(default='default.png', upload_to =photo_path)
 
     def __str__(self):
         return f'{self.user.username} profile'

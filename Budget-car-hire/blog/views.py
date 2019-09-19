@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 
 from . import models, forms
 
+
 #  Show all Blogs
 def blog_list(request):
     template = 'blog/blog_list.html'
@@ -18,6 +19,7 @@ def blog_list(request):
         'blogs' :  blogs
         }
     return render(request, template, context=context)
+
 
 # Show all data for admin
 def admin_blog_list(request):
@@ -67,7 +69,6 @@ def write_blog_view(request):
             'state': 'Create'
             }
         return render(request, 'blog/blog_form.html', context)
-
 
 
 def blog_update_view(request, pk):
@@ -150,3 +151,4 @@ def blog_approval(request, pk):
     admin_blog_list(request)
     context = {'blogs':models.Blog.objects.all().order_by('-is_approved')}
     return render (request, template, context) 
+

@@ -1,3 +1,4 @@
+#pylint: disable = no-member, unused-variable
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
@@ -11,11 +12,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from users.models import Profile
 from blog.models import Blog, Comment
+from vehicle.models import Vehicle
 from faker import Faker
 from django.contrib.auth.hashers import make_password
 
 fakegen = Faker()
-
 def add_user():
     Fake_username   = fakegen.name();
     Fake_password   = make_password("Test1234546789")
@@ -41,9 +42,40 @@ def add_blog():
                                 title= fake_title, 
                                 content= fake_content, 
                                 topic = fake_topic,
-                                is_approved = True
+                                is_approved = True,
                                 posted_date = fake_posted_date)[0]
     return blog
+
+
+def add_vehicles(owner=None):
+    
+    VEHICLE_MODEL = ['Toyota', 'Mercedes-Benz', 'Tata', 'Foard', 'Kia', 'Mitsubishi']
+    MODEL_YEAR = ['', 'Marcedis', 'Tata', 'Foard', 'Hino', 'Cheverolate']
+
+    fake_owner           = owner
+    fake_model_name      = random.choice(VEHICLE_MODEL)
+    fake_model_year      = fakegen.past_date(start_date="-30d", tzinfo=None)
+    fake_reg_no          = fakegen.license_plate()
+    fake_vehicle_type    = fakegen.pyint(min_value=0, max_value=3, step=1)
+    fake_added_on        = fakegen.past_date(start_date="-15d", tzinfo=None)
+    fake_rent            = fakegen.pyint(min_value=2000, max_value=30000, step=1000)
+    fake_capacity        = fakegen.pyint(min_value=2, max_value=35, step=5)
+    fake_is_freezed      = fakegen.pyint(min_value=0, max_value=1, step=1)
+    fake_is_approved     = fakegen.pyint(min_value=0, max_value=1, step=1)
+    
+    car = Vehicle.objects.get_or_create(owner = fake_owner,
+                                        model_name = fake_model_name,
+                                        model_year = fake_model_year,
+                                        reg_no = fake_reg_no,
+                                        vehicle_type = fake_vehicle_type,
+                                        added_on = fake_added_on,
+                                        rent = fake_rent,
+                                        capacity = fake_capacity,
+                                        is_freezed = fake_is_freezed,
+                                        is_approved = fake_is_approved)
+    return car
+
+
 
 def create_comment(N=2):
     for post in range(N):

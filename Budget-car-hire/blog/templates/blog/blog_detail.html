@@ -96,14 +96,14 @@
                       <div class="media-body text-center text-md-left ml-md-3 ml-0">
                         <h5 class="mt-0 font-weight-bold">@ {{cmt.user.username}}
                                 <small class="text-muted">{{cmt.comment_date}}</small>
-                          <a href="" class="pull-right">
+                          <!-- <a href="" class="pull-right">
                             <i class="fas fa-reply"></i>
-                          </a>
+                          </a> -->
                         </h5>
                         {{cmt.comment}}
                         {% if user.id == cmt.user.id or user.is_staff %}
-                        <div class="card-footer">
-                                <a class="btn btn-danger" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete Comment</a>
+                        <div class="mt-5">
+                                <a class="btn btn-danger rounded-pill" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
                             </div>
                             {% endif %}
                         
