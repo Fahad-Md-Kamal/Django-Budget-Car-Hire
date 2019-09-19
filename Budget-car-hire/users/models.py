@@ -1,3 +1,5 @@
+#pylint: disable = no-member, unused-variable
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.conf import settings
@@ -9,10 +11,6 @@ def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     username = instance.user.username
     date = datetime.datetime.now()
-    # return 'profile_pics/{userid}/{date}-{username}{ext}'.format(userid= instance.user.id,
-    #                                                         username = username,
-    #                                                         date = date,
-    #                                                         ext= file_extension)
     return f'profile_pics/{instance.user.id}/{date}-{username}{file_extension}'
 
 
@@ -27,13 +25,13 @@ class Profile(models.Model):
     )
 
 
-    user        = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user        = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_profile')
     house       = models.CharField(max_length=20)
     road        = models.CharField(max_length=100)
     city        = models.CharField(max_length=50)
     contact     = models.CharField(max_length=20)
     user_type   = models.IntegerField(choices=USER_CATEGORY, default=CU)
-    image       = models.ImageField(default='default.png', upload_to =photo_path)
+    image       = models.ImageField(default='default_profile.png', upload_to =photo_path)
 
     def __str__(self):
         return f'{self.user.username} profile'

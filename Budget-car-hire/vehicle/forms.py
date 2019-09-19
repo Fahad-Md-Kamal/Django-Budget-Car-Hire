@@ -11,10 +11,6 @@ class DateInputForm(forms.DateTimeInput):
 
 class vehicle_reg_form(forms.ModelForm):
 
-    model_name = forms.CharField(
-        label = 'Vehicle model: ',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Foard Mustang'}))
-
     reg_no = forms.CharField(
         label = 'Registration no: ',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. VXN-854'}))
@@ -42,9 +38,6 @@ class vehicle_reg_form(forms.ModelForm):
             'reg_no': forms.TextInput(
                     attrs=
                     {'class':'form-control', 'placeholder':'Reg No: VMX 19654'}),
-            'model_name': forms.TextInput (
-                    attrs=
-                    {'class':'form-control', 'placeholder': 'Model Name: e.g Ford Mustung'}),
             'model_year': DateInputForm()
         }
     

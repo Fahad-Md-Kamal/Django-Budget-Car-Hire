@@ -4,89 +4,50 @@
 
 
 {% if not user.is_staff %}
-    Sorry !! Only admins and moderators can visit this page
-{% endif %}
-
-
-<div class="col-10 my-2 col-sm-12">
-    <div class="h3 my-5">Cars Admin's View</div>
-    {% if cars_list %}
-        {% for car in cars_list %}
-        <div class="card my-3 text-decoration-none text-dark">
-            <div class="d-flex">
-                <div class="p-2">
-                    <a class="text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
-                        <img class="rounded" src="https://via.placeholder.com/150" alt="">
-                    </a>
-                </div>
-        
-                <div class="container p-3">
-                        <a class="text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
-                            <div class="row font-weight-bolder">
-                                <p class="col-4 offset-1">Model:</p>
-                                <p class="col-4 text-uppercase">{{car.model_name}}</p>
-                            </div>
-                        </a>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Model Year:</p>
-                            <p class="col-4"> {{car.model_year}}</p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Registration No:</p>
-                            <p class="col-4"> {{car.reg_no}}</p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Owner Name:</p>
-                            <p class="col-4"> {{car.owner.username}}</p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Vehicle Type:</p>
-                            <p class="col-4"> {{car.get_vehicle_type_display}}</p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Rent/month:</p>
-                            <p class="col-4"> {{car.rent_per_month}} </p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Joined On:</p>
-                            <p class="col-4"> {{car.added_on|date}} </p>
-                        </div>
-                        <div class="row font-weight-bolder">
-                            <p class="col-4 offset-1">Hiring Stated</p>
-                            <p class="col-4"> {%if car.is_hired == 1%} Hired {% else %} Available {% endif%} </p>
-                        </div>
-                </div>
-                
-            </div>
-            
-            <div class="btn-group mb-2">
-                {% if not car.is_approved %}
-                    <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}"><i class="fas fa-clipboard-check"></i> Approve </a>
-                    <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="fas fa-ban"></i> Reject </a>
-                {% endif%}
-
-                {% if not car.is_freezed %}
-                    <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}"><i class="fas fa-power-off"></i> Freeze </a>
-                {% else %}
-                    <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}"> <i class="fas fa-power-off"></i> Free </a>
-                {% endif%}
-                
-                {% if user.is_superuser%}
-                        <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
-                {% endif%}
-            </div>
-        </div>
-    {% endfor %}
+   <p class="display-3 container"> Sorry !! Only admins and moderators can visit this page</p>
 
 {% else %}
 
-    <p class="display-1 text-light">
-        Sorry!! There is nothing to show at this moment.
-    </p>
+    <div class="my-2 col-sm-10 col-md-8 col-xl-4 offset-sm-1 offset-md-2 offset-xl-4">
+            <div class="h3 my-5">Admin's View</div>
+            {% if cars_list %}
+                {% for car in cars_list %}
+                <div class="card my-5 text-decoration-none text-dark">
+                    {% include './_list_vehicle.html' %}
+                    
+                    <div class="btn-group mb-2">
+                        {% if not car.is_approved %}
+                            <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}"><i class="fas fa-clipboard-check"></i> Approve </a>
+                            <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="fas fa-ban"></i> Reject </a>
+                        {% endif%}
+        
+                        {% if not car.is_freezed %}
+                            <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}"><i class="fas fa-power-off"></i> Freeze </a>
+                        {% else %}
+                            <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}"> <i class="fas fa-power-off"></i> Free </a>
+                        {% endif%}
+                        
+                        {% if user.is_superuser%}
+                                <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
+                        {% endif%}
+                    </div>
+                </div>
+            {% endfor %}
+        
+        {% else %}
+        
+            <p class="display-1 text-light">
+                Sorry!! There is nothing to show at this moment.
+            </p>
+        
+        {% endif %}
+        
+        </div>
+        
 
 {% endif %}
 
-</div>
+
 
 
 {% endblock  %}

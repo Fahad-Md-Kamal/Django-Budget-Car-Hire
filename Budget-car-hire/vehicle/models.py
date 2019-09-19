@@ -1,3 +1,5 @@
+#pylint: disable = no-member, unused-variable
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -26,18 +28,43 @@ class Vehicle(models.Model):
         (VN, 'Van'),
     ]
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicel_owner')
-    model_name = models.CharField(max_length=20,)
-    model_year = models.DateField(blank=True, null=True)
-    reg_no = models.CharField(max_length=20, unique=True)
-    vehicle_type = models.IntegerField(choices=VEHICLE_CATEGORIES, default=SM)
-    added_on = models.DateField(auto_now_add=True)
-    rent = models.PositiveIntegerField(default = 2000)
-    capacity = models.PositiveIntegerField(default=2)
-    is_freezed = models.BooleanField(default=False)
-    is_approved = models.BooleanField(default=False)
-    is_hired = models.BooleanField(default=False)
-    image = models.ImageField(default='default_vehicle.png', upload_to =photo_path)
+    VEHICLE_MODEL = [
+        ( 0, 'Other'),
+        ( 1, 'Audi'),
+        ( 2, 'BMW'),
+        ( 3, 'Chevrolet'),
+        ( 4, 'Ford'),
+        ( 5, 'Honda'),
+        ( 6, 'Hyundai'),
+        ( 7, 'Jeep'),
+        ( 8, 'Kia'),
+        ( 9, 'Lexus'),
+        ( 10, 'Mazda'),
+        ( 11, 'Mercedes-Benz'),
+        ( 12, 'Mitsubishi'),
+        ( 13, 'Nissan'),
+        ( 14, 'Renault'),
+        ( 15, 'Suzuki'),
+        ( 16, 'Subaru'),
+        ( 17, 'Tata'),
+        ( 18, 'Toyota'),
+        ( 19, 'VolksWagen'),
+        ( 20, 'Volvo'),
+    ]
+
+    owner           = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicel_owner')
+    model_name      = models.IntegerField(choices=VEHICLE_MODEL, default=0)
+    model_year      = models.DateField(blank=True, null=True)
+    reg_no          = models.CharField(max_length=20, unique=True)
+    vehicle_type    = models.IntegerField(choices=VEHICLE_CATEGORIES, default=SM)
+    added_on        = models.DateField(auto_now_add=True)
+    rent            = models.PositiveIntegerField(default = 2000)
+    capacity        = models.PositiveIntegerField(default=2)
+    is_freezed      = models.BooleanField(default=False)
+    is_approved     = models.BooleanField(default=False)
+    is_booked       = models.BooleanField(default=False)
+    is_hired        = models.BooleanField(default=False)
+    image           = models.ImageField(default='default_vehicle.png', upload_to =photo_path)
 
     class Meta:
         ordering = ['vehicle_type',]
@@ -77,6 +104,6 @@ class Vehicle(models.Model):
 
 
     def __str__(self):
-        return  self.model_name + '  ' + self.reg_no
+        return  self.reg_no
         
 

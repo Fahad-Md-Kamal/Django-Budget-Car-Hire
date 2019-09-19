@@ -145,3 +145,11 @@ body {
 
 .card-comments img {
   width: 4rem; }
+
+
+.vehicle_img{
+  width: 400px;
+}
+.vh_table td{
+  font-size: 1.2em;
+}

@@ -1,41 +1,47 @@
-<p class="h3">Details of - {{car.model_name}} {{car.model_year|date:"Y"}}</p>
-        <table class="table table-striped">
+<p class="h3">{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</p>
+
+            
+        <table class="table table-striped vh_table">
+          <legend class="my-5"></legend>
                 <tbody>
                   <tr>
-                    <td>Owner:</td>
-                    <td>{{car.owner.username}}</td>
+                    <td colspan="2"><img class="mx-auto d-block vehicle_img" src="{{ car.image.url }}" alt="{{ car.model_name }}"></td>
                   </tr>
-                  <tr>
+                  <tr class="table-success">
+                    <td>Owner:</td>
+                    <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
+                  </tr>
+                  <tr class="table-danger">
                     <td>Model Name: </td>
                     <td>{{car.model_name}}</td>
                   </tr>
-                  <tr>
+                  <tr class="table-primary">
                     <td>Model Year: </td>
                     <td>{{car.model_year|date:"Y"}}</td>
                   </tr>
-                  <tr>
+                  <tr class="table-info">
                     <td>Registration No: </td>
-                    <td>{{car.reg_no}}</td>
+                    <td>"{{car.reg_no}}"</td>
                   </tr>
-                  <tr>
+                  <tr class="table-warning">
                     <td>Category</td>
                     <td>{{car.get_vehicle_type_display}}</td>
                   </tr>
-                  <tr>
+                  <tr class="table-primary">
                     <td>Status</td>
                     <td>{{car.is_hired}}</td>
                   </tr>
-                  <tr>
+                  <tr class="table-danger">
                     <td>Capacity</td>
                     <td>3 Person</td>
                   </tr>
-                  <tr>
-                    <td>Rent/month</td>
-                    <td>{{car.rent_per_month}}</td>
+                  <tr class="table-warning">
+                    <td>Rent / month</td>
+                    <td>{{car.rent}}</td>
                   </tr>
-                  <tr>
-                    <td>Registared Since</td>
-                    <td>{{ car.added_on|date:"d M Y" }}</td>
+                  <tr class="table-dark">
+                    <td class="text-dark">Registared Since</td>
+                    <td class="text-dark">{{ car.added_on|date:"d M Y" }}</td>
                   </tr>
                 </tbody>
               </table>

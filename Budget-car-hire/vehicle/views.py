@@ -1,3 +1,4 @@
+#pylint: disable = no-member, unused-variable
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -11,35 +12,58 @@ class Vehicles_template_view(generic.TemplateView):
     template_name = 'vehicle/index.html'
 
 
-class VehicleListView(generic.ListView):
-    model = models.Vehicle
-    template_name = 'vehicle/vehicle_list.html'
-    queryset = models.Vehicle.objects.filter(is_freezed = False, is_approved = True)
-    context_object_name = 'CarsList'
+# class VehicleListView(generic.ListView):
+#     model = models.Vehicle
+#     template_name = 'vehicle/vehicle_list.html'
+#     queryset = models.Vehicle.objects.filter(is_freezed = False, is_approved = True)
+#     context_object_name = 'CarsList'
 
 
 
-class VehicleDetaileView(generic.DetailView):
-    model = models.Vehicle
-    context_object_name = 'car'
+def vehicle_list_view(request):
+    template                = 'vehicle/vehicle_list.html'
+    CarsList       = models.Vehicle.objects.filter(is_freezed = False, 
+                                                            is_approved = True, 
+                                                            is_booked = False, 
+                                                            is_hired = False)
+    context = {
+        'CarsList' : CarsList
+    }
+    return render(request, template, context)
 
-    def get_object(self):
-        _id = self.kwargs.get("pk")
-        return get_object_or_404(models.Vehicle, id = _id)
 
 
-class VehicleRegisterView(generic.CreateView):
-    template_name = 'vehicle/vehicle_form.html'
-    form_class = forms.vehicle_reg_form
+# class VehicleDetaileView(generic.DetailView):
+#     model = models.Vehicle
+#     context_object_name = 'car'
 
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super(VehicleRegisterView, self).form_valid(form)
+#     def get_object(self):
+#         _id = self.kwargs.get("pk")
+#         return get_object_or_404(models.Vehicle, id = _id)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['state'] = 'Register'
-        return context
+
+def vehicle_detail_view(request, pk):
+    template            = 'vehicle/vehicle_detail.html'
+    car                 = get_object_or_404(models.Vehicle, pk=pk)
+    context = {
+        'car':car
+    }
+    return render(request, template, context)
+
+
+# class VehicleRegisterView(generic.CreateView):
+#     template_name = 'vehicle/vehicle_form.html'
+#     form_class = forms.vehicle_reg_form
+
+#     def form_valid(self, form):
+#         form.instance.owner = self.request.user
+#         return super(VehicleRegisterView, self).form_valid(form)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['state'] = 'Register'
+#         return context
+
 
 
 def vehicle_registration(request):

@@ -5,18 +5,14 @@
 
 
 <!-- Jumbotron -->
-<div class="jumbotron col-10 offset-1">
+<div class="jumbotron col-sm-10 col-md-8 col-xl-6 offset-sm-1 offset-md-2 offset-xl-3">
         {% include './_detail_vehicle.html' %}
               <div class="btn-group d-flex justify-content-end">
                 {%if not user.is_staff %}
                   <a class="btn btn-lg btn-success" href="#">Hire</a>
                 {% endif %}
-
-                {% if user.is_staff %}
-                  <a class="btn btn-lg btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Freeze</a>
-                {%endif%}
                 
-                {% if car.owner == user or user.is_staff %}
+                {% if car.owner == user %}
                   <a class="btn btn-lg btn-primary" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit Info</a>
                   {% endif %}
 
@@ -27,41 +23,4 @@
       </div>
       <!-- Jumbotron -->
 
-
-
-
-
-
 {% endblock  %}
-
-
-<!-- <div class="col-md-8 col-sm-12 offset-md-2">
-        <blog class=" text-white bg-light mb-3">
-                <div class="card-header d-flex justify-content-start">
-                    <img class="rounded-circle blog-img mr-2" src="#" alt="" srcset="">
-                    <div class="mt-3 ml-3">
-                        <a class="mr-2 text-primary" href="#">@ {{ car.owner.username }}</a>
-                        <h4 class="card-title text-dark">{{ car.reg_no }}</h4>
-                        <small class="text-primary text-muted">{{ car.vehicle_type }}</small>
-                    </div>
-                </div>
-                <div class="card-body text-danger">
-                    <p>Car</p>
-                    {% if car.is_hired %}
-                        <p class="badge badge-pill badge-primary h4">Hired</p>
-                    {% else %}
-                        <p class="badge badge-pill badge-primary h4">Available</p>
-                    {% endif %}
-                  
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                {% if user.is_authenticated %}
-                    {% if user.id == car.owner.id or user.is_staff %}
-                    <div>
-                        <a class="btn btn-outline-success mr-auto" href="{% url 'vehicle:update_vehicle' car.pk %}">Update Vehicle</a>
-                        <a class="btn btn-outline-warning" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete Vehicle</a>
-                    </div>
-                    {% endif %}
-                {% endif %}
-                </div>
-            </div> -->

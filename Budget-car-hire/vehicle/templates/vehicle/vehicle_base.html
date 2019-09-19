@@ -10,6 +10,7 @@
 
 <!--Navbar-->
 <nav class="navbar navbar-dark navbar-dark bg-primary">
+<div class="container">
   <ul class="nav">
     <li class="nav-item">
       <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:vehicle_list' %}">Cars</a>
@@ -27,10 +28,13 @@
       <input class="form-control" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-white btn-md my-2 my-sm-0 ml-3" type="submit">Search</button>
     </form>
+  </div>
   </nav>
 
-<div class="row">
-  {% block vehicle_content%}
-  {% endblock %}
+<div class="conatiner">
+  <div class="row">
+    {% block vehicle_content%}
+    {% endblock %}
+  </div>
 </div>
 {% endblock content %}

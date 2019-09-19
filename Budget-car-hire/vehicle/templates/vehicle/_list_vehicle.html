@@ -1,25 +1,30 @@
-<a class="card my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
+<a class="my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
         <div class="d-flex">
-            <div class="p-2">
-                <img class="rounded" src="https://via.placeholder.com/150" alt="">
-            </div>
+            <!-- <div class="p-2">
+                <img class="rounded" src="{{ car.image.url }}" alt="{{ car.model_name }}">
+            </div> -->
             <div class="container p-3">
-                    <div class="row font-weight-bolder">
-                        <p class="col-4 offset-1">Model:</p>
-                        <p class="col-4 text-uppercase"> {{ car.model_name }} </p>
-                    </div>
-                    <div class="row font-weight-bolder">
-                        <p class="col-4 offset-1">Model Year:</p>
-                        <p class="col-4"> {{ car.model_year }} </p>
-                    </div>
-                    <div class="row font-weight-bolder">
-                        <p class="col-4 offset-1">Reg No:</p>
-                        <p class="col-4"> {{ car.reg_no }} </p>
-                    </div>
-                    <div class="row font-weight-bolder">
-                        <p class="col-4 offset-1">Category:</p>
-                        <p class="col-4">{{car.get_vehicle_type_display}}</p>
-                    </div>
+                <img class="rounded mx-auto d-block my-5" src="{{ car.image.url }}" alt="{{ car.model_name }}">
+                <table class="table table-hover text-center  vh_table">
+                    <tr class="table-success">
+                        <td>Model:</td>
+                        <td class="font-weight-bolder "> {{ car.get_model_name_display }} </td>
+                    </tr>
+                    <tr class="table-info">
+                        <td>Capacity:</td>
+                        <td class="font-weight-bolder "> {{ car.capacity}} </td>
+                    </tr>
+                    <tr class="table-warning">
+                        <td>Reg No:</td>
+                        <td class="font-weight-bolder ">{{ car.reg_no }}</td>
+                    </tr>
+                    <tr class="table-danger">
+                        <td>Category:</td>
+                        <td class="font-weight-bolder text-dark ">{{car.get_vehicle_type_display}}</td>
+                    </tr>
+                </table>
+                
+   
             </div>
     </div>
     </a>

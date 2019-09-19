@@ -9,7 +9,7 @@ urlpatterns = [
         name= 'index'),
         
     path('list/',
-        views.VehicleListView.as_view(), 
+        views.vehicle_list_view, 
         name= 'vehicle_list'),
     
     path('admin-view/', 
@@ -21,7 +21,7 @@ urlpatterns = [
         name= 'reg_vehicle'),
     
     path('<int:pk>/', 
-        views.VehicleDetaileView.as_view(), 
+        views.vehicle_detail_view, 
         name= 'detail_vehicle'),
     
     path('<int:pk>/approve', 
