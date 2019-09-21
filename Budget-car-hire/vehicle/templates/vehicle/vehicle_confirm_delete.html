@@ -6,14 +6,14 @@
         <hr class="my-4 bg-light" >
         <p class="lead"> Do you really want to remove the vehicle ? </p>
         <p class="form-text font-weight-bolder">
-            Model: <i class="fas fa-arrow-right"></i>  {{object.model_name}} <br>
-            Registration No: <i class="fas fa-arrow-right"></i> {{object.reg_no}} <br>
+            Model: <i class="fas fa-arrow-right"></i>  {{car.model_name}} <br>
+            Registration No: <i class="fas fa-arrow-right"></i> {{car.reg_no}} <br>
         </p>
         <hr class="my-4 bg-light" >
         <form method="post">
             {% csrf_token %}
                 <button class="btn btn-lg btn-danger badge-pill" type="submit"><i class="fas fa-trash"></i>Confirm</button>
-        <a class="btn btn-lg btn-success badge-pill" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
+                <a class="btn btn-lg btn-success badge-pill" href="{% url 'vehicle:detail_vehicle' car.pk %}">Cancel</a>
     </form>
     </div>
 {% endblock %}

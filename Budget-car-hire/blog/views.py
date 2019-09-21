@@ -99,15 +99,17 @@ def blog_delete(request, pk):
     user = request.user
     if not user.is_authenticated:
         messages.error(request, 'You have to be logged in first')
-        redirect ('login')
-    if not user == blog.author or not user.is_superuser:
+        return redirect ('login')
+    if not user.is_staff or not blog.author == user:
         messages.error(request, 'You cannot perform delete action on this form')
         return HttpResponseRedirect(reverse_lazy('blogs:blog_detail', kwargs={'pk':blog.id}))
-    if request.method == 'POST':
+    # elif not blog.author == user:
+        # messages.error(request, 'You need to be admin.')
+        # return HttpResponseRedirect(reverse_lazy('blogs:blog_detail', kwargs={'pk':blog.id}))
+    else:
         blog.delete()
         messages.info(request, 'Blog has been deleted, successfully')
         return redirect('blogs:blog_list')
-    else:
         context = {
             'blog': blog
         }

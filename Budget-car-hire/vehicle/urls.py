@@ -33,10 +33,10 @@ urlpatterns = [
         name= 'freeze_vehicle'),
     
     path('<int:pk>/update/', 
-        views.VehicleUpdateView.as_view(), 
+        views.vehicle_update_view, 
         name= 'update_vehicle'),
     
     path('<int:pk>/delete/', 
-        views.VehicleDeleteView.as_view(), 
+        views.vehicel_delete_view, 
         name= 'delete_vehicle'),
 ]
