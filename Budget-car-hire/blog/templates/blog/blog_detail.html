@@ -70,7 +70,7 @@
                   <div class="card-body">
     
                     <div class="media d-block d-md-flex mt-3">
-                    <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ blog.author.profile.image.url }}"
+                    <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ blog.author.user_profile.image.url }}"
                         alt="Generic placeholder image" style="width: 100px;">
                       <div class="media-body text-center text-md-left ml-md-3 ml-0">
                         <h5 class="mt-0 font-weight-bold">{{ blog.author }}
@@ -92,7 +92,7 @@
     
                 {% for cmt in blog.comments.all %}
                 <div class="media d-block d-md-flex mt-4">
-                      <img class="d-flex mb-3 mx-auto " src="{{ cmt.user.profile.image.url }}" alt="Generic placeholder image">
+                      <img class="d-flex mb-3 mx-auto " src="{{ cmt.user.user_profile.image.url }}" alt="Generic placeholder image">
                       <div class="media-body text-center text-md-left ml-md-3 ml-0">
                         <h5 class="mt-0 font-weight-bold">@ {{cmt.user.username}}
                                 <small class="text-muted">{{cmt.comment_date}}</small>

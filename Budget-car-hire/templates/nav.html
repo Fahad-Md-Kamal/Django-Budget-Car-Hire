@@ -4,11 +4,19 @@
 <div class="container">
   <!-- Navbar brand -->
   <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
-  
   <span class="nav-item dropdown ml-auto">
-      <a class="nav-link text-light  {% if user.is_authenticated %}  btn-dark-green {% else %} btn-blue-grey {% endif %} px-3 rounded-circle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
-      </a>
+      {% if user.is_authenticated %}
+      <a id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <img class="user_dp" src="{{ user.user_profile.image.url }}" alt="{{user.username}}-profile-pic">
+        </a>
+        
+      {% else %}
+        <a class="nav-link text-light btn-dark-green btn-blue-grey px-3 rounded-circle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
+        </a>
+      {% endif %}
+
       <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
         {% if user.is_authenticated %}
         <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
@@ -60,6 +68,8 @@
     </div>
 
 </div>
+
+
 </nav>
 <!--/.Navbar-->
 

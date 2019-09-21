@@ -24,7 +24,7 @@ def profile(request):
         u_form = forms.UserUpdateForm(request.POST, instance=request.user)
         p_form = forms.ProfileUpdateForm(request.POST, 
                                          request.FILES, 
-                                         instance=request.user.profile)
+                                         instance=request.user.user_profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
@@ -33,7 +33,7 @@ def profile(request):
             return redirect('profile')
     else:
         u_form = forms.UserUpdateForm(instance=request.user)
-        p_form = forms.ProfileUpdateForm(instance=request.user.profile)
+        p_form = forms.ProfileUpdateForm(instance=request.user.user_profile)
 
     context = {
         'u_form': u_form,
