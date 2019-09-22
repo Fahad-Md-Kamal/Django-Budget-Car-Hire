@@ -3,49 +3,65 @@
 {% block vehicle_content%}
 
 
-{% if not user.is_staff %}
+    <!-- <div class="col-sm-12 col-md-8 col-lg-10"> -->
+            {% if not user.is_staff %}
    <p class="display-3 container"> Sorry !! Only admins and moderators can visit this page</p>
 
 {% else %}
 
-    <div class="my-2 col-sm-10 col-md-8 col-xl-4 offset-sm-1 offset-md-2 offset-xl-4">
-            <div class="h3 my-5">Admin's View</div>
+<div class="p-5">
+    <table id="table_id" class="display table">
+        <thead>
+            <tr>
+                <th>Owner</th>
+                <th>Model</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>Rent / month</th>
+                <th>Joined Since</th>
+                <th ></th>
+            </tr>
+        </thead>
+        <tbody>
             {% if cars_list %}
                 {% for car in cars_list %}
-                <div class="card my-5 text-decoration-none text-dark">
-                    {% include './_list_vehicle.html' %}
-                    
-                    <div class="btn-group mb-2">
-                        {% if not car.is_approved %}
-                            <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}"><i class="fas fa-clipboard-check"></i> Approve </a>
-                            <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="fas fa-ban"></i> Reject </a>
-                        {% endif%}
-        
-                        {% if not car.is_freezed %}
-                            <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}"><i class="fas fa-power-off"></i> Freeze </a>
-                        {% else %}
-                            <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}"> <i class="fas fa-power-off"></i> Free </a>
-                        {% endif%}
-                        
-                        {% if user.is_superuser%}
-                                <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}"> <i class="far fa-trash-alt"></i> Delete </a>
-                        {% endif%}
-                    </div>
-                </div>
-            {% endfor %}
-        
-        {% else %}
-        
-            <p class="display-1 text-light">
-                Sorry!! There is nothing to show at this moment.
-            </p>
-        
-        {% endif %}
-        
-        </div>
-        
+                <tr>
+                    <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
+                    <td>{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</td>
+                    <td>{{car.get_vehicle_type_display}}</td>
+                    <td>{% if car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                    <td>{{ car.capacity}}</td>
+                    <td>{{car.rent}}</td>
+                    <td>{{ car.added_on|date:"d M Y" }}</td>
+                    <td>
+                        <div class="btn-group">
+                            {% if not car.is_approved %}
+                                <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}">Approve</a>
+                                <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Reject</a>
+                            {% else %}
+                                {% if not car.is_freezed %}
+                                    <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Freeze</a>
+                                {% else %}
+                                    <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Free</a>
+                                {% endif %}
+                                <a class="btn btn-primary" href="{% url 'vehicle:detail_vehicle' car.pk %}">Detail</a>
+                                <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
 
+                    </div>
+              
 {% endif %}
+
+
+                <!-- </div> -->
 
 
 

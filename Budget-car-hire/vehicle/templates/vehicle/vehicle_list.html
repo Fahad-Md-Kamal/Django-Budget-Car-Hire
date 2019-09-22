@@ -7,7 +7,7 @@
     <div class="row">
 <div class="col-sm-10 offset-sm-1 col-md-6 col-xl-6">
         {% if CarsList %}
-                <div class="h3 text-center mt-5">All Available Cars</div>
+                <div class="h3 text-center mt-5">All {{ page_heading }} Cars</div>
                 {% for car in CarsList %}
                 <div class="card ml-4 my-5">
                     {% include './_list_vehicle.html' %}
@@ -16,7 +16,7 @@
         
         
             {% else %}
-                <p class="h2 text-info">Sorry !!! <br> Currently we have no cars left for hire</p>
+                <p class="h2 text-info text-center mt-5">No car found</p>
             {% endif %}
         </div>
         
@@ -24,10 +24,30 @@
             <div class="h3">All Categories</div>
             <p class="h4 mt-5">Vehicle Type</p>
             <ul class="list-group">
-                <li class="list-group-item"> <a href="#"> Small Car </a></li>
-                <li class="list-group-item"> <a href="#"> Medium Car </a></li>
-                <li class="list-group-item"> <a href="#"> Large Car </a></li>
-                <li class="list-group-item"> <a href="#"> Van </a></li>
+                <li class="list-group-item">
+                    <form action="{% url 'vehicle:search_vehicle' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="query" value="0" >
+                        <button class="btn btn-link" type="submit"> Small Car </button>
+                    </form> 
+                </li>
+                <li class="list-group-item">
+                    <form action="{% url 'vehicle:search_vehicle' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="query" value="1" >
+                        <button class="btn btn-link" type="submit"> Medium Car </button>
+                    </form> 
+                </li>
+                <li class="list-group-item">
+                    <form action="{% url 'vehicle:search_vehicle' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="query" value="2" >
+                        <button class="btn btn-link" type="submit"> Large Car </button>
+                    </form>
+                </li>
+                <li class="list-group-item">
+                    <form action="{% url 'vehicle:search_vehicle' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="query" value="3" >
+                        <button class="btn btn-link" type="submit"> All Vans </button>
+                    </form> 
+                </li>
             </ul>
         </div>
     </div>

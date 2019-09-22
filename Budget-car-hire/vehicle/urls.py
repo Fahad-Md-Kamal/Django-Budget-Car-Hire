@@ -4,17 +4,22 @@ from . import views
 app_name = 'vehicle'
 
 urlpatterns = [
-    path('', 
-        views.Vehicles_template_view.as_view(),
-        name= 'index'),
-        
-    path('list/',
+       
+    path('',
         views.vehicle_list_view, 
         name= 'vehicle_list'),
     
     path('admin-view/', 
-        views.AdminVehicleView.as_view(), 
+        views.admin_vehicle_view, 
         name= 'admin_vehicle'),
+    
+    path('owner-view/', 
+        views.owner_vehicle_list, 
+        name= 'owner_vehicle_list'),
+    
+    path('search-vehicles/', 
+        views.search_vehicle, 
+        name= 'search_vehicle'),
 
     path('register/', 
         views.vehicle_registration, 

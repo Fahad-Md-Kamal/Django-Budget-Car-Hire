@@ -19,7 +19,7 @@ class vehicle_reg_form(forms.ModelForm):
         label = 'Capacity: ',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 4 persons'}))
     
-    rent_per_month = forms.CharField(
+    rent = forms.CharField(
         label = 'Rent/month: ',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 80000'}))
 
@@ -29,7 +29,7 @@ class vehicle_reg_form(forms.ModelForm):
                   'reg_no', 
                   'model_year',
                   'capacity',
-                  'rent_per_month',
+                  'rent',
                   'image',
                   'vehicle_type',
                   )

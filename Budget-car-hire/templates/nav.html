@@ -36,7 +36,7 @@
           <i class="fa fa-caret-down"></i>
         </a>
         <div class="dropdown-container bg-white text-muted">
-          <a href="{% url 'vehicle:index' %}">All Vehicle</a>
+          <a href="{% url 'vehicle:vehicle_list' %}">All Vehicle</a>
           <a href="{% url 'vehicle:reg_vehicle' %}">Register Vehicle</a>
           {% if user.is_staff %}
           <a href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>

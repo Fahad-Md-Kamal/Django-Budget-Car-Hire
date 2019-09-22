@@ -12,12 +12,12 @@
                   <a class="btn btn-lg btn-success" href="#">Hire</a>
                 {% endif %}
                 
-                {% if car.owner == user %}
-                  <a class="btn btn-lg btn-primary" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit Info</a>
+                {% if car.owner == user or user.is_staff %}
+                  <a class="btn btn-lg btn-warning" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit</a>
                   {% endif %}
 
-                {% if user.is_superuser %}
-                  <a class="btn btn-lg btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete</a>
+                {% if not car.is_hired %}
+                  <a class="btn btn-lg btn-info" href="#">Hire</a>
                 {% endif %}
               </div>
       </div>
