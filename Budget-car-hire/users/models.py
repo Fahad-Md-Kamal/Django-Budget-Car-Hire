@@ -32,7 +32,7 @@ class Profile(models.Model):
     contact     = models.CharField(max_length=20)
     user_type   = models.IntegerField(choices=USER_CATEGORY, default=CU)
     image       = models.ImageField(default='default_profile.png', upload_to =photo_path)
-
+    
     def __str__(self):
         return f'{self.user.username} profile'
 
