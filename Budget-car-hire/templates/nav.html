@@ -43,11 +43,11 @@
           {% endif %}
         </div>
         
-      <a class="dropdown-btn text-light">Fleet
+      <a class="dropdown-btn text-light" >Fleet
           <i class="fa fa-caret-down"></i>
         </a>
         <div class="dropdown-container bg-white text-muted">
-          <a href="#">My Fleet</a>
+          <a href="{% url 'fleet:fleets' %}">My Fleet</a>
           {% if user.is_staff %}
           <a href="#">Admin View</a>
           {% endif %}

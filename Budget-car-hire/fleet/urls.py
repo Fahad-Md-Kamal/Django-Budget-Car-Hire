@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         '',
         views.fleet_view, 
-        name= 'fleets_view'),
+        name= 'fleets'),
        
     path(
         'detail/<int:pk>',

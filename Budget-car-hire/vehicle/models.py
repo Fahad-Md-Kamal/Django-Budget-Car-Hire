@@ -22,9 +22,9 @@ class Vehicle(models.Model):
     LG = 2
     VN = 3
     VEHICLE_CATEGORIES = [
-        (SM, 'Small Car'),
-        (MD, 'Medium Car'),
-        (LG, 'Large Car'),
+        (SM, 'Small'),
+        (MD, 'Medium'),
+        (LG, 'Large'),
         (VN, 'Van'),
     ]
 

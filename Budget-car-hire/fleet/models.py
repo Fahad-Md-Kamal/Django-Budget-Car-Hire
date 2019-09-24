@@ -36,5 +36,5 @@ class Fleet(models.Model):
 
 
     def __str__(self):
-        return str(self.fleet_ref)
+        return self.fleet_ref 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -18,7 +18,7 @@ def fleet_view(request):
     fleets                      = Fleet.objects.filter(user = req_user)
     context                     = {
         'fleets': fleets,
-        'msg': str(uuid4())[-6:].upper()
+        'msg': fleets.count
     }
     return render(request, template, context)
 
@@ -32,10 +32,35 @@ def fleet_detail_view(request, pk):
         'fleet': fleet,
         'customer': fleet.user,
         'vehicles' : fleet.get_fleet_vehicles(),
-        'total': total
+        'total': total,
+        'msg': request.session.get('fleet_id', None)
     }
     return render(request, template, context)
 
+
+
+# @login_required
+# def add_to_fleet(request, pk):
+#     user                        = request.user.user_profile
+#     fleet_id                    = request.COOKIES.get('fleet', None)
+#     car                         = get_object_or_404(Vehicle, pk = pk)
+#     fleet                       = ''
+#     if fleet_id is None:
+#         fleet = Fleet.objects.create(user = user, fleet_ref = str(uuid4())[-6:].upper())
+#         fleet.vehicles.add(car)
+#         car.booked(car)
+#         messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
+#         response.set_cookie('fleet', 'some_cookie')
+#     else:
+#         fleet                   = get_object_or_404(Fleet, pk = fleet_id)
+#         if not fleet.user == user:
+#             messages.error(request, f'You cannot modify this Fleet')
+#         else:
+#             fleet.vehicles.add(car)
+#             messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
+#     return HttpResponseRedirect(fleet.get_absolute_url())
+
+        
 
 
 @login_required
@@ -54,13 +79,12 @@ def add_to_fleet(request, pk):
         fleet                   = get_object_or_404(Fleet, pk = fleet_id)
         if not fleet.user == user:
             messages.error(request, f'You cannot modify this Fleet')
+        elif fleet.vehicles.count == 21:
+            messages.info(request, f'You have reached the max number vehicle for a fleet')
         else:
             fleet.vehicles.add(car)
             messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
     return HttpResponseRedirect(fleet.get_absolute_url())
-
-        
-
 
 
 
