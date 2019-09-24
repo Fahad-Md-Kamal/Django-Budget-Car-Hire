@@ -5,7 +5,19 @@ app_name = 'fleet'
 
 urlpatterns = [
        
-    path('',
-        views.fleet_home, 
-        name= 'fleet_home')
+    path(
+        '',
+        views.fleet_view, 
+        name= 'fleets_view'),
+       
+    path(
+        'detail/<int:pk>',
+        views.fleet_detail_view, 
+        name= 'detail_fleet'),
+       
+    path(
+        'add-vehicle/<int:pk>',
+        views.add_to_fleet, 
+        name= 'add_to_fleet'),
+
         ]

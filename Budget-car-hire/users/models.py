@@ -34,7 +34,7 @@ class Profile(models.Model):
     image       = models.ImageField(default='default_profile.png', upload_to =photo_path)
     
     def __str__(self):
-        return f'{self.user.username} profile'
+        return self.user.username
 
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)

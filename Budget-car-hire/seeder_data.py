@@ -95,7 +95,7 @@ def populate_data(N=5):
         add_vehicles()
 
         ## Complex Data
-        create_comment(N=2)
+        create_comment()
 
 
 

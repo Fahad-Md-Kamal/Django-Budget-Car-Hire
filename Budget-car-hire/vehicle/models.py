@@ -63,6 +63,7 @@ class Vehicle(models.Model):
     is_freezed      = models.BooleanField(default=False)
     is_approved     = models.BooleanField(default=False)
     is_booked       = models.BooleanField(default=False)
+    booked_date     = models.DateTimeField( auto_now=True, blank=True, null=True)
     is_hired        = models.BooleanField(default=False)
     image           = models.ImageField(default='default_vehicle.png', upload_to =photo_path)
 
@@ -100,6 +101,13 @@ class Vehicle(models.Model):
     @staticmethod
     def hire_vehicle(self):
         self.is_hired = not self.is_hired
+        self.save()
+
+
+    @staticmethod
+    def booked(self):
+        self.is_booked  = not self.is_booked
+        self.booked_date = datetime.datetime.now()
         self.save()
 
 

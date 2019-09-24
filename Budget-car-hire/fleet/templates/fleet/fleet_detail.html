@@ -1,0 +1,25 @@
+{% block fleet_content %}
+
+
+{% if fleet %}
+    fleets ID: {{ fleet.id }}<br>
+    Owner: {{ fleet.user.user.username }}<br>
+    Reference Id: {{ fleet.fleet_ref }}<br>
+    Booked On: {{ fleet.booked_date }}<br>
+    Purchased Status: {{ fleet.is_purchased }}<br>
+    Approval: {{ fleet.is_approved }}<br>
+    Total: {{total}} <br>
+
+    {% for vehicle in vehicles %}
+        ID: {{vehicle.id}} - 
+        Reg No: {{vehicle.reg_no}} <br>
+    {% endfor %}
+    {{msg}}
+{% else %}
+    Sorry!!!!      No Fleets
+    <br>
+    {{msg}}
+{% endif %}
+
+
+{% endblock fleet_content%}

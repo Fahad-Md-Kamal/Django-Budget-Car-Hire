@@ -1,2 +1,15 @@
 {% block fleet_content %}
+
+
+{% if fleets%}
+    You have fleets 
+    <br>
+    {{msg}}
+{% else %}
+    Sorry!!!!      No Fleets
+    <br>
+    {{msg}}
+{% endif %}
+
+
 {% endblock fleet_content%}

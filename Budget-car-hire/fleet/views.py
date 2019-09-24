@@ -1,46 +1,140 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+from uuid import uuid4
+from datetime import datetime
 
 from users.models import Profile
 from .models import Fleet
 from vehicle.models import Vehicle
 
-# def get_user_pending_fleet(request):
-#     user_profile    = get_object_or_404(Profile, user=request.user)
-#     fleet           = Fleet.objects.filter(customer= user_profile, is_hired= False)
-#     if fleet.exists():
-#         return fleet[0]
-#     return 0
+@login_required
+def fleet_view(request):
+    template                    = 'fleet/fleets.html'
+    req_user                    = request.user.user_profile
+    fleets                      = Fleet.objects.filter(user = req_user)
+    context                     = {
+        'fleets': fleets,
+        'msg': str(uuid4())[-6:].upper()
+    }
+    return render(request, template, context)
 
 
-# def add_to_fleet(request, **kwargs):
-#     # get the user profile
-#     user_profile    = get_object_or_404(Profile, user=request.user)
-#     # filter vehicle id
-#     vehicle         = Vehicle.objects.filter(id=kwargs.get('vehicle_id', "")).first()
-#     # Check if the user already owns this vehicle
-#     if vehicle in 
-
-def fleet_create(customer=None):
-    fleet_obj       = Fleet.objects.create(customer=None)
-    print('Fleet Id Created')
-    return fleet_obj
-
-
+@login_required
+def fleet_detail_view(request, pk):
+    template            = 'fleet/fleet_detail.html'
+    fleet               = get_object_or_404(Fleet, pk = pk)
+    total               = fleet.get_total()
+    context             = {
+        'fleet': fleet,
+        'customer': fleet.user,
+        'vehicles' : fleet.get_fleet_vehicles(),
+        'total': total
+    }
+    return render(request, template, context)
 
 
-def fleet_home(requset):
-    # del requset.session['fleet_id']
-    requset.session['fleet_id'] = "12"
-    fleet_id = requset.session.get('fleet_id', None)
-    # if fleet_id is None:
-    #     fleet_obj   = fleet_obj()
-    #     requset.session['fleet_id'] = fleet_obj.id
-    # else:
-    qs = Fleet.objects.filter(id=fleet_id)
-    if qs.count() == 1:
-        fleet_obj   = qs.first()
+
+@login_required
+def add_to_fleet(request, pk):
+    user                        = request.user.user_profile
+    fleet_id                    = request.session.get('fleet_id', None)
+    car                         = get_object_or_404(Vehicle, pk = pk)
+    fleet                       = ''
+    if fleet_id is None:
+        fleet = Fleet.objects.create(user = user, fleet_ref = str(uuid4())[-6:].upper())
+        fleet.vehicles.add(car)
+        car.booked(car)
+        messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
+        request.session['fleet_id'] = fleet.id
     else:
-        fleet_obj   = fleet_create()
-        requset.session['fleet_id'] = fleet_obj.id
+        fleet                   = get_object_or_404(Fleet, pk = fleet_id)
+        if not fleet.user == user:
+            messages.error(request, f'You cannot modify this Fleet')
+        else:
+            fleet.vehicles.add(car)
+            messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
+    return HttpResponseRedirect(fleet.get_absolute_url())
 
-    return render(requset, 'fleet/fleets.html', {})
+        
+
+
+
+
+
+
+# def fleet_home(requset):
+#     fleet_id                    = requset.session.get('fleet_id', None)
+#     qs                          = Fleet.objects.filter(id=fleet_id)
+#     if qs.count()               == 1:
+#         fleet_obj               = qs.first()
+#     else:
+#         fleet_obj               = Fleet.objects.new(customer=requset.user)
+#         requset.session['fleet_id'] = fleet_obj.id
+#     return render(requset, 'fleet/fleets.html', {})
+
+
+
+# def fleet_home(request):
+#     fleet_obj, new_obj      = Fleet.objects.new_or_get(request)
+#     cars                    = fleet_obj.vehicles.all()
+#     total                   = 0
+#     for x in cars:
+#         total += x.rent
+#     print(total)
+#     fleet_obj.total         = total
+#     fleet_obj.save()
+#     return render(request, 'fleet/fleets.html', {})
+
+
+# def fleet_update(request):
+#     car_obj                     = Vehicle.objects.get(id=1)
+#     fleet_obj, new_obj          = Fleet.objects.new_or_get(request)
+#     fleet_obj.vehicles.add(car_obj)
+#     return redirect(car_obj.get_absolute_url())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def add_to_fleet(request, vehicle_id): 
+    # vehicle = vehicle.objects.get(id=vehicle_id) 
+    # fleet = Fleet(request) 
+    # fleet.add(vehicle)
+
+# def remove_from_cart(request, vehicle_id): 
+    # vehicle = Vehicle.objects.get(id=vehicle_id) 
+    # fleet = Fleet(request) fleet.remove(vehicle)
+
+# def get_fleet(request): 
+    # return render_to_response('fleet/fleet.html', dict(fleet=Fleet(request)))
+
+# templates/cart.html ``` {% extends 'base.html' %}
+
+# {% block body %} 
+    # Product Quantity Total Price {% for item in cart %} 
+        # {{ item.product.name }} {{ item.quantity }} {{ item.total_price }} 
+    # {% endfor %} 
+# {% endblock %} ```
