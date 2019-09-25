@@ -8,16 +8,13 @@
 <div class="jumbotron col-sm-10 col-md-8 col-xl-6 offset-sm-1 offset-md-2 offset-xl-3">
         {% include './_detail_vehicle.html' %}
               <div class="btn-group d-flex justify-content-end">
-                {%if not user.is_staff %}
-                  <a class="btn btn-lg btn-success" href="#">Hire</a>
-                {% endif %}
                 
                 {% if car.owner == user or user.is_staff %}
                   <a class="btn btn-lg btn-warning" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit</a>
                   {% endif %}
 
-                {% if not car.is_hired %}
-                  <a class="btn btn-lg btn-info" href="#">Hire</a>
+                {%if user.is_staff and not car.is_hired %}
+                  <a class="btn btn-lg btn-success" href="{% url 'fleet:add_to_fleet' car.pk %}">Book</a>
                 {% endif %}
               </div>
       </div>

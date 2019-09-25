@@ -25,6 +25,12 @@
             <p class="h4 mt-5">Vehicle Type</p>
             <ul class="list-group">
                 <li class="list-group-item">
+                    <form action="{% url 'vehicle:vehicle_list' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="query" value="0" >
+                        <button class="btn btn-link" type="submit"> All Cars </button>
+                    </form> 
+                </li>
+                <li class="list-group-item">
                     <form action="{% url 'vehicle:search_vehicle' %}" method="post">{% csrf_token %}
                         <input type="hidden" name="query" value="0" >
                         <button class="btn btn-link" type="submit"> Small Car </button>

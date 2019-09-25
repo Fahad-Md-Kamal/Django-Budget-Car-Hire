@@ -3,13 +3,26 @@
 
 
 {% if fleets%}
-    You have fleets 
-
-
-
-    
-    <br>
-    {{msg}}
+    {% for fleet in fleets %}
+    <div class="card px-5 h4">
+    <p class="card-header ">
+        Fleet ID: <span class="font-weight-bolder h4 text-success">{{ fleet.fleet_ref }}</span>
+    </p>
+    <div class="card-body">
+            <div class="text-capitalize">
+                <span>Total Cars:</span>
+                <span>{{ fleet.vehicles.count }}</span>
+            </div>
+            <div class="text-capitalize">
+                <span>Total Rent:</span>
+                <span>&#2547; {{ fleet.get_total }}</span>
+            </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-block badge-info badge-pill" href="{% url 'fleet:detail_fleet'  fleet.pk %}">Detail</a>
+    </div>
+</div>
+    {% endfor %}
 {% else %}
     Sorry!!!!      No Fleets
     <br>

@@ -106,7 +106,13 @@ class Vehicle(models.Model):
 
     @staticmethod
     def booked(self):
-        self.is_booked  = not self.is_booked
+        self.is_booked  = True
+        self.booked_date = datetime.datetime.now()
+        self.save()
+
+    @staticmethod
+    def unbook(self):
+        self.is_booked  = False
         self.booked_date = datetime.datetime.now()
         self.save()
 

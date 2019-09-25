@@ -15,7 +15,6 @@ def vehicle_list_view(request):
     template        = 'vehicle/vehicle_list.html'
     CarsList        = models.Vehicle.objects.filter(is_freezed = False, 
                                         is_approved = True, 
-                                        is_booked = False, 
                                         is_hired = False)
     context = {
         'CarsList' : CarsList,
@@ -140,11 +139,10 @@ def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
     query = request.POST.get('query', None)
 
-
     CarsList        = models.Vehicle.objects.filter(vehicle_type = query)  
     context = {
         'CarsList':CarsList,
-        'page_heading' : 'Searched'
+        'page_heading' : 'Filtered'
     }
     return render (request, template, context)    
 

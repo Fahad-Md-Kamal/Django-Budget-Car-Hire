@@ -4,21 +4,8 @@
 
 
 {% if fleet %}
-    fleet ID: {{ fleet.id }}<br>
-    Owner: {{ fleet.user.user.username }}<br>
-    Reference Id: {{ fleet.fleet_ref }}<br>
-    Booked On: {{ fleet.booked_date }}<br>
-    Purchased Status: {{ fleet.is_purchased }}<br>
-    Approval: {{ fleet.is_approved }}<br>
-    Total: {{total}} <br>
-    {{msg}}
-
-
-
-
     <div class="px-4 px-lg-0">
-
-      
+     
         <div class="pb-5">
           <div class="container">
 
@@ -27,7 +14,7 @@
                           <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Reference Id: <span class="text-info">{{fleet.fleet_ref}}</span></div>
                           <div class="p-4">
                               <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
-                              <button id="button-addon3" type="button" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</button>
+                              <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
                           </div>
                           <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Customer Information</div>
                           <div class="p-4">
@@ -42,7 +29,6 @@
                             <ul class="list-unstyled mb-4">
                               <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Vehicle(s):  </strong><strong class="font-weight-bold">	
                                     {{fleet.vehicles.count}}</strong></li>
-                                <!-- <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted"></strong><strong> {{tex}}</strong></li> -->
                                 <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Rent:</strong>
                                 <h5 class="font-weight-bold">&#2547; {{total}}</h5>
                               </li>
@@ -81,7 +67,7 @@
                           <div class="p-2">
                             <img src="{{ car.image.url }}" alt="" width="70" class="img-fluid rounded shadow-sm">
                             <div class="ml-3 d-inline-block align-middle">
-                              <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">{{car.get_model_name_display}} {{car.model_year|date:"Y"}}</a></h5>
+                              <h5 class="mb-0"> <a href="{% url 'vehicle:detail_vehicle' car.pk %}" class="text-dark d-inline-block align-middle">{{car.get_model_name_display}} {{car.model_year|date:"Y"}}</a></h5>
                                 <span class="text-muted font-weight-normal font-italic d-block">Category: {{car.get_vehicle_type_display.upper}}</span>
                             </div>
                           </div>

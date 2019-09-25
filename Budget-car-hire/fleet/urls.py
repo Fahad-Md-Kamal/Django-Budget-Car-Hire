@@ -19,5 +19,10 @@ urlpatterns = [
         'add-vehicle/<int:pk>',
         views.add_to_fleet, 
         name= 'add_to_fleet'),
+       
+    path(
+        'existing-fleet/<int:pk>',
+        views.existing_fleet, 
+        name= 'existing_fleet'),
 
         ]

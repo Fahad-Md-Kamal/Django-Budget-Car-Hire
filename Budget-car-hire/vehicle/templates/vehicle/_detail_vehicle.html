@@ -27,17 +27,17 @@
                     <td>Category</td>
                     <td>{{car.get_vehicle_type_display}}</td>
                   </tr>
-                  <tr class="table-primary">
-                    <td>Status</td>
-                    <td>{{car.is_hired}}</td>
-                  </tr>
                   <tr class="table-danger">
+                    <td>Status</td>
+                    <td>{% if car.is_booked %} Booked {% elif car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                  </tr>
+                  <tr class="table-primary">
                     <td>Capacity</td>
-                    <td>3 Person</td>
+                    <td><i class="fas fa-chair"></i> {{car.capacity}}</td>
                   </tr>
                   <tr class="table-warning">
                     <td>Rent / month</td>
-                    <td>{{car.rent}}</td>
+                    <td>&#2547; {{car.rent}}</td>
                   </tr>
                   <tr class="table-dark">
                     <td class="text-dark">Registared Since</td>
