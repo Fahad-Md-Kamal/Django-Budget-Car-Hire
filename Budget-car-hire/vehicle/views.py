@@ -9,16 +9,19 @@ from django.contrib.auth.decorators import login_required
 from datetime import date
 
 from . import models, forms
+from fleet.models import Fleet
 
 
 def vehicle_list_view(request):
     template        = 'vehicle/vehicle_list.html'
-    CarsList        = models.Vehicle.objects.filter(is_freezed = False, 
-                                        is_approved = True, 
-                                        is_hired = False)
+    fleet_id        = request.session.get('fleet_id', None)
+    fleet           = get_object_or_404(Fleet, pk=fleet_id)
     context = {
-        'CarsList' : CarsList,
-        'page_heading' : 'Available'
+        'CarsList' : models.Vehicle.objects.filter(is_freezed = False, 
+                                        is_approved = True, 
+                                        is_hired = False),
+        'page_heading' : 'Available',
+        'fleet'     : fleet
     }
     return render(request, template, context)
 
@@ -26,9 +29,8 @@ def vehicle_list_view(request):
 
 def vehicle_detail_view(request, pk):
     template        = 'vehicle/vehicle_detail.html'
-    car             = get_object_or_404(models.Vehicle, pk=pk)
     context = {
-        'car':car
+        'car':get_object_or_404(models.Vehicle, pk=pk)
     }
     return render(request, template, context)
 
@@ -146,29 +148,3 @@ def search_vehicle(request):
     }
     return render (request, template, context)    
 
-
-# from django.shortcuts import render
-# from django.db.models import Q
-# from posts.models import Post
-
-# def searchposts(request):
-#     if request.method == 'GET':
-#         query= request.GET.get('q')
-
-#         submitbutton= request.GET.get('submit')
-
-#         if query is not None:
-#             lookups= Q(title__icontains=query) | Q(content__icontains=query)
-
-#             results= Post.objects.filter(lookups).distinct()
-
-#             context={'results': results,
-#                      'submitbutton': submitbutton}
-
-#             return render(request, 'search/search.html', context)
-
-#         else:
-#             return render(request, 'search/search.html')
-
-#     else:
-#         return render(request, 'search/search.html')

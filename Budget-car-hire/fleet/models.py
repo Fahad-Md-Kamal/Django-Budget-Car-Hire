@@ -21,6 +21,13 @@ class Fleet(models.Model):
     def get_total(self):
         return sum([car.rent for car in self.vehicles.all()])
 
+    def check_hired(self):
+        for car in (self.vehicles.all()):
+            if car.is_hired:
+                return True
+        return False
+
+
     def approve(self):
         self.is_approved    = not self.is_approved
         self.approved_on    = datetime.now()

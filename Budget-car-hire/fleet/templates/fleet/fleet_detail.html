@@ -5,23 +5,95 @@
 
 {% if fleet %}
     <div class="px-4 px-lg-0">
+        {{fleet.check_hired}}
      
         <div class="pb-5">
-          <div class="container">
+          <div class="container-fluid">
+
+              <div class="row">
+                  <div class="col-md-4 col-lg-4 p-5 bg-white rounded shadow-sm mb-5">
+                    {% if car %}
+                      <span class="bg-info"> {% include 'vehicle/_detail_vehicle.html' %}</span>
+                    {% else%}
+                    
+                    {% endif %}
+                  </div>
+                    <div class="col-md-6 col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+          
+                    <!-- Shopping cart table -->
+                    <div class="table-responsive">
+
+
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="border-0 bg-light">
+                              <div class="p-2 px-3 text-uppercase">Product</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                              <div class="py-2 text-uppercase">Rent/month</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                              <div class="py-2 text-uppercase">Capacity</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                              <div class="py-2 text-uppercase">Remove</div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for car in vehicles %}
+                          <tr>
+                            <th scope="row" class="border-0">
+                              <a href="{% url 'fleet:detail_fleet' fleet.pk car.pk %}">
+                              <div class="p-2">
+                                <img src="{{ car.image.url }}" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                <div class="ml-3 d-inline-block align-middle">
+                                  <h5 class="mb-0"> <span class="text-dark d-inline-block align-middle">{{car.get_model_name_display}}</span></h5>
+                                    <span class="text-muted font-weight-normal font-italic d-block">Category: {{car.get_vehicle_type_display.upper}}</span>
+                                    {% if car.is_hired%} <span class="text-muted font-weight-normal font-italic d-block text-danger">This Vehicle is Hired</span>{% endif %}
+                                </div>
+                              </div>
+                            </a>
+                            </th>
+                            <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
+                            <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
+                            <td class="border-0 align-middle"><a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                        <tr class="table-active">
+                            <th scope="row" class="border-0">
+                              <h5>Total Vehicels: {{fleet.vehicles.count}}</h5>
+                            </th>
+                            <td class="border-0 align-middle"> <span class="h5">Total Rent: </span></td>
+                            <td class="border-0 align-middle"><span class="h5">&#2547; {{total}} /-</span></td>
+                            <td class="border-0 align-middle"></td>
+                          </tr>
+
+                        
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- End -->
+                  </div>
+                </div>
 
                 <div class="row py-5 p-4 bg-white rounded shadow-sm">
-                        <div class="col-lg-6">
-                          <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Reference Id: <span class="text-info">{{fleet.fleet_ref}}</span></div>
-                          <div class="p-4">
-                              <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
-                              <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
-                          </div>
-                          <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Customer Information</div>
-                          <div class="p-4">
-                            <p class="font-italic mb-4">If you have some information for the seller you can leave them in the box below</p>
-                            
+
+
+                    <div class="col-lg-6">
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Reference Id: <span class="text-info">{{fleet.fleet_ref}}</span></div>
+                        <div class="p-4">
+                            <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
+                            <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
                         </div>
-                        </div>
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Customer Information</div>
+                        <div class="p-4">
+                          <p class="font-italic mb-4">If you have some information for the seller you can leave them in the box below</p>
+                          
+                      </div>
+                      </div>
+
                         <div class="col-lg-6">
                           <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
                           <div class="p-4">
@@ -32,58 +104,14 @@
                                 <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Rent:</strong>
                                 <h5 class="font-weight-bold">&#2547; {{total}}</h5>
                               </li>
-                            </ul><a href="#" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                            </ul>
+                            {% if not is_approved %}
+                              <a href="#" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                              <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
+                            {% endif %}
                           </div>
                         </div>
                       </div>
-
-
-            <div class="row">
-              <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
-      
-                <!-- Shopping cart table -->
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="border-0 bg-light">
-                          <div class="p-2 px-3 text-uppercase">Product</div>
-                        </th>
-                        <th scope="col" class="border-0 bg-light">
-                          <div class="py-2 text-uppercase">Rent/month</div>
-                        </th>
-                        <th scope="col" class="border-0 bg-light">
-                          <div class="py-2 text-uppercase">Capacity</div>
-                        </th>
-                        <th scope="col" class="border-0 bg-light">
-                          <div class="py-2 text-uppercase">Remove</div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {% for car in vehicles %}
-                      <tr>
-                        <th scope="row" class="border-0">
-                          <div class="p-2">
-                            <img src="{{ car.image.url }}" alt="" width="70" class="img-fluid rounded shadow-sm">
-                            <div class="ml-3 d-inline-block align-middle">
-                              <h5 class="mb-0"> <a href="{% url 'vehicle:detail_vehicle' car.pk %}" class="text-dark d-inline-block align-middle">{{car.get_model_name_display}} {{car.model_year|date:"Y"}}</a></h5>
-                                <span class="text-muted font-weight-normal font-italic d-block">Category: {{car.get_vehicle_type_display.upper}}</span>
-                            </div>
-                          </div>
-                        </th>
-                        <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
-                        <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                        <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-trash text-danger"></i></a></td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-                <!-- End -->
-              </div>
-            </div>
-      
 
       
           </div>

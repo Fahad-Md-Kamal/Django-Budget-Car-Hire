@@ -9,6 +9,15 @@
         {% if CarsList %}
                 <div class="h3 text-center mt-5">All {{ page_heading }} Cars</div>
                 {% for car in CarsList %}
+                {{fleet}}
+                {{car.fleet_vehicle.all}}
+
+                {% if fleet == car.fleet_vehicle.all %}
+                    True
+                {% else %}
+                    False
+                {% endif %}
+
                 <div class="card ml-4 my-5">
                     {% include './_list_vehicle.html' %}
                 </div>
