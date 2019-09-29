@@ -37,15 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'crispy_forms',
-    
     'users.apps.UsersConfig',
     'blog.apps.BlogConfig',
     'vehicle.apps.VehicleConfig',
     'fleet.apps.FleetConfig',
-    # 'fleets.apps.FleetsConfig',
-    # 'payment.apps.PaymentConfig',
+    'stripe',
+    'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -142,3 +140,10 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
 # LOGOUT_REDIRECT_URL = '/'
+
+if DEBUG:
+    STRIPE_PUBLISHABLE_KEY = 'pk_test_K05P8fUTdXXbEEqMiLAmbjie00UpDcH7J0'
+    STRIPE_SECRET_KEY = 'sk_test_TAgqTCslztROJW34fRSVh7jn00z9wh8vnr'
+else:
+    STRIPE_PUBLISHABLE_KEY = ''
+    STRIPE_SECRET_KEY = ''

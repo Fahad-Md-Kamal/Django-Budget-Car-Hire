@@ -99,3 +99,5 @@ def remove_fleet(request, pk):
         messages.error(request, 'You cannot perform this action on this fleet')
         return HttpResponseRedirect(fleet.get_absolute_url())
     return redirect ('fleet:fleets')
+
+

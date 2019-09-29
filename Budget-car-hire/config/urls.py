@@ -27,8 +27,9 @@ urlpatterns = [
     path('blogs/', include('blog.urls', namespace='blogs')),
     path('fleet/', include('fleet.urls', namespace='fleet')),
     # path('fleets/', include('fleets.urls', namespace='fleets')),
-    # path('payment/', include('payment.urls', namespace='payment')),
+    path('payment/', include('payment.urls', namespace='payment')),
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,36 +1,23 @@
 from django.db import models
 from django.urls import reverse_lazy
+from users.models import Profile
+from fleet.models import Fleet
 
-from fleets.models import Fleet
+class Transaction(models.Model):
+    profile         = models.ForeignKey(Profile, on_delete= models.CASCADE, related_name='fleet_payer')
+    token           = models.CharField(max_length=120)
+    fleet           = models.ForeignKey(Fleet, on_delete = models.SET_NULL, blank=True, null=True)
+    amount          = models.DecimalField(max_digits=100, decimal_places=2)
+    success         = models.BooleanField(default=True)
+    timestamp       = models.DateTimeField(auto_now_add=True, auto_now=False)
 
-class FleetPayment(models.Model):
 
-    CASH = 0
-    NAGAD = 1
-    BANK_TRANS = 2
-    VISA = 3
-    MASTERCARD = 4
-    AMERICAN_EXPRESS = 5
+    class Meta:
+        ordering    = ['-timestamp']
 
-    PAYMENT_METHOD = (
-        (CASH, 'Direct Payment'),
-        (NAGAD, 'Nagad App-pay'),
-        (BANK_TRANS, 'Bank Transection'),
-        (VISA, 'VISA Payment'),
-        (MASTERCARD, 'MASTERCARD Payment'),
-        (AMERICAN_EXPRESS, 'AMERICAN EXPRESS'),
-    )
 
-    fleet = models.ForeignKey(Fleet, on_delete=models.CASCADE, related_name='payment_fleet')
-    payment_medium = models.IntegerField(choices= PAYMENT_METHOD, default= CASH)
-    paid_amount = models.PositiveIntegerField(default=0)
-    paid_on = models.DateField(auto_now_add=True)
-    transection_id = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    card_number = models.CharField(max_length=16, blank=True, null=True)
-    account_name = models.CharField(max_length=50, blank=True, null=True, )
-    is_verified = models.BooleanField(default= False)
+    def __str__(self):
+        return self.fleet.fleet_ref
 
 
 
-    def get_absolute_url(self):
-        return reverse_lazy('fleets:fleet_detail', kwargs={'pk': self.fleet.pk})

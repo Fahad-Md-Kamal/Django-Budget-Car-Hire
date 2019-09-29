@@ -26,7 +26,6 @@ def vehicle_list_view(request):
     return render(request, template, context)
 
 
-
 def vehicle_detail_view(request, pk):
     template        = 'vehicle/vehicle_detail.html'
     context = {
@@ -48,7 +47,6 @@ def vehicle_registration(request):
             return HttpResponseRedirect(vehicle.get_absolute_url())
     else:
         form = forms.vehicle_reg_form()
-
     context = {
         'form': form,
         'state': 'Register'
@@ -61,7 +59,6 @@ def vehicle_update_view(request, pk):
     template        = 'vehicle/vehicle_form.html'
     vehicle         = get_object_or_404(models.Vehicle, id = pk)
     user            = request.user
-
     if user.is_staff or user == vehicle.owner:
         if request.method == 'POST':
             form     = forms.vehicle_reg_form(request.POST, instance = vehicle)
@@ -83,14 +80,11 @@ def vehicle_update_view(request, pk):
         return HttpResponseRedirect(vehicle.get_absolute_url())
 
 
-
-
 @login_required
 def vehicel_delete_view(request, pk):
     template        = 'vehicle/vehicle_confirm_delete.html'
     car             = get_object_or_404(models.Vehicle, id = pk)
     user            = request.user
-
     if user.is_staff or car.owner == user:
         if request.method == 'POST':
             car.delete()
@@ -127,6 +121,7 @@ def freeze_vehicle(request, pk):
     vehicle.freeze_vehicle()
     return redirect('vehicle:admin_vehicle')
 
+
 def owner_vehicle_list(request):
     template        = 'vehicle/vehicle_list.html'
     owner           = request.user
@@ -137,10 +132,10 @@ def owner_vehicle_list(request):
     }
     return render (request, template, context)
 
+
 def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
-    query = request.POST.get('query', None)
-
+    query           = request.POST.get('query', None)
     CarsList        = models.Vehicle.objects.filter(vehicle_type = query)  
     context = {
         'CarsList':CarsList,

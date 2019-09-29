@@ -1,8 +1,30 @@
 {% extends 'fleet/fleet_base.html' %}
 {% block fleet_content %}
 
+<script src="https://js.stripe.com/v3/"></script>
 
+<form action="/charge" method="post" id="payment-form">
+  <div class="form-row">
+    <label for="card-element">
+      Credit or debit card
+    </label>
+    <div id="card-element">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
+
+    <!-- Used to display form errors. -->
+    <div id="card-errors" role="alert"></div>
+  </div>
+
+  <button>Submit Payment</button>
+</form>
+
+
+
+      
 {% if fleets%}
+
+
     {% for fleet in fleets %}
     <div class="card px-5 h4">
     <p class="card-header ">

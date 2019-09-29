@@ -11,6 +11,7 @@ pillow = "*"
 django-bootstrap4 = "*"
 django-crispy-forms = "*"
 faker = "*"
+stripe = "*"
 
 [requires]
 python_version = "3.7"

@@ -40,4 +40,9 @@ urlpatterns = [
         views.remove_fleet, 
         name= 'remove_fleet'),
 
+    # path(
+    #     'remove-payment/',
+    #     views.payment, 
+    #     name= 'fleet_payment'),
+
         ]
