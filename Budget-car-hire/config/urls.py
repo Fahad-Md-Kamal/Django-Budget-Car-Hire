@@ -27,7 +27,7 @@ urlpatterns = [
     path('blogs/', include('blog.urls', namespace='blogs')),
     path('fleet/', include('fleet.urls', namespace='fleet')),
     # path('fleets/', include('fleets.urls', namespace='fleets')),
-    path('payment/', include('payment.urls', namespace='payment')),
+    # path('payment/', include('payment.urls', namespace='payment')),
 ]
 
 if settings.DEBUG:

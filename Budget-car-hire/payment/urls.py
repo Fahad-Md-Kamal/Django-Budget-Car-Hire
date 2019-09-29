@@ -5,5 +5,5 @@ app_name='payment'
 
 
 urlpatterns = [
-    path('fleet/<int:pk>/', views.make_payment, name='make_payment' )
+    path('fleet/<int:pk>/', views.checkout, name='checkout' )
 ]

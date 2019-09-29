@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from django.conf import settings
 
 from uuid import uuid4
 from datetime import datetime
@@ -10,6 +10,9 @@ from datetime import datetime
 from users.models import Profile
 from .models import Fleet
 from vehicle.models import Vehicle
+
+import stripe
+
 
 @login_required
 def fleet_view(request):
@@ -74,8 +77,6 @@ def add_to_fleet(request, pk):
     return HttpResponseRedirect(fleet.get_absolute_url())
 
 
-
-
 @login_required
 def remove_from_fleet(request, fleet_pk, vehicle_pk):
     car             = get_object_or_404(Vehicle, pk = vehicle_pk)
@@ -90,7 +91,6 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
 
 @login_required
 def remove_fleet(request, pk):
-    # pass
     fleet           = get_object_or_404(Fleet, pk = pk)
     if request.user.is_staff or request.user.user_profile == fleet.user:
         Fleet.delete(fleet)
@@ -100,4 +100,49 @@ def remove_fleet(request, pk):
         return HttpResponseRedirect(fleet.get_absolute_url())
     return redirect ('fleet:fleets')
 
+@login_required
+def check_out(request):
+    template = 'fleet/fleet_detail.html'
+    existing_fleet = fleet_view(request)
+    publishkey  = settings.STRIPE_PUBLISHABLE_KEY
+    if request.method == 'POST':
+        try:
+            token = request.POST['stripeToken']
 
+            charge = stripe.Charge.create(
+                amount = existing_fleet.get_total(),
+                currency = 'usd',
+                description = 'Example charge',
+                source = token
+            )
+            return redirect(reversed('fleet:update_payment_record',
+                        kwargs = {
+                            'token':token
+                            })
+                        )
+
+        except stripe.error.CardError as e:
+            messages.info(request, "Your payment request couldn't be completed")
+
+    context = {
+        'fleet': existing_fleet,
+        'STRIPE_PUBLISHABLE_KEY': publishkey
+    }
+
+    return render(request, template, context)
+
+
+def update_payment_record(request, token):
+    fleet_to_purchase                   = get_object_or_404(Fleet, pk = fleet_pk)
+    fleet_to_purchase.is_purchased      = True
+    fleet_to_purchase.booked_date       = datetime.now()
+    fleet_to_purchase.save()
+    fleet_vhicles                       = fleet_to_purchase.vehicles.all()
+    fleet_vhicles.Update( is_booked = False, is_hired= True )
+    transaction = models.Transaction( profile        = request.user.profile,
+                                      fleet           = fleet_to_purchase,
+                                      amount          = fleet_to_purchase.get_total(),
+                                      is_purchased    = True )
+    transaction.save()
+    messages.info(request, 'Your payment has been done successfully')
+    return HttpResponseRedirect(fleet_to_purchase.get_absolute_url())

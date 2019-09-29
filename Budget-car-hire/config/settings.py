@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'vehicle.apps.VehicleConfig',
     'fleet.apps.FleetConfig',
     'stripe',
-    'payment.apps.PaymentConfig'
+    # 'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [

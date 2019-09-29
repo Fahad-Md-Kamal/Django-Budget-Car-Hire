@@ -107,7 +107,7 @@
                             </ul>
                             {% if not is_approved %}
                            
-                              <a href="#" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                              <a href="{% url 'fleet:check_out' %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
                               <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
                             {% endif %}
                           </div>
