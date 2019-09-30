@@ -106,10 +106,22 @@
                               </li>
                             </ul>
                             {% if not is_approved %}
-                           
-                              <a href="{% url 'fleet:check_out' %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                           <form action="{% url 'fleet:checkout' fleet.pk %}" method="post">
+                             {% csrf_token %}
+                            <!-- <div class="form-group"> -->
+                              <div class="form-group">
+                                <input type="text" name="number" id="number" placeholder="Card Number">
+                                <input type="text" name="month" id="month" placeholder="Expiration Month">
+                                <input type="text" name="year" id="your" placeholder="Expiration Year">
+                                <input type="text" name="cvc" id="cvc" placeholder="CVC">
+                              </div>
+                            <!-- </div> -->
+
+                              <button class="btn btn-info rounded-pill py-2 btn-block" type="submit">Checkout</button>
+                              <!-- <a href="{% url 'fleet:payement_form' fleet.pk %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a> -->
                               <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
-                            {% endif %}
+                           </form>
+                           {% endif %}
                           </div>
                         </div>
                       </div>

@@ -100,12 +100,26 @@ def remove_fleet(request, pk):
         return HttpResponseRedirect(fleet.get_absolute_url())
     return redirect ('fleet:fleets')
 
+
+
+def payement_form(request, pk):
+    template = 'fleet/checkout.html'
+    fleet       = get_object_or_404(Fleet, pk = pk)
+    context     = {
+        'fleet': fleet,
+    }
+    return render (request, template, context)
+
 @login_required
-def check_out(request):
-    template = 'fleet/fleet_detail.html'
-    existing_fleet = fleet_view(request)
+def checkout(request, pk):
+    template = 'fleet/checkout.html'
+    # existing_fleet = fleet_view(request)
+    existing_fleet = get_object_or_404(Fleet, pk = pk)
+
     publishkey  = settings.STRIPE_PUBLISHABLE_KEY
+    
     if request.method == 'POST':
+        print('Paid')
         try:
             token = request.POST['stripeToken']
 

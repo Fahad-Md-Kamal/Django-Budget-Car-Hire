@@ -39,11 +39,17 @@ urlpatterns = [
         'remove-fleet/<int:pk>/',
         views.remove_fleet, 
         name= 'remove_fleet'),
+        
+    path(
+        'payement-form/<int:pk>/',
+        views.payement_form, 
+        name= 'payement_form'),
+        
 
     path(
-        'check-out/',
-        views.check_out, 
-        name= 'check_out'),
+        'checkout/<int:pk>/',
+        views.checkout, 
+        name= 'checkout'),
 
     path(
         'update-payment-record/',
