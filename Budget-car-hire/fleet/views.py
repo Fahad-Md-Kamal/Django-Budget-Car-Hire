@@ -117,23 +117,45 @@ def checkout(request, pk):
     existing_fleet = get_object_or_404(Fleet, pk = pk)
 
     publishkey  = settings.STRIPE_PUBLISHABLE_KEY
+    print(publishkey)
     
     if request.method == 'POST':
         print('Paid')
         try:
-            token = request.POST['stripeToken']
+            stripe.api_key = settings.STRIPE_PUBLISHABLE_KEY
+            number = request.POST['number']
+            exp_month = request.POST['month']
+            exp_year = request.POST['year']
+            cvc = request.POST['cvc']
 
-            charge = stripe.Charge.create(
-                amount = existing_fleet.get_total(),
-                currency = 'usd',
-                description = 'Example charge',
-                source = token
+            if exp_month > datetime.now().month():
+                print( puran)
+
+            print(number);
+            print(exp_month);
+
+            token = stripe.Token.create(
+                card = {
+                    'number': number,
+                    'exp_month': exp_month,
+                    'exp_year': exp_year,
+                    'cvc': cvc,
+                }
             )
-            return redirect(reversed('fleet:update_payment_record',
-                        kwargs = {
-                            'token':token
-                            })
-                        )
+
+            print(token);
+
+            # charge = stripe.Charge.create(
+            #     amount = existing_fleet.get_total(),
+            #     currency = 'usd',
+            #     description = 'Example charge',
+            #     source = token
+            # )
+            # return redirect(reversed('fleet:update_payment_record',
+            #             kwargs = {
+            #                 'token':token
+            #                 })
+            #             )
 
         except stripe.error.CardError as e:
             messages.info(request, "Your payment request couldn't be completed")
@@ -143,7 +165,7 @@ def checkout(request, pk):
         'STRIPE_PUBLISHABLE_KEY': publishkey
     }
 
-    return render(request, template, context)
+    return HttpResponseRedirect(existing_fleet.get_absolute_url())
 
 
 def update_payment_record(request, token):

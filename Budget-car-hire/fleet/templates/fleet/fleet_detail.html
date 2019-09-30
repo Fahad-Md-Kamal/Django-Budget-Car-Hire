@@ -110,10 +110,13 @@
                              {% csrf_token %}
                             <!-- <div class="form-group"> -->
                               <div class="form-group">
-                                <input type="text" name="number" id="number" placeholder="Card Number">
-                                <input type="text" name="month" id="month" placeholder="Expiration Month">
-                                <input type="text" name="year" id="your" placeholder="Expiration Year">
-                                <input type="text" name="cvc" id="cvc" placeholder="CVC">
+                                <input class="form-control" type="text" disabled value="&#2547; {{total}}">
+                                <input class="form-control my-3" type="text" name="number" id="number" placeholder="Card Number" maxlength="16" required>
+                              <div class="d-flex">
+                                <input class="form-control" type="text" name="month" id="month" placeholder="Exp Month e.g. 07" maxlength="2" required>
+                                <input class="form-control" type="text" name="year" id="year" placeholder="Exp Year e.g. 2020 " maxlength="4" required>
+                                <input class="form-control" type="text" name="cvc" id="cvc" placeholder="CVC" maxlength="3" required>
+                              </div>
                               </div>
                             <!-- </div> -->
 
