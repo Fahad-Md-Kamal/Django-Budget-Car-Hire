@@ -5,24 +5,24 @@
 
 {% if fleet %}
     <div class="px-4 px-lg-0">
-        {{fleet.check_hired}}
+        <!-- {{fleet.check_hired}} -->
      
         <div class="pb-5">
           <div class="container-fluid">
 
               <div class="row">
-                  <div class="col-md-4 col-lg-4 p-5 bg-white rounded shadow-sm mb-5">
                     {% if car %}
-                      <span class="bg-info"> {% include 'vehicle/_detail_vehicle.html' %}</span>
-                    {% else%}
-                    
-                    {% endif %}
+                  <div class="col-md-4 col-lg-4 p-5 bg-white rounded shadow-sm mb-5">
+                      {% include 'vehicle/_detail_vehicle.html' %}
+                      <a class="btn btn-block badge-pill badge-success" href="{% url 'vehicle:detail_vehicle' car.pk  %}">Detail</a>
                   </div>
-                    <div class="col-md-6 col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+                  <div class="col-md-6 col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+                        {% else%}
+                    <div class="col-md-10 p-5 bg-white rounded shadow-sm mb-5 offset-md-1">
+                    {% endif %}
           
                     <!-- Shopping cart table -->
                     <div class="table-responsive">
-
 
                       <table class="table">
                         <thead>
@@ -58,7 +58,7 @@
                             </th>
                             <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
                             <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                            <td class="border-0 align-middle"><a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a></td>
+                            <td class="border-0 align-middle">{% if not car.is_hired %} <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> {% endif %}</td>
                           </tr>
                         {% endfor %}
                         <tr class="table-active">
@@ -105,30 +105,19 @@
                                 <h5 class="font-weight-bold">&#2547; {{total}}</h5>
                               </li>
                             </ul>
-                            {% if not is_approved %}
-                           <form action="{% url 'fleet:checkout' fleet.pk %}" method="post">
-                             {% csrf_token %}
-                            <!-- <div class="form-group"> -->
-                              <div class="form-group">
-                                <input class="form-control" type="text" disabled value="&#2547; {{total}}">
-                                <input class="form-control my-3" type="text" name="number" id="number" placeholder="Card Number" maxlength="16" required>
-                              <div class="d-flex">
-                                <input class="form-control" type="text" name="month" id="month" placeholder="Exp Month e.g. 07" maxlength="2" required>
-                                <input class="form-control" type="text" name="year" id="year" placeholder="Exp Year e.g. 2020 " maxlength="4" required>
-                                <input class="form-control" type="text" name="cvc" id="cvc" placeholder="CVC" maxlength="3" required>
-                              </div>
-                              </div>
-                            <!-- </div> -->
-
-                              <button class="btn btn-info rounded-pill py-2 btn-block" type="submit">Checkout</button>
-                              <!-- <a href="{% url 'fleet:payement_form' fleet.pk %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a> -->
-                              <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
-                           </form>
+                            {% if not fleet.is_purchased %}
+                              <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                            {% else %}
+                              <p class="badge badge-success badge-pill p-3 text-end">Hired</p>
                            {% endif %}
                           </div>
                         </div>
                       </div>
-
+                              <!-- <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-danger rounded-pill py-2 btn-block text-light">Freeze</a> -->
+                              <!-- <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a> -->
+                            <!-- {% elif user.is_staff and not fleet.is_approved %} -->
+                              <!-- <a href="{% url 'fleet:approve_fleet' fleet.pk  %}" class="btn btn-primary rounded-pill py-2 btn-block text-light">Approved</a> -->
+                            <!-- {% elif user.is_staff and fleet.is_approved %} -->
       
           </div>
         </div>

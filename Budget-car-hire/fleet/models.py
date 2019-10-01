@@ -47,7 +47,6 @@ class Fleet(models.Model):
 
 
 
-
 class Transaction(models.Model):
     profile         = models.ForeignKey(Profile, 
                                         on_delete= models.CASCADE, 
@@ -60,7 +59,7 @@ class Transaction(models.Model):
                                         related_name= 'paid_fleet')
     amount          = models.DecimalField(max_digits=100, 
                                         decimal_places=2)
-    success         = models.BooleanField(default=True)
+    is_purchased    = models.BooleanField(default=True)
     timestamp       = models.DateTimeField(auto_now_add=True, 
                                             auto_now=False)
 

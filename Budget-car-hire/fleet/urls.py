@@ -7,53 +7,58 @@ urlpatterns = [
        
     path(
         '',
-        views.fleet_view, 
+        views.fleet_view,
         name= 'fleets'),
        
     path(
         'detail/<int:pk>/',
-        views.fleet_detail_view, 
+        views.fleet_detail_view,
         name= 'detail_fleet'),
        
     path(
         'detail/<int:pk>/<int:car_pk>',
-        views.fleet_detail_view, 
+        views.fleet_detail_view,
         name= 'detail_fleet'),
        
     path(
         'add-vehicle/<int:pk>',
-        views.add_to_fleet, 
+        views.add_to_fleet,
         name= 'add_to_fleet'),
        
     path(
         'existing-fleet/<int:pk>/',
-        views.existing_fleet, 
+        views.existing_fleet,
         name= 'existing_fleet'),
         
     path(
         'remove-vehicle/<int:fleet_pk>/<int:vehicle_pk>',
-        views.remove_from_fleet, 
+        views.remove_from_fleet,
         name= 'remove_from_fleet'),
         
     path(
         'remove-fleet/<int:pk>/',
-        views.remove_fleet, 
+        views.remove_fleet,
         name= 'remove_fleet'),
         
     path(
-        'payement-form/<int:pk>/',
-        views.payement_form, 
-        name= 'payement_form'),
+        'approve-fleet/<int:pk>/',
+        views.approve_fleet,
+        name= 'approve_fleet'),
         
+    path(
+        'cancel-fleet/<int:pk>/',
+        views.cancel_fleet,
+        name= 'cancel_fleet'),
 
     path(
-        'checkout/<int:pk>/',
+        '<int:pk>/', 
         views.checkout, 
-        name= 'checkout'),
+        name='checkout' ),
 
     path(
-        'update-payment-record/',
+        'update_record/<int:pk>/<str:token>', 
         views.update_payment_record, 
-        name= 'update_payment_record'),
+        name='update_record' ),
 
-        ]
+        
+]

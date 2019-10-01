@@ -26,7 +26,6 @@ urlpatterns = [
     path('vehicle/', include('vehicle.urls', namespace='vehicle')),
     path('blogs/', include('blog.urls', namespace='blogs')),
     path('fleet/', include('fleet.urls', namespace='fleet')),
-    # path('fleets/', include('fleets.urls', namespace='fleets')),
     # path('payment/', include('payment.urls', namespace='payment')),
 ]
 

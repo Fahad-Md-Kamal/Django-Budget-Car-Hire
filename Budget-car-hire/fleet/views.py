@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 
 from uuid import uuid4
-from datetime import datetime
+from datetime import date
 
 from users.models import Profile
 from .models import Fleet
@@ -83,7 +83,7 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
     fleet           = get_object_or_404(Fleet, pk = fleet_pk)
     if request.user.is_staff or request.user.user_profile == fleet.user:
         fleet.vehicles.remove(car)
-        messages.info(request, f'{car.reg_no} removed form the vehicel')
+        messages.info(request, f'{car.reg_no} removed form the Fleet')
     else:
         messages.error(request, 'You cannot perform vehicle remove action on this fleet')
     return HttpResponseRedirect(fleet.get_absolute_url())
@@ -102,83 +102,65 @@ def remove_fleet(request, pk):
 
 
 
-def payement_form(request, pk):
-    template = 'fleet/checkout.html'
-    fleet       = get_object_or_404(Fleet, pk = pk)
-    context     = {
-        'fleet': fleet,
-    }
-    return render (request, template, context)
+@login_required
+def approve_fleet(request, pk):
+    if not request.user.is_staff:
+        messages.error(request, 'You cannot perform this action on this fleet')
+        return HttpResponseRedirect(fleet.get_absolute_url())
+    fleet      = get_object_or_404(Fleet, pk=pk)
+    fleet_vhicles                       = fleet.vehicles.all()
+    fleet_vhicles.update( is_hired= True )
+    fleet.approve()
+    return HttpResponseRedirect(fleet.get_absolute_url())
 
 @login_required
-def checkout(request, pk):
-    template = 'fleet/checkout.html'
-    # existing_fleet = fleet_view(request)
-    existing_fleet = get_object_or_404(Fleet, pk = pk)
+def cancel_fleet(request, pk):
+    if not request.user.is_staff:
+        messages.error(request, 'You cannot perform this action on this fleet')
+        return HttpResponseRedirect(fleet.get_absolute_url())
+    fleet      = get_object_or_404(Fleet, pk=pk)
+    fleet_vhicles                       = fleet.vehicles.all()
+    fleet_vhicles.update( is_hired= False )
+    fleet.approve()
+    return HttpResponseRedirect(fleet.get_absolute_url())
 
-    publishkey  = settings.STRIPE_PUBLISHABLE_KEY
-    print(publishkey)
     
+@login_required
+def checkout(request, pk):
+    template = 'fleet/stripe_pay.html'
+    fleet_to_pay                    = get_object_or_404(Fleet, pk = pk)
+    total = fleet_to_pay.get_total()
     if request.method == 'POST':
-        print('Paid')
-        try:
-            stripe.api_key = settings.STRIPE_PUBLISHABLE_KEY
-            number = request.POST['number']
-            exp_month = request.POST['month']
-            exp_year = request.POST['year']
-            cvc = request.POST['cvc']
-
-            if exp_month > datetime.now().month():
-                print( puran)
-
-            print(number);
-            print(exp_month);
-
-            token = stripe.Token.create(
-                card = {
-                    'number': number,
-                    'exp_month': exp_month,
-                    'exp_year': exp_year,
-                    'cvc': cvc,
-                }
-            )
-
-            print(token);
-
-            # charge = stripe.Charge.create(
-            #     amount = existing_fleet.get_total(),
-            #     currency = 'usd',
-            #     description = 'Example charge',
-            #     source = token
-            # )
-            # return redirect(reversed('fleet:update_payment_record',
-            #             kwargs = {
-            #                 'token':token
-            #                 })
-            #             )
-
-        except stripe.error.CardError as e:
-            messages.info(request, "Your payment request couldn't be completed")
+        token = request.POST['stripeToken']
+        print (token)
+        charge = stripe.Charge.create(
+            amount= total,
+            currency='usd',
+            description='Example charge',
+            source=token,
+        )
+        return redirect(reverse ('fleet:update_record', kwargs = {'pk':fleet_to_pay.pk,'token': token}))
 
     context = {
-        'fleet': existing_fleet,
-        'STRIPE_PUBLISHABLE_KEY': publishkey
+        'total': total
     }
+    return render(request, template, context)
+     
 
-    return HttpResponseRedirect(existing_fleet.get_absolute_url())
-
-
-def update_payment_record(request, token):
-    fleet_to_purchase                   = get_object_or_404(Fleet, pk = fleet_pk)
+@login_required
+def update_payment_record(request, pk, token):
+    fleet_to_purchase                   = get_object_or_404(Fleet, pk = pk)
+    # Fleet property modification
     fleet_to_purchase.is_purchased      = True
     fleet_to_purchase.booked_date       = datetime.now()
     fleet_to_purchase.save()
-    fleet_vhicles                       = fleet_to_purchase.vehicles.all()
-    fleet_vhicles.Update( is_booked = False, is_hired= True )
-    transaction = models.Transaction( profile        = request.user.profile,
+
+    transaction = models.Transaction( profile         = request.user.user_profile,
                                       fleet           = fleet_to_purchase,
                                       amount          = fleet_to_purchase.get_total(),
-                                      is_purchased    = True )
+                                      token           = token )
     transaction.save()
-    messages.info(request, 'Your payment has been done successfully')
+    # Success message.
+    messages.success(request, 'Your payment has been done successfully')
+    # Redirecting to the fleet
     return HttpResponseRedirect(fleet_to_purchase.get_absolute_url())
