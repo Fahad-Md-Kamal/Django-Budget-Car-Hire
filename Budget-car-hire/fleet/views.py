@@ -1,18 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 
 from uuid import uuid4
-from datetime import date
+from datetime import datetime, date
 
 from users.models import Profile
-from .models import Fleet
+from .models import Fleet, Transaction
 from vehicle.models import Vehicle
 
 import stripe
-
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def fleet_view(request):
@@ -24,6 +24,17 @@ def fleet_view(request):
     }
     return render(request, template, context)
 
+@login_required
+def admin_fleet_view(request):
+    template                    = 'fleet/fleet_admin.html'
+    req_user                    = request.user.user_profile
+    fleets                      = Fleet.objects.filter()
+    context                     = {
+        'fleets': fleets,
+    }
+    return render(request, template, context)
+
+
 
 @login_required
 def fleet_detail_view(request, pk, car_pk=None):
@@ -33,8 +44,8 @@ def fleet_detail_view(request, pk, car_pk=None):
     car                 = ''
     if car_pk:
         car                 = get_object_or_404(Vehicle, pk = car_pk)
-    # if fleet_id:
-        # del request.session['fleet_id']
+    if fleet_id:
+        del request.session['fleet_id']
     context             = {
         'fleet': fleet,
         'vehicles' : fleet.get_fleet_vehicles(),
@@ -127,7 +138,7 @@ def cancel_fleet(request, pk):
     
 @login_required
 def checkout(request, pk):
-    template = 'fleet/stripe_pay.html'
+    template = 'fleet/payment.html'
     fleet_to_pay                    = get_object_or_404(Fleet, pk = pk)
     total = fleet_to_pay.get_total()
     if request.method == 'POST':
@@ -150,12 +161,11 @@ def checkout(request, pk):
 @login_required
 def update_payment_record(request, pk, token):
     fleet_to_purchase                   = get_object_or_404(Fleet, pk = pk)
-    # Fleet property modification
     fleet_to_purchase.is_purchased      = True
     fleet_to_purchase.booked_date       = datetime.now()
     fleet_to_purchase.save()
 
-    transaction = models.Transaction( profile         = request.user.user_profile,
+    transaction = Transaction( profile         = request.user.user_profile,
                                       fleet           = fleet_to_purchase,
                                       amount          = fleet_to_purchase.get_total(),
                                       token           = token )

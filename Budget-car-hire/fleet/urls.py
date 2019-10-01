@@ -9,6 +9,11 @@ urlpatterns = [
         '',
         views.fleet_view,
         name= 'fleets'),
+
+    path(
+        'admin-view/',
+        views.admin_fleet_view,
+        name= 'admin_fleet_view'),
        
     path(
         'detail/<int:pk>/',

@@ -92,7 +92,7 @@ class Vehicle(models.Model):
     def save(self, *args, **kwargs):
         super(Vehicle, self).save(*args, **kwargs)
         img = Image.open(self.image.path)
-        if img.height > 400 or img.width > 450:
+        if img.height > 300 or img.width > 350:
             output_size = (400, 450)
             img.thumbnail(output_size)
             img.save(self.image.path)

@@ -23,6 +23,7 @@
           
                     <!-- Shopping cart table -->
                     <div class="table-responsive">
+                        <div class="bg-light px-4 py-3 font-weight-bold">Reference Id: <span class="text-success">{{fleet.fleet_ref}}</span></div>
 
                       <table class="table">
                         <thead>
@@ -51,14 +52,14 @@
                                 <div class="ml-3 d-inline-block align-middle">
                                   <h5 class="mb-0"> <span class="text-dark d-inline-block align-middle">{{car.get_model_name_display}}</span></h5>
                                     <span class="text-muted font-weight-normal font-italic d-block">Category: {{car.get_vehicle_type_display.upper}}</span>
-                                    {% if car.is_hired%} <span class="text-muted font-weight-normal font-italic d-block text-danger">This Vehicle is Hired</span>{% endif %}
+                                    {% if fleet.is_purchased%} <span class="text-muted font-weight-normal font-italic d-block text-danger">This Vehicle is Hired</span>{% endif %}
                                 </div>
                               </div>
                             </a>
                             </th>
                             <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
                             <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                            <td class="border-0 align-middle">{% if not car.is_hired %} <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> {% endif %}</td>
+                            <td class="border-0 align-middle">{% if  not fleet.is_purchased %} <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> {% endif %}</td>
                           </tr>
                         {% endfor %}
                         <tr class="table-active">
@@ -73,6 +74,9 @@
                         
                         </tbody>
                       </table>
+                      {% if not fleet.is_purchased%}
+                      <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
+                    {% endif %}
                     </div>
                     <!-- End -->
                   </div>
@@ -84,8 +88,8 @@
                     <div class="col-lg-6">
                         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Reference Id: <span class="text-info">{{fleet.fleet_ref}}</span></div>
                         <div class="p-4">
-                            <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
-                            <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
+                            <!-- <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p> -->
+                            <!-- <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a> -->
                         </div>
                         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Customer Information</div>
                         <div class="p-4">
@@ -108,7 +112,7 @@
                             {% if not fleet.is_purchased %}
                               <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
                             {% else %}
-                              <p class="badge badge-success badge-pill p-3 text-end">Hired</p>
+                              <p class="badge badge-success p-3 text-end">Hired</p>
                            {% endif %}
                           </div>
                         </div>

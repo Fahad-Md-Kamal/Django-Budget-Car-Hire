@@ -3,7 +3,16 @@
 {% block title %} Fleet {% endblock %}
 
 {% block content %}
-
+<nav class="navbar bg-primary mb-3">
+        <div class="container">
+          <ul class="nav">
+              <li class="nav-item"><a class="btn text-light mr-2 text-decoration-none" href="{% url 'blogs:blog_list' %}">My Fleet</a></li>
+              {% if user.is_staff %}
+              <li class="nav-item"><a class="btn text-light mr-2 text-decoration-none" href="{% url 'fleet:admin_fleet_view' %}">Admin's view</a></li>
+              {% endif %}
+            </ul>
+        </div>
+          </nav>
 {% block fleet_content %}
 {% endblock fleet_content%}
 

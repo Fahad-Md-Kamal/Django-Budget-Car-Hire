@@ -7,6 +7,8 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from django.db.models import Q
+import re
 
 from . import models, forms
 from fleet.models import Fleet
@@ -14,14 +16,16 @@ from fleet.models import Fleet
 
 def vehicle_list_view(request):
     template        = 'vehicle/vehicle_list.html'
+    context         = {}
     fleet_id        = request.session.get('fleet_id', None)
-    fleet           = get_object_or_404(Fleet, pk=fleet_id)
+    if fleet_id:
+        context['fleet'] = get_object_or_404(Fleet, pk=fleet_id) 
     context = {
         'CarsList' : models.Vehicle.objects.filter(is_freezed = False, 
                                         is_approved = True, 
                                         is_hired = False),
         'page_heading' : 'Available',
-        'fleet'     : fleet
+        'vehicle_list' : models.Vehicle.objects.all()
     }
     return render(request, template, context)
 
@@ -135,11 +139,24 @@ def owner_vehicle_list(request):
 
 def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
-    query           = request.POST.get('query', None)
-    CarsList        = models.Vehicle.objects.filter(vehicle_type = query)  
+    CarsList        = models.Vehicle.objects.all()
+
+    vehicel_type           = request.GET.get('vehicel_type', None)
+    model_name      = request.GET.get('model_name', None)
+    query_text      = request.GET.get('query_text', None)
+
+    if query_text != '' and query_text is not None:
+        CarsList = CarsList.filter(reg_no__icontains=query_text)
+
+    if vehicel_type != '' and vehicel_type is not None:
+        CarsList = CarsList.filter(vehicle_type=vehicel_type)
+
+    if model_name != '' and model_name is not None:
+        CarsList = CarsList.filter(model_name=model_name)
+
     context = {
         'CarsList':CarsList,
-        'page_heading' : 'Filtered'
+        'page_heading' : 'Filtered',
+        'vehicle_list' : models.Vehicle.objects.all(),
     }
     return render (request, template, context)    
-

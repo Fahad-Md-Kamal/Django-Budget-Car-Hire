@@ -1,0 +1,54 @@
+{% extends 'fleet/fleet_base.html' %}
+
+{% block fleet_content %}
+<div class="p-5">
+        <table id="table_id" class="display table">
+            <thead>
+                <tr>
+                    <th>Owner</th>
+                    <th>Model</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Capacity</th>
+                    <th>Rent / month</th>
+                    <th>Joined Since</th>
+                    <th ></th>
+                </tr>
+            </thead>
+            <tbody>
+{% if fleets %}
+{% for fleet in fleets%}
+                    <tr>
+                        <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
+                        <td>{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</td>
+                        <td>{{car.get_vehicle_type_display}}</td>
+                        <td>{% if car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                        <td>{{ car.capacity}}</td>
+                        <td>{{car.rent}}</td>
+                        <td>{{ car.added_on|date:"d M Y" }}</td>
+                        <td>
+                            <div class="btn-group">
+                                {% if not car.is_approved %}
+                                    <a class="btn btn-success" href="">Approve</a>
+                                    <a class="btn btn-danger" href="">Reject</a>
+                                {% else %}
+                                    {% if not car.is_freezed %}
+                                        <a class="btn btn-warning" href="">Freeze</a>
+                                    {% else %}
+                                        <a class="btn btn-success" href="">Free</a>
+                                    {% endif %}
+                                    <a class="btn btn-primary" href="">Detail</a>
+                                    <a class="btn btn-danger" href="">Delete</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    
+                        </div>
+ <br>
+
+{% endblock %}

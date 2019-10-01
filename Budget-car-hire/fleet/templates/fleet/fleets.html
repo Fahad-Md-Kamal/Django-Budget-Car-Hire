@@ -1,26 +1,5 @@
 {% extends 'fleet/fleet_base.html' %}
 {% block fleet_content %}
-
-<script src="https://js.stripe.com/v3/"></script>
-
-<form action="/charge" method="post" id="payment-form">
-  <div class="form-row">
-    <label for="card-element">
-      Credit or debit card
-    </label>
-    <div id="card-element">
-      <!-- A Stripe Element will be inserted here. -->
-    </div>
-
-    <!-- Used to display form errors. -->
-    <div id="card-errors" role="alert"></div>
-  </div>
-
-  <button>Submit Payment</button>
-</form>
-
-
-
       
 {% if fleets%}
 
@@ -56,7 +35,7 @@
 
         <!-- Card image -->
         <div class="view overlay rounded-top">
-          <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(134).jpg" class="img-fluid" alt="Sample image">
+          <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(134).jpg" class="img-fluid card-img-overlay" alt="Sample image">
           <a href="#">
             <div class="mask rgba-white-slight"></div>
           </a>
