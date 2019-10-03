@@ -8,23 +8,72 @@
     <div class="row">
 <div class="col-sm-10 offset-sm-1 col-md-6 col-xl-6">
     {{msg}}
-        {% if CarsList %}
+        {% if cars %}
                 <div class="h3 text-center mt-5">All {{ page_heading }} Cars</div>
-                {% for car in CarsList %}
+                {% for car in cars %}
                 <div class="card ml-4 my-5">
                     {% include './_list_vehicle.html' %}
                     {% if car in fleet_cars %}
                     <div class="card-footer text-center">
                         <span class="h4 text-danger">In Fleet</span>
                     </div>
-                {% endif %}
+                    {% endif %}
                 </div>
-        {% endfor %}
+                {% endfor %}
         
         
             {% else %}
                 <p class="h2 text-info text-center mt-5">No car found</p>
             {% endif %}
+
+            
+            {% if cars.has_other_pages %}
+            <nav class="Page navigation">
+              <ul class="pagination">
+                {% if cars.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ cars.previous_page_number }}">&laquo;</a>
+                  </li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+            
+                {% for i in cars.paginator.page_range %}
+                  
+                {% if cars.number == i %}
+                    <li class="active text-danger">
+                      <span>{{ i }} 
+                        <span class="sr-only">(current)</span>
+                      </span>
+                    </li>
+                  {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    </li>
+                  {% endif %}
+            
+                {% endfor %}
+            
+                {% if cars.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ cars.next_page_number }}">&raquo;</a>
+                  </li>
+                {% else %}
+                  <li class="disabled">
+                    <span>&raquo;</span>
+                  </li>
+                {% endif %}
+            
+              </ul>
+            </nav>
+            {% endif %}
+
+
+
+
+
+
+
         </div>
         
         <div class="col-md-3 d-sm-none d-md-block my-2 col-xl-3 offset-xl-1">

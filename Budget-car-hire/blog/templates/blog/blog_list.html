@@ -5,66 +5,85 @@
 
 <div class="col-md-8">
   {% if blogs%}
+
+<p class="mt-5 text-center h3 py-3 text-dark card-title tempting-azure-gradient rounded-pill">
+    {{msg}}
+</p>
+
     {% for post in blogs %}
+      {% include './_list_blog.html' %}
+    {% endfor %}
 
-  
-  <!-- Card -->
-  <div class="card card-cascade wider mb-3">
-  
-    <!-- Card image -->
-    <div class="p-3 d-flex view view-cascade gradient-card-header tempting-azure-gradient">
-        <img class="rounded-circle blog-img mr-3" src="{{ post.author.user_profile.image.url }}" alt="" srcset="">
-    <div class="mt-4">
-        <span>@{{post.author.username}}</span>
-        <!-- Title -->
-      <!-- Text -->
-      <p class="text-muted">on: {{ post.posted_date|date:'d-M-Y' }}</p>
-    </div>
-    </div>
-  
-    <!-- Card content -->
-    <div class="card-body card-body-cascade text-center">
-  
-      <h2 class="card-header-title mb-3"><a class="card-title text-dark text-decoration-none h5" href="{% url 'blogs:blog_detail' post.id%}">{{ post.title }}</a></h2>
-      <!-- Link -->
-      <a  href="{% url 'blogs:blog_detail' post.id%}" class="orange-text p-2">
-        <h5 class=" tex btn btn-outline-cyan rounded-pill mt-5">Read more<i class="fas fa-angle-double-right ml-2"></i></h5>
-      </a>
-  
-    </div>
-    <!-- Card content -->
-    {% if post.comments.count > 0 %}
-    <div class="card-footer d-flex justify-content-between">
-<div>
-    <a class="card-title table-warning text-decoration-none" href="{% url 'blogs:blog_detail' post.id%}">
-        <div class="my-2"><span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span> Comment(s)
-            
-        </div>
-</div>
-</div>
-    {% endif %}</a>
-  </div>
-  <!-- Card -->
 
-{% endfor %}
-{% else %}
+    {% else %}
 <div class="card card-cascade wider mb-3">
   <p class="card-body">There is no blog to show</p>
 </div>
 
 {% endif%}
+
+
+{% if blogs.has_other_pages %}
+<nav class="Page navigation">
+  <ul class="pagination">
+    {% if blogs.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ blogs.previous_page_number }}">&laquo;</a>
+      </li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+
+    {% for i in blogs.paginator.page_range %}
+      
+    {% if blogs.number == i %}
+        <li class="active text-danger">
+          <span>{{ i }} 
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+      {% endif %}
+
+    {% endfor %}
+
+    {% if blogs.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ blogs.next_page_number }}">&raquo;</a>
+      </li>
+    {% else %}
+      <li class="disabled">
+        <span>&raquo;</span>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endif %}
+
+
+
+
+
+
+<!--  -->
+
 </div>
 
-<div class="col-md-4">
+<div class="col-md-4 my-5">
 
 <div class="card">
     <p class="h3 p-2 text-dark card-title tempting-azure-gradient">
-        Category Search
+        Search
     </p>
     <div class="card-body">
-        <a class="btn btn-block rounded-pill" href="#">Latest </a>
-        <a class="btn btn-block rounded-pill" href="#">Vehicle </a>
-        <a class="btn btn-block rounded-pill" href="#">Other </a>
+        <form action="{% url 'blogs:search' %}" method="get">
+          <input class="form-control" type="text" name="query_text" placeholder="Search ..." >
+        <button class="btn btn-block badge-success" type="submit">submit</button>
+    </form> 
     </div>
 </div>
 

@@ -19,21 +19,31 @@ from fleet.models import Fleet
 
 def vehicle_list_view(request):
     template        = 'vehicle/vehicle_list.html'
-    context         = {}
     fleet_id        = request.session.get('fleet_id', None)
     fleet_cars      = ''
     if fleet_id:
-        fleet = get_object_or_404(Fleet, pk=fleet_id)
-        fleet_cars = fleet.get_fleet_vehicles()
+        fleet       = get_object_or_404(Fleet, pk=fleet_id)
+        fleet_cars  = fleet.get_fleet_vehicles()
+
+    CarsList        = models.Vehicle.objects.filter(is_freezed = False, 
+                                is_approved = True, 
+                                is_hired = False)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(CarsList, 5)
+    try:
+        cars = paginator.page(page)
+    except PageNotAnInteger:
+        cars = paginator.page(1)
+    except EmptyPage:
+        cars = paginator.page(paginator.num_pages)
 
     context = {
-        'CarsList' : models.Vehicle.objects.filter(is_freezed = False, 
-                                        is_approved = True, 
-                                        is_hired = False),
-        'page_heading' : 'Available',
-        'vehicle_list' : models.Vehicle.objects.all(),
-        'fleet_cars' : fleet_cars,
-        'form': forms.vehicle_model_form()
+        'cars'          : cars,
+        'page_heading'  : 'Available',
+        'vehicle_list'  : models.Vehicle.objects.all(),
+        'fleet_cars'    : fleet_cars,
+        'form'          : forms.vehicle_model_form()
     }
     return render(request, template, context)
 
