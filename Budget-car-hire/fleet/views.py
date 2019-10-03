@@ -40,12 +40,10 @@ def admin_fleet_view(request):
 def fleet_detail_view(request, pk, car_pk=None):
     template            = 'fleet/fleet_detail.html'
     fleet               = get_object_or_404(Fleet, pk = pk)
-    fleet_id            = request.session.get('fleet_id', None)
+    request.session['fleet_id'] = fleet.id
     car                 = ''
     if car_pk:
         car                 = get_object_or_404(Vehicle, pk = car_pk)
-    if fleet_id:
-        del request.session['fleet_id']
     context             = {
         'fleet': fleet,
         'vehicles' : fleet.get_fleet_vehicles(),
@@ -58,6 +56,12 @@ def fleet_detail_view(request, pk, car_pk=None):
 @login_required
 def existing_fleet(request, pk):
     fleet               = get_object_or_404(Fleet, pk = pk)
+    request.session['fleet_id'] = fleet.id
+    return redirect('vehicle:vehicle_list')
+
+def new_fleet(request):
+    fleet = Fleet.objects.create(user = request.user.user_profile, fleet_ref = str(uuid4())[-6:].upper())
+    messages.info(request, f'Select vehicle for your Fleet')
     request.session['fleet_id'] = fleet.id
     return redirect('vehicle:vehicle_list')
 
@@ -76,8 +80,10 @@ def add_to_fleet(request, pk):
         request.session['fleet_id'] = fleet.id
     else:
         fleet                   = get_object_or_404(Fleet, pk = fleet_id)
-        if not fleet.user == user:
-            messages.error(request, f'You cannot modify this Fleet')
+        if fleet.vehicles.count() >= 10:
+            messages.warning(request, f'You have reached the limit of 10')
+        elif not fleet.user == user:
+            messages.success(request, f'You cannot modify this Fleet')
         elif fleet.vehicles.count == 11:
             messages.info(request, f'You have reached the max number vehicle for a fleet')
         else:
@@ -86,6 +92,8 @@ def add_to_fleet(request, pk):
             messages.info(request, f'{car.reg_no} added to fleet {fleet.fleet_ref}')
     
     return HttpResponseRedirect(fleet.get_absolute_url())
+
+    
 
 
 @login_required
@@ -97,20 +105,39 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
         messages.info(request, f'{car.reg_no} removed form the Fleet')
     else:
         messages.error(request, 'You cannot perform vehicle remove action on this fleet')
+
     return HttpResponseRedirect(fleet.get_absolute_url())
+
+
+@login_required
+def cancel_fleet(request, pk):
+    if not request.user.is_staff:
+        messages.error(request, 'You cannot perform this action on this fleet')
+        return HttpResponseRedirect(fleet.get_absolute_url())
+
+    fleet      = get_object_or_404(Fleet, pk=pk)
+    fleet.delete()
+    del request.session['fleet_id']
+    
+    return HttpResponseRedirect(reverse('fleet:fleets'))
+
 
 
 @login_required
 def remove_fleet(request, pk):
     fleet           = get_object_or_404(Fleet, pk = pk)
-    if request.user.is_staff or request.user.user_profile == fleet.user:
+    if request.user.user_profile == fleet.user:
         Fleet.delete(fleet)
         messages.info(request, f'{fleet.fleet_ref} removed')
+        del request.session['fleet_id']
     else:
+        fleet.delete()
         messages.error(request, 'You cannot perform this action on this fleet')
-        return HttpResponseRedirect(fleet.get_absolute_url())
-    return redirect ('fleet:fleets')
 
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
+    else:
+        return redirect ('fleet:fleets')
 
 
 @login_required
@@ -121,19 +148,20 @@ def approve_fleet(request, pk):
     fleet      = get_object_or_404(Fleet, pk=pk)
     fleet_vhicles                       = fleet.vehicles.all()
     fleet_vhicles.update( is_hired= True )
+    fleet.approved_on = datetime.now()
     fleet.approve()
-    return HttpResponseRedirect(fleet.get_absolute_url())
+    return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
+
 
 @login_required
-def cancel_fleet(request, pk):
+def freeze_fleet(request, pk):
     if not request.user.is_staff:
         messages.error(request, 'You cannot perform this action on this fleet')
         return HttpResponseRedirect(fleet.get_absolute_url())
     fleet      = get_object_or_404(Fleet, pk=pk)
-    fleet_vhicles                       = fleet.vehicles.all()
-    fleet_vhicles.update( is_hired= False )
-    fleet.approve()
-    return HttpResponseRedirect(fleet.get_absolute_url())
+    fleet.is_freezed = not fleet.is_freezed
+    fleet.save()
+    return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
     
 @login_required
@@ -143,7 +171,6 @@ def checkout(request, pk):
     total = fleet_to_pay.get_total()
     if request.method == 'POST':
         token = request.POST['stripeToken']
-        print (token)
         charge = stripe.Charge.create(
             amount= total,
             currency='usd',

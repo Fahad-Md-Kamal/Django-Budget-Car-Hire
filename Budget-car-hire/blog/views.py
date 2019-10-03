@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from . import models, forms
 
@@ -154,3 +155,20 @@ def blog_approval(request, pk):
     context = {'blogs':models.Blog.objects.all().order_by('-is_approved')}
     return render (request, template, context) 
 
+
+
+def search(request):
+    template        = 'blog/blog_list.html'
+    blogs           = models.Blog.objects.all()
+
+    query_text      = request.GET.get('query_text', None)
+
+
+    if query_text   != '' and query_text is not None:
+        blogs        = blogs.filter(Q(title__icontains=query_text) 
+                                    | Q(content__icontains=query_text))
+    context = {
+        'blogs' :  blogs
+        }
+    return render(request, template, context=context)
+ 

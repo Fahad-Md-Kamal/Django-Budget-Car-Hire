@@ -1,17 +1,18 @@
 {% extends 'fleet/fleet_base.html' %}
 
 {% block fleet_content %}
+
 <div class="p-5">
         <table id="table_id" class="display table">
             <thead>
                 <tr>
-                    <th>Owner</th>
-                    <th>Model</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Capacity</th>
-                    <th>Rent / month</th>
-                    <th>Joined Since</th>
+                    <th>Customer</th>
+                    <th>Fleet ID</th>
+                    <th>Total vehicles</th>
+                    <th>Rent</th>
+                    <th>Payment State</th>
+                    <th>Approved On</th>
+                    <th>Expires On</th>
                     <th ></th>
                 </tr>
             </thead>
@@ -19,27 +20,24 @@
 {% if fleets %}
 {% for fleet in fleets%}
                     <tr>
-                        <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
-                        <td>{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</td>
-                        <td>{{car.get_vehicle_type_display}}</td>
-                        <td>{% if car.is_hired %} Hired {% else %} Available {% endif %}</td>
-                        <td>{{ car.capacity}}</td>
-                        <td>{{car.rent}}</td>
-                        <td>{{ car.added_on|date:"d M Y" }}</td>
+                        <td><i class="fa fa-user"></i> {{fleet.user.user.username}}</td>
+                        <td>{{fleet.fleet_ref}}</td>
+                        <td>{{fleet.vehicles.count}}</td>
+                        <td>&#2547; {{ fleet.get_total}}</td>
+                        <td>{% if fleet.is_purchased %} <span class="btn badge badge-success badge-pill">  Paid </span>{% else %} <span class="btn badge badge-danger badge-pill"> Not-Paid </span>{% endif %}</td>
+                        <td> {% if fleet.is_approved %} {{ fleet.approved_on|date:"d M Y" }} {% else %} Not Approved  {% endif %}</td>
+                        <td> {% if fleet.is_approved %} {{ fleet.expiration_date|date:"d M Y" }} {% else %} Not Approved {% endif %} </td>
                         <td>
                             <div class="btn-group">
-                                {% if not car.is_approved %}
-                                    <a class="btn btn-success" href="">Approve</a>
-                                    <a class="btn btn-danger" href="">Reject</a>
+                                {% if not fleet.is_purchased or not fleet.is_approved %}
+                                    <a class="btn btn-success" href="{% url 'fleet:approve_fleet' fleet.pk %}">Approve</a>
+                                    <a class="btn btn-danger" href="{% url 'fleet:remove_fleet' fleet.pk %}">Remove</a>
+                                {% elif not fleet.is_freezed %}
+                                    <a class="btn btn-warning" href="{% url 'fleet:freeze_fleet' fleet.pk %}">Freeze</a>
                                 {% else %}
-                                    {% if not car.is_freezed %}
-                                        <a class="btn btn-warning" href="">Freeze</a>
-                                    {% else %}
-                                        <a class="btn btn-success" href="">Free</a>
-                                    {% endif %}
-                                    <a class="btn btn-primary" href="">Detail</a>
-                                    <a class="btn btn-danger" href="">Delete</a>
+                                    <a class="btn btn-success" href="{% url 'fleet:freeze_fleet' fleet.pk %}">Free</a>
                                 {% endif %}
+                                <a class="btn btn-primary" href="{% url 'fleet:detail_fleet' fleet.pk %}">Details</a>
                             </div>
                         </td>
                     </tr>
@@ -48,7 +46,5 @@
             </tbody>
         </table>
     
-                        </div>
- <br>
-
+</div>
 {% endblock %}

@@ -6,9 +6,11 @@
 <nav class="navbar bg-primary mb-3">
         <div class="container">
           <ul class="nav">
-              <li class="nav-item"><a class="btn text-light mr-2 text-decoration-none" href="{% url 'blogs:blog_list' %}">My Fleet</a></li>
               {% if user.is_staff %}
               <li class="nav-item"><a class="btn text-light mr-2 text-decoration-none" href="{% url 'fleet:admin_fleet_view' %}">Admin's view</a></li>
+              {% else %}
+              <li class="nav-item"><a class="btn text-light mr-2 text-decoration-none" href="{% url 'fleet:fleets' %}">My Fleet</a></li>
+              <li class="nav-item"><a href="{% url 'fleet:new_fleet' %}" id="button-addon3" class="btn text-light mr-2 text-decoration-none">New Fleet</a></li>
               {% endif %}
             </ul>
         </div>

@@ -32,19 +32,7 @@
       <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:reg_vehicle' %}">Register Car</a>
     </li>
   </ul>
-    <form action="{% url 'vehicle:search_vehicle' %}" method="GET" class="form-inline my-2 my-lg-0 ml-auto">
-      {% csrf_token %} 
-      {% if vehicle_list %}
-        <select class="form-control mr-2" name="model_name" >
-          <option>Select Model</option>
-          {% for vehicle in vehicle_list %}
-          <option value="{{vehicle.model_name}}">{{vehicle.get_model_name_display}}</option>
-          {% endfor %}
-      </select>
-        {% endif %}
-        <input class="form-control" name="query_text" type="search" placeholder="Search..." aria-label="Search">
-      <button class="btn btn-outline-white btn-md my-2 my-sm-0 ml-3" type="submit">Search</button>
-    </form>
+
   </div>
   </nav>
 

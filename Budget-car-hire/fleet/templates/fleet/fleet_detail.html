@@ -5,25 +5,27 @@
 
 {% if fleet %}
     <div class="px-4 px-lg-0">
-        <!-- {{fleet.check_hired}} -->
      
         <div class="pb-5">
           <div class="container-fluid">
 
               <div class="row">
                     {% if car %}
-                  <div class="col-md-4 col-lg-4 p-5 bg-white rounded shadow-sm mb-5">
+                  <div class="col-md-10 col-lg-4 p-5 bg-white rounded offset-md-1 shadow-sm mb-5">
                       {% include 'vehicle/_detail_vehicle.html' %}
-                      <a class="btn btn-block badge-pill badge-success" href="{% url 'vehicle:detail_vehicle' car.pk  %}">Detail</a>
                   </div>
-                  <div class="col-md-6 col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+                  <div class="col-md-10 col-lg-6 p-5 bg-white rounded offset-md-1 shadow-sm mb-5">
                         {% else%}
                     <div class="col-md-10 p-5 bg-white rounded shadow-sm mb-5 offset-md-1">
                     {% endif %}
           
                     <!-- Shopping cart table -->
                     <div class="table-responsive">
-                        <div class="bg-light px-4 py-3 font-weight-bold">Reference Id: <span class="text-success">{{fleet.fleet_ref}}</span></div>
+                        <div class="bg-light px-4 py-3 font-weight-bold d-flex"> 
+                          <span> Reference Id: <span class="text-success">{{fleet.fleet_ref}}</span></span>
+                          <span class="ml-auto text-success font-weight-bolder">{% if fleet.is_approved %} Approved {% endif %}</span>
+                          
+                        </div>
 
                       <table class="table">
                         <thead>
@@ -37,9 +39,11 @@
                             <th scope="col" class="border-0 bg-light">
                               <div class="py-2 text-uppercase">Capacity</div>
                             </th>
+                            {% if  not fleet.is_purchased %}
                             <th scope="col" class="border-0 bg-light">
                               <div class="py-2 text-uppercase">Remove</div>
                             </th>
+                            {% endif %}
                           </tr>
                         </thead>
                         <tbody>
@@ -59,58 +63,62 @@
                             </th>
                             <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
                             <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                            <td class="border-0 align-middle">{% if  not fleet.is_purchased %} <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> {% endif %}</td>
+                            {% if  not fleet.is_purchased %} 
+                              <td class="border-0 align-middle"> <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> </td>
+                            {% endif %}
                           </tr>
                         {% endfor %}
-                        <tr class="table-active">
+                            <tr class="table-active">
                             <th scope="row" class="border-0">
                               <h5>Total Vehicels: {{fleet.vehicles.count}}</h5>
                             </th>
                             <td class="border-0 align-middle"> <span class="h5">Total Rent: </span></td>
                             <td class="border-0 align-middle"><span class="h5">&#2547; {{total}} /-</span></td>
+                          {% if  not fleet.is_purchased %}
                             <td class="border-0 align-middle"></td>
+                            {% endif %}
                           </tr>
 
-                        
                         </tbody>
                       </table>
-                      {% if not fleet.is_purchased%}
-                      <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
-                    {% endif %}
+                      {% if not fleet.is_purchased and fleet.vehicles.count < 10 %}
+                        <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
+                      {% elif fleet.is_purchased and fleet.vehicles.count >= 10 %}
+                        <a href="{% url 'fleet:new_fleet' %}" id="button-addon3" class="btn btn-primary btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>New Fleet</a>
+                      {% else %}
+                      <span class="text-warning h3 text-center" >Reached fleet limit of 10 vehicle</span>
+                      {% endif %}
                     </div>
                     <!-- End -->
                   </div>
                 </div>
 
-                <div class="row py-5 p-4 bg-white rounded shadow-sm">
 
 
-                    <div class="col-lg-6">
-                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Reference Id: <span class="text-info">{{fleet.fleet_ref}}</span></div>
-                        <div class="p-4">
-                            <!-- <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p> -->
-                            <!-- <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a> -->
-                        </div>
-                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Customer Information</div>
-                        <div class="p-4">
-                          <p class="font-italic mb-4">If you have some information for the seller you can leave them in the box below</p>
-                          
-                      </div>
-                      </div>
-
-                        <div class="col-lg-6">
-                          <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
+                        <div class="col-md-10 col-lg-6 offset-md-1">
+                          <div class="bg-light rounded-pill px-4 py-3 text-capitalize font-weight-bold">Fleet information </div>
                           <div class="p-4">
-                            <p class="font-italic mb-4">Shipping and additional costs are calculated based on values you have entered.</p>
-                            <ul class="list-unstyled mb-4">
-                              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Vehicle(s):  </strong><strong class="font-weight-bold">	
-                                    {{fleet.vehicles.count}}</strong></li>
+                          <p class=" mb-4"><span class="ml-auto">
+                            {% if fleet.is_approved %}
+                              <span class="text-warning h4">Expirs on: {{ fleet.expiration_date|date:"d-M-Y" }}</span>
+                            {% else %}
+                              <span class="text-primary"> Your fleet will be expired after 30 days from the approval day</span>
+                            {% endif %}
+                          </p>
+                          <ul class="list-unstyled mb-4">
+                              <li class="d-flex justify-content-between py-3 border-bottom">
+                                <strong class="text-muted">Total Vehicle(s):</strong>
+                                <strong class="font-weight-bold">	
+                                    {{fleet.vehicles.count}}
+                                  </strong>
+                                  </li>
                                 <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Rent:</strong>
                                 <h5 class="font-weight-bold">&#2547; {{total}}</h5>
                               </li>
                             </ul>
                             {% if not fleet.is_purchased %}
                               <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                              <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
                             {% else %}
                               <p class="badge badge-success p-3 text-end">Hired</p>
                            {% endif %}

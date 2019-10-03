@@ -9,11 +9,19 @@
     <p class="card-header ">
         Fleet ID: <span class="font-weight-bolder h4 text-success">{{ fleet.fleet_ref }}</span>
     </p>
-    <div class="card-body">
+    <div class="card-body p-5">
             <div class="text-capitalize">
                 <span>Total Cars:</span>
                 <span>{{ fleet.vehicles.count }}</span>
             </div>
+            <hr class="my-3 bg-primary" >
+            {% if fleet.is_approved %}
+            <div class="text-capitalize">
+                <span>Expires on:</span>
+                <span class="text-danger">{{ fleet.expiration_date|date:"d-M-Y" }}</span>
+            </div>
+            <hr class="my-3 bg-primary" >
+            {% endif %}
             <div class="text-capitalize">
                 <span>Total Rent:</span>
                 <span>&#2547; {{ fleet.get_total }}</span>

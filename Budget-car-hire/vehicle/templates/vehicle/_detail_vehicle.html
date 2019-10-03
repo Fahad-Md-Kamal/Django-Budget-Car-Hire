@@ -29,7 +29,7 @@
                   </tr>
                   <tr class="table-danger">
                     <td>Status</td>
-                    <td>{% if car.is_booked %} Booked {% elif car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                    <td>{% if car.fleet_vehicle.all %} Booked {% elif car.is_hired %} Hired {% else %} Available {% endif %}</td>
                   </tr>
                   <tr class="table-primary">
                     <td>Capacity</td>

@@ -31,6 +31,11 @@ urlpatterns = [
         name= 'add_to_fleet'),
        
     path(
+        'new-fleet/',
+        views.new_fleet,
+        name= 'new_fleet'),
+       
+    path(
         'existing-fleet/<int:pk>/',
         views.existing_fleet,
         name= 'existing_fleet'),
@@ -39,6 +44,11 @@ urlpatterns = [
         'remove-vehicle/<int:fleet_pk>/<int:vehicle_pk>',
         views.remove_from_fleet,
         name= 'remove_from_fleet'),
+        
+    path(
+        'cancel-fleet/<int:pk>/',
+        views.cancel_fleet,
+        name= 'cancel_fleet'),
         
     path(
         'remove-fleet/<int:pk>/',
@@ -51,9 +61,9 @@ urlpatterns = [
         name= 'approve_fleet'),
         
     path(
-        'cancel-fleet/<int:pk>/',
-        views.cancel_fleet,
-        name= 'cancel_fleet'),
+        'freeze-fleet/<int:pk>/',
+        views.freeze_fleet,
+        name= 'freeze_fleet'),
 
     path(
         '<int:pk>/', 

@@ -6,8 +6,11 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+
 from datetime import date
-from django.db.models import Q
+
+
 import re
 
 from . import models, forms
@@ -18,14 +21,19 @@ def vehicle_list_view(request):
     template        = 'vehicle/vehicle_list.html'
     context         = {}
     fleet_id        = request.session.get('fleet_id', None)
+    fleet_cars      = ''
     if fleet_id:
-        context['fleet'] = get_object_or_404(Fleet, pk=fleet_id) 
+        fleet = get_object_or_404(Fleet, pk=fleet_id)
+        fleet_cars = fleet.get_fleet_vehicles()
+
     context = {
         'CarsList' : models.Vehicle.objects.filter(is_freezed = False, 
                                         is_approved = True, 
                                         is_hired = False),
         'page_heading' : 'Available',
-        'vehicle_list' : models.Vehicle.objects.all()
+        'vehicle_list' : models.Vehicle.objects.all(),
+        'fleet_cars' : fleet_cars,
+        'form': forms.vehicle_model_form()
     }
     return render(request, template, context)
 
@@ -139,24 +147,27 @@ def owner_vehicle_list(request):
 
 def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
-    CarsList        = models.Vehicle.objects.all()
+    vehicle_list        = models.Vehicle.objects.all()
 
-    vehicel_type           = request.GET.get('vehicel_type', None)
-    model_name      = request.GET.get('model_name', None)
+    vehicel_type    = request.GET.get('vehicel_type', None)
+    model_name   = request.GET.get('model_name', None)
     query_text      = request.GET.get('query_text', None)
 
     if query_text != '' and query_text is not None:
-        CarsList = CarsList.filter(reg_no__icontains=query_text)
+        CarsList = vehicle_list.filter(reg_no__icontains=query_text)
 
-    if vehicel_type != '' and vehicel_type is not None:
-        CarsList = CarsList.filter(vehicle_type=vehicel_type)
+    elif vehicel_type != '' and vehicel_type is not None:
+        CarsList = vehicle_list.filter(vehicle_type=vehicel_type)
 
-    if model_name != '' and model_name is not None:
-        CarsList = CarsList.filter(model_name=model_name)
+    elif model_name != '':
+        try:
+            CarsList = vehicle_list.filter(model_name=model_name)
+        except:
+            CarsList = None
 
     context = {
         'CarsList':CarsList,
         'page_heading' : 'Filtered',
-        'vehicle_list' : models.Vehicle.objects.all(),
+        'form' : forms.vehicle_model_form()
     }
     return render (request, template, context)    

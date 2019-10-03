@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse_lazy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from vehicle.models import Vehicle
 from users.models import Profile
@@ -13,6 +13,7 @@ class Fleet(models.Model):
     vehicles            = models.ManyToManyField(Vehicle, related_name='fleet_vehicle')
     is_purchased        = models.BooleanField(default=False)
     is_approved         = models.BooleanField(default=False)
+    is_freezed          = models.BooleanField(default=False)
     approved_on         = models.DateTimeField(blank=True, null=True)
 
     def get_fleet_vehicles(self):
@@ -26,6 +27,12 @@ class Fleet(models.Model):
             if car.is_hired:
                 return True
         return False
+
+    def duration_check(self):
+        return abs((datetime.now() - self.approved_on ).days)
+
+    def expiration_date(self):
+        return self.approved_on + timedelta(days=30)
 
 
     def approve(self):

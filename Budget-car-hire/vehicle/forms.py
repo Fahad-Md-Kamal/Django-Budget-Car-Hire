@@ -41,3 +41,17 @@ class vehicle_reg_form(forms.ModelForm):
             'model_year': DateInputForm()
         }
     
+
+
+class vehicle_model_form(forms.ModelForm):
+
+    model_name= forms.Select(attrs={'name':'vehicle_model'})
+
+    class Meta:
+        model = models.Vehicle
+        fields = ('model_name',)
+
+
+    
+
+

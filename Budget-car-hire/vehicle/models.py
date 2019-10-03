@@ -7,6 +7,7 @@ import os, random, datetime
 from PIL import Image
 
 
+
 def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     print(basefilename, file_extension)
@@ -78,11 +79,6 @@ class Vehicle(models.Model):
     def approve_vehicle(self):
         self.is_approved = not self.is_approved
         self.save()
-
-
-    def delete_vehicle(self):
-        self.delete()
-
 
     def freeze_vehicle(self):
         self.is_freezed = not self.is_freezed

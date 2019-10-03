@@ -127,5 +127,5 @@ if __name__ == '__main__':
     print("#############################################################")
 
     print("Populating Data... Please Wait.")
-    populate_data(20)
+    populate_data(30)
     print("Populating Data... Complete")

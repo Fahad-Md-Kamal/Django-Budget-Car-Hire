@@ -1,4 +1,5 @@
 {% extends 'vehicle/vehicle_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block vehicle_content%}
 
@@ -10,10 +11,13 @@
         {% if CarsList %}
                 <div class="h3 text-center mt-5">All {{ page_heading }} Cars</div>
                 {% for car in CarsList %}
-             
-
                 <div class="card ml-4 my-5">
                     {% include './_list_vehicle.html' %}
+                    {% if car in fleet_cars %}
+                    <div class="card-footer text-center">
+                        <span class="h4 text-danger">In Fleet</span>
+                    </div>
+                {% endif %}
                 </div>
         {% endfor %}
         
@@ -24,9 +28,22 @@
         </div>
         
         <div class="col-md-3 d-sm-none d-md-block my-2 col-xl-3 offset-xl-1">
-            <div class="h3">All Categories</div>
-            <p class="h4 mt-5">Vehicle Type</p>
+            <div class="h3 my-5">Filter Vehicle</div>
+                
+
             <ul class="list-group">
+                    <li class="list-group-item bg-primary">
+                            <p class="h4 text-center text-light">Search</p>
+                    </li>
+                    <li class="list-group-item">
+                        <form action="{% url 'vehicle:search_vehicle' %}" method="GET" class="form-inline">
+                            <input type="text" class="" name="query_text" placeholder="Search...">
+                            <button class=" form-control" type="submit"> Submit </button>
+                        </form>
+                    </li>
+                    <li class="list-group-item bg-primary">
+                            <p class="h4 text-center text-light">Vehicle Type</p>
+                    </li>
                 <li class="list-group-item">
                     <a  class="btn btn-link" href="{% url 'vehicle:vehicle_list' %}" >All Cars 
                     </a> 
@@ -55,10 +72,28 @@
                         <button class="btn btn-link" type="submit"> All Vans </button>
                     </form> 
                 </li>
-            </ul>
+            <!-- </ul>
+
+            
+            <ul class="list-group"> -->
+                <li class="list-group-item divider" ></li>
+                    <li class="list-group-item bg-primary">
+                            <p class="h4 text-center text-light">Models</p>
+                    </li>
+            <li class="list-group-item">
+                <form action="{% url 'vehicle:search_vehicle' %}" method="get">
+                        {{ form|crispy }}
+                <button class="btn btn-block badge-success" type="submit">submit</button>
+                </form> 
+            </li>
+    </ul>
         </div>
     </div>
     </div>
+
+
+
+
 
 {% endblock  %}
 

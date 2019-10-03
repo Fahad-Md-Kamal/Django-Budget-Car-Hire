@@ -162,3 +162,7 @@ body {
   border-radius: 80%;
   padding: 3px;
 }
+
+.text-warning{
+  color: #b37615 !important;
+}

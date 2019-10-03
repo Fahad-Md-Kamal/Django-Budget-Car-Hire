@@ -25,5 +25,6 @@ urlpatterns = [
     path('<int:pk>/approve', views.blog_approval, name='blog_approval'),
     path('comment/<int:pk>/comment', views.create_comment, name='add_blog_comment'),
     path('comment/<int:pk>/delete', views.comment_delete, name='delete_blog_comment'),
+    path('search/', views.search, name='search'),
 ]
 

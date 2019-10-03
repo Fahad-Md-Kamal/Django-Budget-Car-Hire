@@ -1,9 +1,6 @@
 <a class="my-2 text-decoration-none text-dark" href="{% url 'vehicle:detail_vehicle' car.pk %}">
-        <div class="d-flex">
-            <!-- <div class="p-2">
-                <img class="rounded" src="{{ car.image.url }}" alt="{{ car.model_name }}">
-            </div> -->
-            <div class="container p-3">
+        <div class="card-header h3">{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</div>
+        <div class="container p-3">
                 <img class="rounded mx-auto d-block my-5" src="{{ car.image.url }}" alt="{{ car.model_name }}">
                 <table class="table table-hover text-center  vh_table">
                     <tr class="table-success">
@@ -18,10 +15,6 @@
                         <td>Reg No:</td>
                         <td class="font-weight-bolder ">{{ car.reg_no }}</td>
                     </tr>
-                    <tr class="table-primary">
-                        <td>State:</td>
-                        <td class="font-weight-bolder text-dark ">{% if car.is_booked %}BOOKED {% else %} Available {% endif %} </td>
-                    </tr>
                     <tr class="table-danger">
                         <td>Category:</td>
                         <td class="font-weight-bolder text-dark ">{{car.get_vehicle_type_display}}</td>
@@ -30,5 +23,4 @@
                 
    
             </div>
-    </div>
     </a>
