@@ -1,9 +1,11 @@
 
 <!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+<nav class="navbar navbar-expand-lg navbar-dark primary-color d-block d-md-none ">
 <div class="container">
   <!-- Navbar brand -->
   <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
+
+  
   <span class="nav-item dropdown ml-auto">
       {% if user.is_authenticated %}
       <a id="navbarDropdownMenuLink-333" data-toggle="dropdown"
@@ -16,7 +18,7 @@
           aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
         </a>
       {% endif %}
-
+  
       <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
         {% if user.is_authenticated %}
         <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
@@ -27,7 +29,9 @@
         {% endif %}
       </div>
     </span>
-  
+
+
+
   <span class="text-light ml-3 " style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
     <div id="mySidenav" class="sidenav">
       <a class="text-right" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -73,3 +77,85 @@
 </nav>
 <!--/.Navbar-->
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary d-none d-md-block ">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">BCH</a>
+    
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Vehicle
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'vehicle:vehicle_list' %}">All Vehicles</a>
+        {% if user.is_authenticated %}
+            <a class="dropdown-item" href="{% url 'vehicle:owner_vehicle_list' %}">My Vehicles</a>
+            <a class="dropdown-item" href="{% url 'vehicle:reg_vehicle' %}">Register Vehicle</a>
+        {% endif %}
+        {% if user.is_staff %}
+          <a class="dropdown-item" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
+        {% endif %}
+        </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Fleet
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <!-- { if user.is_staff %} -->
+              <a class="dropdown-item" href="{% url 'fleet:fleets' %}">Fleets</a>
+            <a class="dropdown-item" href="{% url 'fleet:new_fleet' %}">New Fleet</a>
+          <!-- { else %} -->
+            <a class="dropdown-item" href="{% url 'fleet:admin_fleet_view' %}">Admin View</a>
+          <!-- { endif %} -->
+        </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Blog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'blogs:blog_list' %}">All Blogs</a>
+            <a class="dropdown-item" href="{% url 'blogs:blog_create' %}">Write Blog</a>
+          {% if user.is_staff %}
+          <a class="dropdown-item" href="{% url 'blogs:admin_blog_list' %}">Admin View</a>
+          {% endif %}
+        </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+          </li>
+      </ul>
+    </div>
+    <span class="nav-item dropdown ml-auto mr-3">
+        {% if user.is_authenticated %}
+        <a id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <img class="user_dp" src="{{ user.user_profile.image.url }}" alt="{{user.username}}-profile-pic">
+          </a>
+          
+        {% else %}
+          <a class="nav-link text-light btn-dark-green btn-blue-grey px-3 rounded-circle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
+          </a>
+        {% endif %}
+    
+        <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+          {% if user.is_authenticated %}
+          <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          {% else %}
+          <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+          <a class="dropdown-item" href="{% url 'register' %}">Join Now</a>
+          {% endif %}
+        </div>
+      </span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+  </nav>

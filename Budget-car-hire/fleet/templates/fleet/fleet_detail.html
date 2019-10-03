@@ -4,12 +4,12 @@
 
 
 {% if fleet %}
-    <div class="px-4 px-lg-0">
+<div class="container-fluid">
+    <div class="row">
+    <!-- <div class="px-4 px-lg-0">
      
-        <div class="pb-5">
-          <div class="container-fluid">
+        <div class="pb-5"> -->
 
-              <div class="row">
                     {% if car %}
                   <div class="col-md-10 col-lg-4 p-5 bg-white rounded offset-md-1 shadow-sm mb-5">
                       {% include 'vehicle/_detail_vehicle.html' %}
@@ -31,7 +31,7 @@
                         <thead>
                           <tr>
                             <th scope="col" class="border-0 bg-light">
-                              <div class="p-2 px-3 text-uppercase">Product</div>
+                              <div class="p-2 px-3 text-uppercase">Vehicle</div>
                             </th>
                             <th scope="col" class="border-0 bg-light">
                               <div class="py-2 text-uppercase">Rent/month</div>
@@ -124,16 +124,9 @@
                            {% endif %}
                           </div>
                         </div>
-                      </div>
-                              <!-- <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-danger rounded-pill py-2 btn-block text-light">Freeze</a> -->
-                              <!-- <a href="#" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a> -->
-                            <!-- {% elif user.is_staff and not fleet.is_approved %} -->
-                              <!-- <a href="{% url 'fleet:approve_fleet' fleet.pk  %}" class="btn btn-primary rounded-pill py-2 btn-block text-light">Approved</a> -->
-                            <!-- {% elif user.is_staff and fleet.is_approved %} -->
-      
-          </div>
+<!-- 
         </div>
-      </div>
+      </div> -->
 
 
 
@@ -145,5 +138,6 @@
     {{msg}}
 {% endif %}
 
-
+                      </div>
+          </div>
 {% endblock fleet_content%}

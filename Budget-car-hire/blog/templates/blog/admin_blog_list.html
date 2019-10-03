@@ -2,7 +2,9 @@
 {% load crispy_forms_tags %}
 
 {% block blog_content%}
-
+<div class="container">
+        <!-- row -->
+        <div class="row">
 {% if user.is_staff %}
 
 <table id="table_id" class="display my-5">
@@ -41,5 +43,8 @@
 {% else %}
     <p class="display-1">You don't have permission</p>
 {% endif %}
+</div>
+</div>
+
 {% endblock blog_content%}
   

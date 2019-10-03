@@ -3,43 +3,6 @@
 {% block title %} Vehicle {% endblock %}
 
 {% block content %}
-
-
-
-
-
-<!--Navbar-->
-<nav class="navbar navbar-dark navbar-dark bg-primary">
-<div class="container">
-  <ul class="nav">
-    <li class="nav-item">
-      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:vehicle_list' %}">Cars</a>
-    </li>
- 
-    {% if user.is_authenticated %}
-    <li class="nav-item">
-        <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:owner_vehicle_list' %}">My Vehicles</a>
-      </li>
-    {% endif %}
-
-    {% if user.is_superuser or user.is_staff %}
-    <li class="nav-item">
-      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
-    </li>
-    {% endif %}
-
-    <li class="nav-item">
-      <a class="btn text-light mr-2 text-decoration-none" href="{% url 'vehicle:reg_vehicle' %}">Register Car</a>
-    </li>
-  </ul>
-
-  </div>
-  </nav>
-
-<!-- <div class="conatiner">
-  <div class="row"> -->
     {% block vehicle_content%}
     {% endblock %}
-  <!-- </div>
-</div> -->
 {% endblock content %}

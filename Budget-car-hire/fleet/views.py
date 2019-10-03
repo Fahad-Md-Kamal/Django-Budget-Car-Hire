@@ -24,6 +24,7 @@ def fleet_view(request):
     }
     return render(request, template, context)
 
+
 @login_required
 def admin_fleet_view(request):
     template                    = 'fleet/fleet_admin.html'
@@ -33,7 +34,6 @@ def admin_fleet_view(request):
         'fleets': fleets,
     }
     return render(request, template, context)
-
 
 
 @login_required
@@ -93,8 +93,6 @@ def add_to_fleet(request, pk):
     
     return HttpResponseRedirect(fleet.get_absolute_url())
 
-    
-
 
 @login_required
 def remove_from_fleet(request, fleet_pk, vehicle_pk):
@@ -120,7 +118,6 @@ def cancel_fleet(request, pk):
     del request.session['fleet_id']
     
     return HttpResponseRedirect(reverse('fleet:fleets'))
-
 
 
 @login_required
