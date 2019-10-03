@@ -61,7 +61,7 @@ def existing_fleet(request, pk):
 
 def new_fleet(request):
     fleet = Fleet.objects.create(user = request.user.user_profile, fleet_ref = str(uuid4())[-6:].upper())
-    messages.info(request, f'Select vehicle for your Fleet')
+    messages.info(request, f'Please !!.. Select vehicle for your Fleet')
     request.session['fleet_id'] = fleet.id
     return redirect('vehicle:vehicle_list')
 
@@ -80,7 +80,9 @@ def add_to_fleet(request, pk):
         request.session['fleet_id'] = fleet.id
     else:
         fleet                   = get_object_or_404(Fleet, pk = fleet_id)
-        if fleet.vehicles.count() >= 10:
+        if fleet.is_purchased:
+            messages.warning(request, f'Cannot modify this Fleet. Please register new Fleet.')
+        elif fleet.vehicles.count() >= 10:
             messages.warning(request, f'You have reached the limit of 10')
         elif not fleet.user == user:
             messages.success(request, f'You cannot modify this Fleet')
@@ -114,6 +116,8 @@ def cancel_fleet(request, pk):
         return HttpResponseRedirect(fleet.get_absolute_url())
 
     fleet      = get_object_or_404(Fleet, pk=pk)
+    fleet_vhicles                       = fleet.vehicles.all()
+    fleet_vhicles.update( is_hired=False )
     fleet.delete()
     del request.session['fleet_id']
     
@@ -144,7 +148,7 @@ def approve_fleet(request, pk):
         return HttpResponseRedirect(fleet.get_absolute_url())
     fleet      = get_object_or_404(Fleet, pk=pk)
     fleet_vhicles                       = fleet.vehicles.all()
-    fleet_vhicles.update( is_hired= True )
+    fleet_vhicles.update( is_booked = False )
     fleet.approved_on = datetime.now()
     fleet.approve()
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
@@ -166,7 +170,11 @@ def checkout(request, pk):
     template = 'fleet/payment.html'
     fleet_to_pay                    = get_object_or_404(Fleet, pk = pk)
     total = fleet_to_pay.get_total()
-    if request.method == 'POST':
+
+    if request.user.user_profile != fleet_to_pay.user:
+        messages.warning (request, 'You cannot pay for other people\'s fleet.')
+
+    elif request.method == 'POST':
         token = request.POST['stripeToken']
         charge = stripe.Charge.create(
             amount= total,
@@ -184,17 +192,19 @@ def checkout(request, pk):
 
 @login_required
 def update_payment_record(request, pk, token):
-    fleet_to_purchase                   = get_object_or_404(Fleet, pk = pk)
-    fleet_to_purchase.is_purchased      = True
-    fleet_to_purchase.booked_date       = datetime.now()
-    fleet_to_purchase.save()
+    fleet_purchased                   = get_object_or_404(Fleet, pk = pk)
+    fleet_purchased.is_purchased      = True
+    fleet_purchased.booked_date       = datetime.now()
+    fleet_vehicles                      = fleet_purchased.vehicles.all()
+    fleet_vehicles.update(is_hired = True, is_booked = False)
+    fleet_purchased.save()
 
     transaction = Transaction( profile         = request.user.user_profile,
-                                      fleet           = fleet_to_purchase,
-                                      amount          = fleet_to_purchase.get_total(),
+                                      fleet           = fleet_purchased,
+                                      amount          = fleet_purchased.get_total(),
                                       token           = token )
     transaction.save()
     # Success message.
     messages.success(request, 'Your payment has been done successfully')
     # Redirecting to the fleet
-    return HttpResponseRedirect(fleet_to_purchase.get_absolute_url())
+    return HttpResponseRedirect(fleet_purchased.get_absolute_url())

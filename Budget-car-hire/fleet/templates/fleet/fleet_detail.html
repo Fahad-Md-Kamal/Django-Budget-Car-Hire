@@ -56,14 +56,14 @@
                                 <div class="ml-3 d-inline-block align-middle">
                                   <h5 class="mb-0"> <span class="text-dark d-inline-block align-middle">{{car.get_model_name_display}}</span></h5>
                                     <span class="text-muted font-weight-normal font-italic d-block">Category: {{car.get_vehicle_type_display.upper}}</span>
-                                    {% if fleet.is_purchased%} <span class="text-muted font-weight-normal font-italic d-block text-danger">This Vehicle is Hired</span>{% endif %}
+                                    {% if car.is_hired%} <span class="text-muted font-weight-normal font-italic d-block text-danger">This Vehicle is Hired</span>{% endif %}
                                 </div>
                               </div>
                             </a>
                             </th>
                             <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
                             <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                            {% if  not fleet.is_purchased %} 
+                            {% if  not car.is_hired %} 
                               <td class="border-0 align-middle"> <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> </td>
                             {% endif %}
                           </tr>
@@ -83,10 +83,9 @@
                       </table>
                       {% if not fleet.is_purchased and fleet.vehicles.count < 10 %}
                         <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
-                      {% elif fleet.is_purchased and fleet.vehicles.count >= 10 %}
-                        <a href="{% url 'fleet:new_fleet' %}" id="button-addon3" class="btn btn-primary btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>New Fleet</a>
-                      {% else %}
-                      <span class="text-warning h3 text-center" >Reached fleet limit of 10 vehicle</span>
+                      {% elif fleet.is_purchased or fleet.vehicles.count >= 10 %}
+                      <span class="text-warning h3 text-center" >Cann't Modify This Fleet </span>
+                      <a href="{% url 'fleet:new_fleet' %}" id="button-addon3" class="btn btn-primary btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>New Fleet</a>
                       {% endif %}
                     </div>
                     <!-- End -->

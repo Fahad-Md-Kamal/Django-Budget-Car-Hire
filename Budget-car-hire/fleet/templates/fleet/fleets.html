@@ -1,9 +1,11 @@
 {% extends 'fleet/fleet_base.html' %}
 {% block fleet_content %}
       
+<div class="container">
+    <div class="row">
 {% if fleets%}
 
-
+        
     {% for fleet in fleets %}
     <div class="card px-5 h4">
     <p class="card-header ">
@@ -29,9 +31,9 @@
     </div>
     <div class="card-footer">
         <div class="btn-group">
-            <a class="btn btn-lg badge-info badge-pill" href="{% url 'fleet:detail_fleet'  fleet.pk %}">Detail</a>
-        {% if not fleet.is_approved%}
-            <a class="btn btn-lg badge-danger badge-pill" href="{% url 'fleet:remove_fleet'  fleet.pk %}">Delete</a>
+            <a class="btn btn-lg badge-info" href="{% url 'fleet:detail_fleet'  fleet.pk %}">Detail</a>
+        {% if not fleet.is_approved and not fleet.is_purchased %}
+            <a class="btn btn-lg badge-danger" href="{% url 'fleet:remove_fleet'  fleet.pk %}">Delete</a>
         {% endif %}
 </div>
     </div>
@@ -39,31 +41,22 @@
     {% endfor %}
 {% else %}
 <!-- Jumbotron -->
-<div class="jumbotron p-0">
+<div class="jumbotron p-5 text-center mt-5">
 
-        <!-- Card image -->
-        <div class="view overlay rounded-top">
-          <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(134).jpg" class="img-fluid card-img-overlay" alt="Sample image">
-          <a href="#">
-            <div class="mask rgba-white-slight"></div>
-          </a>
-        </div>
+        
       
-        <!-- Card content -->
-        <div class="card-body text-center mb-3">
-      
-          <!-- Title -->
-          <h3 class="card-title h3 my-4"><strong>Card title</strong></h3>
-          <!-- Text -->
-          <p class="card-text py-2">Some quick example text to build on the card title and make up the bulk of the card's</p>
-          <!-- Button -->
-          <a href="{% url 'vehicle:vehicle_list' %}" class="btn purple-gradient badge-pill mb-4 px-5">Create Fleet</a>
-      
-        </div>
+            <!-- Title -->
+            <h3 class="card-title h3 my-4"><strong>You have no Fleets</strong></h3>
+            <!-- Text -->
+            <!-- Button -->
+            <a href="{% url 'fleet:new_fleet' %}" class="btn purple-gradient badge-pill mb-4 px-5">Create New Fleet</a>
+
       
       </div>
       <!-- Jumbotron -->
 {% endif %}
 
+    </div>
+</div>
 
 {% endblock fleet_content%}

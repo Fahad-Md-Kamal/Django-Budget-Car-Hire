@@ -74,7 +74,6 @@ class Transaction(models.Model):
     class Meta:
         ordering    = ['-timestamp']
 
-
     def __str__(self):
-        return self.fleet.fleet_ref
+        return self.fleet
 

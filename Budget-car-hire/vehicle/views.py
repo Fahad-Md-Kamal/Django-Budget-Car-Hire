@@ -176,7 +176,7 @@ def search_vehicle(request):
             CarsList = None
 
     context = {
-        'CarsList':CarsList,
+        'cars':CarsList,
         'page_heading' : 'Filtered',
         'form' : forms.vehicle_model_form()
     }

@@ -12,6 +12,7 @@ def checkdate(sender, **kwargs):
     for fleet in fleets:
         if fleet.is_approved and fleet.duration_check() > 30:
             fleet.is_approved = False
+            fleet.is_purchased = False
             fleet.save()
 
 request_started.connect( checkdate)

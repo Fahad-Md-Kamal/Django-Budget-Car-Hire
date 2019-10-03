@@ -30,7 +30,9 @@
                         <td>
                             <div class="btn-group">
                                 {% if not fleet.is_purchased or not fleet.is_approved %}
-                                    <a class="btn btn-success" href="{% url 'fleet:approve_fleet' fleet.pk %}">Approve</a>
+                                    {% if fleet.is_purchased %}
+                                        <a class="btn btn-success" href="{% url 'fleet:approve_fleet' fleet.pk %}">Approve</a>
+                                    {% endif %}
                                     <a class="btn btn-danger" href="{% url 'fleet:remove_fleet' fleet.pk %}">Remove</a>
                                 {% elif not fleet.is_freezed %}
                                     <a class="btn btn-warning" href="{% url 'fleet:freeze_fleet' fleet.pk %}">Freeze</a>
