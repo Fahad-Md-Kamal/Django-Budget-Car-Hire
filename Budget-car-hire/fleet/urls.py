@@ -71,9 +71,14 @@ urlpatterns = [
         name='checkout' ),
 
     path(
-        'update_record/<int:pk>/<str:token>', 
+        'update-record/<int:pk>/<str:token>', 
         views.update_payment_record, 
         name='update_record' ),
+
+    path(
+        'report/<int:pk>', 
+        views.report_generator, 
+        name='report_generator' ),
 
         
 ]

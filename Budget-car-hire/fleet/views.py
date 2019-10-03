@@ -15,15 +15,113 @@ from vehicle.models import Vehicle
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, landscape
+
+
+def report_generator(request, pk):
+
+    fleet           = get_object_or_404(Fleet, pk= pk)
+    paid_fleet      = get_object_or_404(Transaction, fleet=fleet)
+    vehicles        = fleet.vehicles.all()
+
+
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+    # p = canvas.Canvas(f'{fleet.fleet_ref}-invoice.pdf', pagesize=letter)
+    p.setLineWidth(.3)
+    p.setFont('Helvetica', 12)
+
+    # Center Text
+    p.setFont('Helvetica', 18, leading=None )
+    p.drawString(240, 790, f'Budget Car Hire' )
+    p.setFont('Helvetica', 12, leading=None )
+    p.drawString(250, 770, f'Fleet Detail Report' )
+
+
+    # Left Side Information
+    p.drawString(30, 730, f'Customer Name:  {fleet.user.user.username}' )
+    p.drawString(30, 710, f'Total Rent:     {fleet.get_total()}/- ' )
+    p.drawString(30, 690, f'Booked On:      {fleet.booked_date.date()}')
+    p.drawString(30, 670, f'Paid On:        {paid_fleet.timestamp.date()} ')
+    p.drawString(30, 650, f'Payment Token:  {paid_fleet.token } ')
+
+    # Right Side Information
+    p.drawString(420, 730,  f'Reference ID:     {fleet.fleet_ref}' )
+    p.drawString(420, 710,   f'Start Date:     {fleet.approved_on.date()}' )
+    p.drawString(420, 690,  f'Expires On:       {fleet.expiration_date().date()}' )
+
+    # model_name model_year
+    # reg_no
+    # capacity
+    # rent
+    # vehicle_type
+    p.drawString(30, 500, 'Model')
+    # p.drawString(130, 500, 'Year')
+    p.drawString(150, 500, 'Reg. No.')
+    p.drawString(250, 500, 'Capacity')
+    p.drawString(350, 500, 'Rent/ Month')
+    p.drawString(490, 500, 'Vehicle Type')
+
+
+
+    y = 470
+    for car in vehicles:
+        p.drawString(30, y, car.get_model_name_display())
+        # p.drawString(130, y, str(car.model_year))
+        p.drawString(150, y, car.reg_no)
+        p.drawString(270, y, str(car.capacity))
+        p.drawString(360, y, str(car.rent))
+        p.drawString(500, y, car.get_vehicle_type_display())
+        y -= 20
+        
+        
+
+
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename=f'{fleet.fleet_ref}-invoice.pdf')
+
+    # # Fleet Table ####
+    # user                
+    # fleet_ref           
+    # booked_date        
+    # vehicles            
+    # is_purchased        
+    # is_approved        
+    # is_freezed          
+    # approved_on  
+    # expiration_date
+    # get_total
+
+    # # Transection Table ####
+    # token
+    # paid_fleet.timestamp.date()
+
+
+
+
+
+    # return HttpResponse(request, 'Its ok')
+
+
 @login_required
 def fleet_view(request):
     template                    = 'fleet/fleets.html'
     req_user                    = request.user.user_profile
     fleets                      = Fleet.objects.filter(user = req_user)
-
     context                     = {
         'fleets': fleets,
     }
+
+
     return render(request, template, context)
 
 

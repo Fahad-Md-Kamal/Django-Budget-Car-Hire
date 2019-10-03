@@ -12,6 +12,7 @@ django-bootstrap4 = "*"
 django-crispy-forms = "*"
 faker = "*"
 stripe = "*"
+reportlab = "*"
 
 [requires]
 python_version = "3.7"
