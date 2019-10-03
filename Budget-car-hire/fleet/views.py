@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
+from django.core.mail import send_mail
 
 from uuid import uuid4
 from datetime import datetime, date
@@ -19,6 +20,7 @@ def fleet_view(request):
     template                    = 'fleet/fleets.html'
     req_user                    = request.user.user_profile
     fleets                      = Fleet.objects.filter(user = req_user)
+
     context                     = {
         'fleets': fleets,
     }
@@ -151,6 +153,10 @@ def approve_fleet(request, pk):
     fleet_vhicles.update( is_booked = False )
     fleet.approved_on = datetime.now()
     fleet.approve()
+    send_mail('Fleet Approved',
+        f'Your fleet {fleet.fleet_ref} has ' +
+        f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
+        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
 
@@ -206,6 +212,13 @@ def update_payment_record(request, pk, token):
                                       amount          = fleet_purchased.get_total(),
                                       token           = token )
     transaction.save()
+
+    # Payment Confirmation mail to the user
+    send_mail('Payment Success',
+            f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
+            f'been successfully received, Payement confirmation token {token}.',
+            'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+
     # Success message.
     messages.success(request, 'Your payment has been done successfully')
     # Redirecting to the fleet

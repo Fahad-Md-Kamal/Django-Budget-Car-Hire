@@ -13,7 +13,7 @@
                   <a class="btn btn-lg btn-warning" href="{% url 'vehicle:update_vehicle' car.pk %}">Edit</a>
                   {% endif %}
 
-                {%if user.is_staff and not car.is_hired %}
+                {%if user.is_staff and not car.is_hired and car.is_approved %}
                   <a class="btn btn-lg btn-success" href="{% url 'fleet:add_to_fleet' car.pk %}">Book</a>
                 {% endif %}
               </div>

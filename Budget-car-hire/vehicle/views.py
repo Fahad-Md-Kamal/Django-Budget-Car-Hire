@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 
 from datetime import date
 
@@ -65,7 +66,8 @@ def vehicle_registration(request):
             vehicle = form.save(commit=False)
             vehicle.owner = request.user
             vehicle = form.save()
-            messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully.')
+
+            messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully. We will notify you when approved')
             return HttpResponseRedirect(vehicle.get_absolute_url())
     else:
         form = forms.vehicle_reg_form()
@@ -85,7 +87,9 @@ def vehicle_update_view(request, pk):
         if request.method == 'POST':
             form     = forms.vehicle_reg_form(request.POST, instance = vehicle)
             if form.is_valid():
-                form.save()
+                vehcile = form.save( commit= False)
+                vehcile.is_approved = False
+                vehcile.save()
                 messages.info(request, f'Vehicle {vehicle.reg_no} updated successfully')
                 return HttpResponseRedirect(vehicle.get_absolute_url())
             else:
@@ -135,6 +139,9 @@ def admin_vehicle_view(request):
 def approve_vehicle(request, pk):
     vehicle = get_object_or_404(models.Vehicle, pk =pk)
     vehicle.approve_vehicle()
+    send_mail('Vehicle Approved',
+        f'Your vehicle {vehicle.reg_no} has been approved.',
+        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
     return redirect('vehicle:admin_vehicle')
 
 
@@ -149,8 +156,9 @@ def owner_vehicle_list(request):
     owner           = request.user
     CarsList        = models.Vehicle.objects.filter(owner = owner)
     context = {
-        'CarsList':CarsList,
-        'page_heading' : owner.username + '\'s'
+        'cars':CarsList,
+        'page_heading' : owner.username + '\'s',
+        'form'          : forms.vehicle_model_form()
     }
     return render (request, template, context)
 

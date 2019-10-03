@@ -69,7 +69,7 @@ class Vehicle(models.Model):
     image           = models.ImageField(default='default_vehicle.png', upload_to =photo_path)
 
     class Meta:
-        ordering = ['-is_approved',]
+        ordering = ['-is_approved','-added_on']
 
 
     def get_absolute_url(self):
