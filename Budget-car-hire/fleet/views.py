@@ -171,9 +171,11 @@ def checkout(request, pk):
     fleet_to_pay                    = get_object_or_404(Fleet, pk = pk)
     total = fleet_to_pay.get_total()
 
-    if request.user.user_profile != fleet_to_pay.user:
+    if fleet_to_pay.check_hired():
+        messages.warning (request, 'Already Hired vehicle\'s In the Fleet')
+        return HttpResponseRedirect(fleet_to_pay.get_absolute_url())
+    elif request.user.user_profile != fleet_to_pay.user:
         messages.warning (request, 'You cannot pay for other people\'s fleet.')
-
     elif request.method == 'POST':
         token = request.POST['stripeToken']
         charge = stripe.Charge.create(

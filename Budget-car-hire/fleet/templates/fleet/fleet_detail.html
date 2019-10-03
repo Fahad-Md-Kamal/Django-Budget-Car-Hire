@@ -9,7 +9,6 @@
     <!-- <div class="px-4 px-lg-0">
      
         <div class="pb-5"> -->
-
                     {% if car %}
                   <div class="col-md-10 col-lg-4 p-5 bg-white rounded offset-md-1 shadow-sm mb-5">
                       {% include 'vehicle/_detail_vehicle.html' %}
@@ -63,7 +62,7 @@
                             </th>
                             <td class="border-0 align-middle"><strong>&#2547; {{car.rent}} /-</strong></td>
                             <td class="border-0 align-middle"><strong>{{car.capacity}}</strong></td>
-                            {% if  not car.is_hired %} 
+                            {% if not car.is_hired or not fleet.is_purchased %} 
                               <td class="border-0 align-middle"> <a href="{% url 'fleet:remove_from_fleet' fleet.pk car.pk %}" class="text-dark"><i class="fa fa-trash text-danger"></i></a> </td>
                             {% endif %}
                           </tr>
