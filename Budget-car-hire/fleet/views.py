@@ -20,9 +20,7 @@ import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-
-
-
+# Logged in Users Fleet List View
 @login_required
 def fleet_view(request):
     template                    = 'fleet/fleets.html'
@@ -31,11 +29,10 @@ def fleet_view(request):
     context                     = {
         'fleets': fleets,
     }
-
-
     return render(request, template, context)
 
 
+# Admins View of all fleets
 @login_required
 def admin_fleet_view(request):
     template                    = 'fleet/fleet_admin.html'
@@ -46,7 +43,7 @@ def admin_fleet_view(request):
     }
     return render(request, template, context)
 
-
+# Certain fleet detail view
 @login_required
 def fleet_detail_view(request, pk, car_pk=None):
     template            = 'fleet/fleet_detail.html'
@@ -63,13 +60,14 @@ def fleet_detail_view(request, pk, car_pk=None):
     }
     return render(request, template, context)
 
-
+# Activating existing fleet for modification
 @login_required
 def existing_fleet(request, pk):
     fleet               = get_object_or_404(Fleet, pk = pk)
     request.session['fleet_id'] = fleet.id
     return redirect('vehicle:vehicle_list')
 
+# Creating new fleet for Vehicle booking
 def new_fleet(request):
     fleet = Fleet.objects.create(user = request.user.user_profile, fleet_ref = str(uuid4())[-6:].upper())
     messages.info(request, f'Please !!.. Select vehicle for your Fleet')
@@ -77,6 +75,7 @@ def new_fleet(request):
     return redirect('vehicle:vehicle_list')
 
 
+# Adding vehicle to the fleet
 @login_required
 def add_to_fleet(request, pk):
     user                        = request.user.user_profile
@@ -107,6 +106,7 @@ def add_to_fleet(request, pk):
     return HttpResponseRedirect(fleet.get_absolute_url())
 
 
+# Removing vehicle form the fleet
 @login_required
 def remove_from_fleet(request, fleet_pk, vehicle_pk):
     car             = get_object_or_404(Vehicle, pk = vehicle_pk)
@@ -120,21 +120,21 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
     return HttpResponseRedirect(fleet.get_absolute_url())
 
 
+# Cancel a fleet
 @login_required
 def cancel_fleet(request, pk):
     if not request.user.is_staff:
         messages.error(request, 'You cannot perform this action on this fleet')
         return HttpResponseRedirect(fleet.get_absolute_url())
-
     fleet      = get_object_or_404(Fleet, pk=pk)
     fleet_vhicles                       = fleet.vehicles.all()
     fleet_vhicles.update( is_hired=False )
     fleet.delete()
     del request.session['fleet_id']
-    
     return HttpResponseRedirect(reverse('fleet:fleets'))
 
 
+# Removing a fleet
 @login_required
 def remove_fleet(request, pk):
     fleet           = get_object_or_404(Fleet, pk = pk)
@@ -151,7 +151,7 @@ def remove_fleet(request, pk):
     else:
         return redirect ('fleet:fleets')
 
-
+# Admin Approving fleet
 @login_required
 def approve_fleet(request, pk):
     if not request.user.is_staff:
@@ -162,13 +162,17 @@ def approve_fleet(request, pk):
     fleet_vhicles.update( is_booked = False )
     fleet.approved_on = datetime.now()
     fleet.approve()
-    send_mail('Fleet Approved',
-        f'Your fleet {fleet.fleet_ref} has ' +
-        f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
-        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+
+    # Send Mail After Fleet Approval
+    # send_mail('Fleet Approved',
+    #     f'Your fleet {fleet.fleet_ref} has ' +
+    #     f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
+    #     'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
 
+# Block a Fleet 
 @login_required
 def freeze_fleet(request, pk):
     if not request.user.is_staff:
@@ -179,7 +183,7 @@ def freeze_fleet(request, pk):
     fleet.save()
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
-    
+# Check-out by paying for Fleet
 @login_required
 def checkout(request, pk):
     template = 'fleet/payment.html'
@@ -202,11 +206,12 @@ def checkout(request, pk):
         return redirect(reverse ('fleet:update_record', kwargs = {'pk':fleet_to_pay.pk,'token': token}))
 
     context = {
-        'total': total
+        'fleet': fleet_to_pay
     }
     return render(request, template, context)
      
 
+# After successfull payment Store payment information
 @login_required
 def update_payment_record(request, pk, token):
     fleet_purchased                   = get_object_or_404(Fleet, pk = pk)
@@ -223,10 +228,10 @@ def update_payment_record(request, pk, token):
     transaction.save()
 
     # Payment Confirmation mail to the user
-    send_mail('Payment Success',
-            f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
-            f'been successfully received, Payement confirmation token {token}.',
-            'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+    # send_mail('Payment Success',
+    #         f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
+    #         f'been successfully received, Payement confirmation token {token}.',
+    #         'randomfahad@gmail.com', [request.user.email], fail_silently=False )
 
     # Success message.
     messages.success(request, 'Your payment has been done successfully')
@@ -234,6 +239,15 @@ def update_payment_record(request, pk, token):
     return HttpResponseRedirect(fleet_purchased.get_absolute_url())
 
 
+
+
+
+
+
+
+
+
+# Generate Fleet Invoice Only after it is paid
 def report_generator(request, pk):
 
     fleet           = get_object_or_404(Fleet, pk= pk)
@@ -242,7 +256,6 @@ def report_generator(request, pk):
 
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer)
-    # p = canvas.Canvas(f'{fleet.fleet_ref}-invoice.pdf', pagesize=letter)
     p.setLineWidth(.3)
     p.setFont('Helvetica', 12)
 

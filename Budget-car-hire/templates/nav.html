@@ -16,26 +16,32 @@
             <a class="dropdown-item" href="{% url 'vehicle:vehicle_list' %}">All Vehicles</a>
         {% if user.is_authenticated %}
             <a class="dropdown-item" href="{% url 'vehicle:owner_vehicle_list' %}">My Vehicles</a>
+            <!-- If the user is Owner only then he can register vehicle -->
+          {% if user.user_profile.user_type == 1 or user.is_staff %} 
             <a class="dropdown-item" href="{% url 'vehicle:reg_vehicle' %}">Register Vehicle</a>
+          {% endif %}
+
         {% endif %}
         {% if user.is_staff %}
           <a class="dropdown-item" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
         {% endif %}
         </div>
         </li>
-        <li class="nav-item dropdown">
+          {% if user.user_profile.user_type == 0 %} 
+          <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Fleet
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <!-- { if user.is_staff %} -->
+            {% if not user.is_staff %}
               <a class="dropdown-item" href="{% url 'fleet:fleets' %}">Fleets</a>
-            <a class="dropdown-item" href="{% url 'fleet:new_fleet' %}">New Fleet</a>
-          <!-- { else %} -->
+              <a class="dropdown-item" href="{% url 'fleet:new_fleet' %}">New Fleet</a>
+          {% else %}
             <a class="dropdown-item" href="{% url 'fleet:admin_fleet_view' %}">Admin View</a>
-          <!-- { endif %} -->
+          {% endif %}
         </div>
         </li>
+        {% endif %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Blog

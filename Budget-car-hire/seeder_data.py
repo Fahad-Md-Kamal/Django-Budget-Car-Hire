@@ -15,11 +15,12 @@ from blog.models import Blog, Comment
 from vehicle.models import Vehicle
 from faker import Faker
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import get_object_or_404
 
 fakegen = Faker()
 def add_user():
     Fake_username       = fakegen.name()
-    Fake_password       = make_password("Test1234546")
+    Fake_password       = make_password("test1234546")
     Fake_email          = fakegen.email()
     Fake_firstname      = fakegen.first_name()
     Fake_lastname       = fakegen.last_name()

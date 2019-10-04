@@ -15,7 +15,6 @@ def photo_path(instance, filename):
 
 
 class Profile(models.Model):
-
     CU    = 0
     OW    = 1
 
@@ -24,12 +23,12 @@ class Profile(models.Model):
         (OW, 'OWNER'),
     )
 
-
+    # Related with the built-in User Model
     user        = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_profile')
-    house       = models.CharField(max_length=20)
-    road        = models.CharField(max_length=100)
-    city        = models.CharField(max_length=50)
-    contact     = models.CharField(max_length=20)
+    house       = models.CharField(max_length=20, blank=True, null=True )
+    road        = models.CharField(max_length=100, blank=True, null=True)
+    city        = models.CharField(max_length=50, blank=True, null=True)
+    contact     = models.CharField(max_length=20, blank=True, null=True)
     user_type   = models.IntegerField(choices=USER_CATEGORY, default=CU)
     image       = models.ImageField(default='default_profile.png', upload_to =photo_path)
     
@@ -48,9 +47,10 @@ class Profile(models.Model):
 
 
 
-
+# Signal Creats Profile Class
 def create_profile(sender, **kwargs):
     if kwargs['created']:
         Profile.objects.create(user=kwargs['instance'])
 
+# Signal Connects the method and profile
 post_save.connect(create_profile, sender= settings.AUTH_USER_MODEL)

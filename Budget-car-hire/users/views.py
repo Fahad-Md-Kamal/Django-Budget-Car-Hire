@@ -1,19 +1,30 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 # from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from . import forms
 
+from . import forms, models, extras
+
+# Registraiton View
 def register(request):
     if request.method == 'POST':
         form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            
+            # Get form data
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created as {username}! Please, wait for the account approval.')
+            tp = form.cleaned_data.get('user_type')
+            
+            # Saves the requested user while creating user profile with the help of signals
+            created_user = form.save()
+
+            # set user type to the profile model
+            extras.set_user_type(created_user, tp)
+            
+            messages.success(request, f'Account created as {username}!')
             return redirect('home')
     else:
         form = forms.UserRegisterForm()
