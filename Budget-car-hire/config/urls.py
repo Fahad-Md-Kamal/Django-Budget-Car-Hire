@@ -19,15 +19,14 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.IndexView.as_view(), name='home'),
-    path('contact/', views.ContactView.as_view(), name='contact'),
     path('register/', user_views.register, name= 'register'),
     path('profile/', user_views.profile, name= 'profile'),
+    path('user-profile/<int:pk>/', user_views.user_detail, name='user_profile' ),
     path('login/', auth_view.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_view.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('vehicle/', include('vehicle.urls', namespace='vehicle')),
     path('blogs/', include('blog.urls', namespace='blogs')),
     path('fleet/', include('fleet.urls', namespace='fleet')),
-    # path('payment/', include('payment.urls', namespace='payment')),
 ]
 
 if settings.DEBUG:

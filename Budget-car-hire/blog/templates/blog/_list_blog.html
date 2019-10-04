@@ -5,7 +5,7 @@
         <div class="p-3 d-flex view view-cascade gradient-card-header tempting-azure-gradient">
             <img class="rounded-circle blog-img mr-3" src="{{ post.author.user_profile.image.url }}" alt="" srcset="">
         <div class="mt-4">
-            <span>@{{post.author.username}}</span>
+            <span>@ <a href="{% url 'user_profile' post.author.pk %}"> {{post.author.username}}</a></span>
             <!-- Title -->
           <!-- Text -->
           <p class="text-muted">on: {{ post.posted_date|date:'d-M-Y' }}</p>

@@ -26,5 +26,6 @@ urlpatterns = [
     path('comment/<int:pk>/comment', views.create_comment, name='add_blog_comment'),
     path('comment/<int:pk>/delete', views.comment_delete, name='delete_blog_comment'),
     path('search/', views.search, name='search'),
+    path('about-us/', views.about_us, name='about_us'),
 ]
 

@@ -91,39 +91,37 @@
                   </div>
                 </div>
 
-
-
-                        <div class="col-md-10 col-lg-6 offset-md-1">
-                          <div class="bg-light rounded-pill px-4 py-3 text-capitalize font-weight-bold">Fleet information </div>
-                          <div class="p-4">
-                          <p class=" mb-4"><span class="ml-auto">
-                            {% if fleet.is_approved %}
-                              <span class="text-warning h4">Expirs on: {{ fleet.expiration_date|date:"d-M-Y" }}</span>
-                            {% else %}
-                              <span class="text-primary"> Your fleet will be expired after 30 days from the approval day</span>
-                            {% endif %}
-                          </p>
-                          <ul class="list-unstyled mb-4">
-                              <li class="d-flex justify-content-between py-3 border-bottom">
-                                <strong class="text-muted">Total Vehicle(s):</strong>
-                                <strong class="font-weight-bold">	
-                                    {{fleet.vehicles.count}}
-                                  </strong>
-                                  </li>
-                                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Rent:</strong>
-                                <h5 class="font-weight-bold">&#2547; {{total}}</h5>
-                              </li>
-                            </ul>
-                            {% if not fleet.is_purchased %}
-                              <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
-                              <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
-                            {% elif fleet.is_approved %}
-                              <a href="{% url 'fleet:report_generator' fleet.pk  %}" class="btn btn-info rounded-pill p-3 btn-block">Fleet Report</a>
-                           {% else %}
-                              <p class="h5 text-danger" >Please Wait For the Approval of the Fleet</p>
-                           {% endif %}
-                          </div>
-                        </div>
+                <div class="col-md-10 col-lg-6 offset-md-1">
+                  <div class="bg-light rounded-pill px-4 py-3 text-capitalize font-weight-bold">Fleet information </div>
+                  <div class="p-4">
+                  <p class=" mb-4"><span class="ml-auto">
+                    {% if fleet.is_approved %}
+                      <span class="text-warning h4">Expirs on: {{ fleet.expiration_date|date:"d-M-Y" }}</span>
+                    {% else %}
+                      <span class="text-primary"> Your fleet will be expired after 30 days from the approval day</span>
+                    {% endif %}
+                  </p>
+                  <ul class="list-unstyled mb-4">
+                      <li class="d-flex justify-content-between py-3 border-bottom">
+                        <strong class="text-muted">Total Vehicle(s):</strong>
+                        <strong class="font-weight-bold">	
+                            {{fleet.vehicles.count}}
+                          </strong>
+                          </li>
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Rent:</strong>
+                        <h5 class="font-weight-bold">&#2547; {{total}}</h5>
+                      </li>
+                    </ul>
+                    {% if not fleet.is_purchased %}
+                      <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
+                      <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
+                    {% elif fleet.is_approved %}
+                      <a href="{% url 'fleet:report_generator' fleet.pk  %}" class="btn btn-info rounded-pill p-3 btn-block">Fleet Report</a>
+                    {% else %}
+                      <p class="h5 text-danger" >Please Wait For the Approval of the Fleet</p>
+                    {% endif %}
+                  </div>
+                </div>
 <!-- 
         </div>
       </div> -->

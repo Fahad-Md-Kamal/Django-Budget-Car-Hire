@@ -9,7 +9,7 @@
                   </tr>
                   <tr class="table-success">
                     <td>Owner:</td>
-                    <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
+                    <td> <i class="fa fa-user"></i> <a href="{% url 'user_profile' car.owner.pk %}"> {{car.owner.username}}</a></td>
                   </tr>
                   <tr class="table-danger">
                     <td>Model Name: </td>

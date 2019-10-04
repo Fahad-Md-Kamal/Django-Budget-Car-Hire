@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+# from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 from . import forms
 
@@ -41,3 +43,12 @@ def profile(request):
         'p_form': p_form
     }
     return render(request, 'users/profile.html', context)
+
+def user_detail(request, pk):
+    template        = 'users/user_info.html'
+    requested_user    = get_object_or_404(auth.models.User, pk = pk)
+    context  ={
+        'requested_user' : requested_user,
+    }
+
+    return render(request, template, context)

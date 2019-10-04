@@ -12,6 +12,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from . import models, forms
 
 
+
+def about_us(request):
+    template = 'blog/about_us.html'
+    return render(request, template, {})
+
+
 #  Show all Blogs
 def blog_list(request):
     template = 'blog/blog_list.html'
@@ -171,3 +177,6 @@ def search(request):
         'msg' : f'{blogs.count()} Match(s) Found.'
         }
     return render(request, template, context=context)
+
+
+

@@ -23,7 +23,7 @@
     
                     <blockquote class="blockquote">
                       <p class="mb-0">{{ blog.title }}</p>
-                      <footer class="blockquote-footer">by @ {{ blog.author }} <br>
+                      <footer class="blockquote-footer">by @ <a href="{% url 'user_profile' blog.author.pk %}">{{ blog.author }} </a><br>
                         <cite title="Source Title">{{ blog.posted_date }}</cite>
                       </footer>
                     </blockquote>
@@ -69,13 +69,14 @@
                   <div class="card-body">
     
                     <div class="media d-block d-md-flex mt-3">
-                    <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ blog.author.user_profile.image.url }}"
+                   <a href="{% url 'user_profile' blog.author.pk %}"> <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ blog.author.user_profile.image.url }}"
                         alt="Generic placeholder image" style="width: 100px;">
                       <div class="media-body text-center text-md-left ml-md-3 ml-0">
                         <h5 class="mt-0 font-weight-bold">{{ blog.author }}
                         </h5>
                         {{blog.author.profile.first_name}}
                       </div>
+                    </a>
                     </div>
     
                   </div>
@@ -93,7 +94,7 @@
                 <div class="media d-block d-md-flex mt-4">
                       <img class="d-flex mb-3 mx-auto " src="{{ cmt.user.user_profile.image.url }}" alt="Generic placeholder image">
                       <div class="media-body text-center text-md-left ml-md-3 ml-0">
-                        <h5 class="mt-0 font-weight-bold">@ {{cmt.user.username}}
+                        <h5 class="mt-0 font-weight-bold">@ <a href="{% url 'user_profile' cmt.user.pk %}">{{cmt.user.username}}</a>
                                 <small class="text-muted">{{cmt.comment_date}}</small>
                           <!-- <a href="" class="pull-right">
                             <i class="fas fa-reply"></i>
