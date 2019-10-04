@@ -36,51 +36,63 @@ def report_generator(request, pk):
     p.setLineWidth(.3)
     p.setFont('Helvetica', 12)
 
+
+    
     # Center Text
     p.setFont('Helvetica', 18, leading=None )
-    p.drawString(240, 790, f'Budget Car Hire' )
+    p.drawString(240, 790, 'Budget Car Hire' )
+    p.drawString(240, 540, 'Vehicle(s) Detail' )
+
     p.setFont('Helvetica', 12, leading=None )
-    p.drawString(250, 770, f'Fleet Detail Report' )
+    p.drawString(250, 765, 'Fleet Detail Report' )
 
 
     # Left Side Information
-    p.drawString(30, 730, f'Customer Name:  {fleet.user.user.username}' )
-    p.drawString(30, 710, f'Total Rent:     {fleet.get_total()}/- ' )
-    p.drawString(30, 690, f'Booked On:      {fleet.booked_date.date()}')
-    p.drawString(30, 670, f'Paid On:        {paid_fleet.timestamp.date()} ')
-    p.drawString(30, 650, f'Payment Token:  {paid_fleet.token } ')
+    p.drawString(30, 730, f'Customer Name : {fleet.user.user.username}' )
+    p.drawString(30, 710, f'Booked On : {fleet.booked_date.date()}' )
+    p.drawString(30, 690, f'Paid On : {paid_fleet.timestamp.date()}')
+    p.drawString(30, 670, f'Total Rent : {fleet.get_total()}/-')
 
     # Right Side Information
-    p.drawString(420, 730,  f'Reference ID:     {fleet.fleet_ref}' )
-    p.drawString(420, 710,   f'Start Date:     {fleet.approved_on.date()}' )
-    p.drawString(420, 690,  f'Expires On:       {fleet.expiration_date().date()}' )
+    p.drawRightString(550, 730,  f'{fleet.fleet_ref} : Reference ID' )
+    p.drawRightString(550, 710,  f'{fleet.approved_on.date()} : Start Date' )
+    p.drawRightString(550, 690,  f'{fleet.expiration_date().date()} : Expires On' )
+    p.drawRightString(550, 670,  f'{paid_fleet.token} : Token' )
+    
 
-    # model_name model_year
-    # reg_no
-    # capacity
-    # rent
-    # vehicle_type
+
+    for i in range(10,580):
+        p.drawString(i, 755, '. .')
+
+    for i in range(10,580):
+        p.drawString(i, 650, '. .')
+
+    # Vehicle Details
     p.drawString(30, 500, 'Model')
-    # p.drawString(130, 500, 'Year')
     p.drawString(150, 500, 'Reg. No.')
     p.drawString(250, 500, 'Capacity')
     p.drawString(350, 500, 'Rent/ Month')
     p.drawString(490, 500, 'Vehicle Type')
 
 
+    for i in range(10,580):
+        p.drawString(i, 485, '. .')
 
-    y = 470
+
+    y = 460
     for car in vehicles:
         p.drawString(30, y, car.get_model_name_display())
-        # p.drawString(130, y, str(car.model_year))
         p.drawString(150, y, car.reg_no)
         p.drawString(270, y, str(car.capacity))
         p.drawString(360, y, str(car.rent))
         p.drawString(500, y, car.get_vehicle_type_display())
         y -= 20
         
-        
-
+    for i in range(330,540):
+        p.drawString(i, 70, '. .')
+    # Bottom Right Corner
+    p.drawString(400, 120, 'Authorized by:')
+    p.drawString(400, 50, 'Budget Car Hire')
 
 
     p.showPage()
