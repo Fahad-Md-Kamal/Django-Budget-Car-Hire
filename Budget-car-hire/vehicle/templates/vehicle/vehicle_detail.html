@@ -14,7 +14,7 @@
                   {% endif %}
 
                 <!-- {if not user.is_staff and not car.is_hired and car.is_approved } -->
-                {%if user.user_profile.user_type == 0 %}
+                {%if user.user_profile.user_type == 0 and not user.is_staff %}
                   <a class="btn btn-lg btn-success" href="{% url 'fleet:add_to_fleet' car.pk %}">Book</a>
                 {% endif %}
               </div>

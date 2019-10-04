@@ -10,11 +10,14 @@ django.setup()
 import random
 from django.conf import settings
 from django.contrib.auth.models import User
+
 from users.models import Profile
 from blog.models import Blog, Comment
 from vehicle.models import Vehicle
+
 from faker import Faker
 from django.contrib.auth.hashers import make_password
+
 from django.shortcuts import get_object_or_404
 
 fakegen = Faker()
@@ -70,6 +73,11 @@ def add_vehicles():
                                                         capacity = fake_capacity,
                                                         is_freezed = fake_is_freezed,
                                                         is_approved = fake_is_approved)
+
+    owner_profile       = get_object_or_404(Profile, user = fake_owner)
+    owner_profile.user_type = 1
+    owner_profile.save()
+    
     return car
 
 
@@ -112,9 +120,10 @@ if __name__ == '__main__':
                                     is_superuser = True,
                                     is_active = True )
 
+
+
     print("Super User Created")
     print("#############################################################")  
-      
     user = User.objects.get_or_create(username= 'Moderator', 
                                     password= make_password("password123"), 
                                     email = 'moderator@gmail.com',
@@ -127,6 +136,9 @@ if __name__ == '__main__':
     print("Moderator Created")
     print("#############################################################")
 
+
     print("Populating Data... Please Wait.")
+    print("#############################################################")
     populate_data(30)
     print("Populating Data... Complete")
+    print("#############################################################")

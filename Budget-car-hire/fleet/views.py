@@ -1,10 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import (render, get_object_or_404, redirect, reverse)
+from django.http import (HttpResponseRedirect, HttpResponse)
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
-
 from uuid import uuid4
 from datetime import datetime, date
 
@@ -43,6 +42,7 @@ def admin_fleet_view(request):
     }
     return render(request, template, context)
 
+
 # Certain fleet detail view
 @login_required
 def fleet_detail_view(request, pk, car_pk=None):
@@ -60,12 +60,14 @@ def fleet_detail_view(request, pk, car_pk=None):
     }
     return render(request, template, context)
 
+
 # Activating existing fleet for modification
 @login_required
 def existing_fleet(request, pk):
     fleet               = get_object_or_404(Fleet, pk = pk)
     request.session['fleet_id'] = fleet.id
     return redirect('vehicle:vehicle_list')
+
 
 # Creating new fleet for Vehicle booking
 def new_fleet(request):
@@ -151,7 +153,9 @@ def remove_fleet(request, pk):
     else:
         return redirect ('fleet:fleets')
 
-# Admin Approving fleet
+
+
+# Approving fleet (Admin)
 @login_required
 def approve_fleet(request, pk):
     if not request.user.is_staff:
@@ -164,10 +168,10 @@ def approve_fleet(request, pk):
     fleet.approve()
 
     # Send Mail After Fleet Approval
-    # send_mail('Fleet Approved',
-    #     f'Your fleet {fleet.fleet_ref} has ' +
-    #     f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
-    #     'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+    send_mail('Fleet Approved',
+        f'Your fleet {fleet.fleet_ref} has ' +
+        f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
+        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
 
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
@@ -222,28 +226,21 @@ def update_payment_record(request, pk, token):
     fleet_purchased.save()
 
     transaction = Transaction( profile         = request.user.user_profile,
-                                      fleet           = fleet_purchased,
-                                      amount          = fleet_purchased.get_total(),
-                                      token           = token )
+                            fleet           = fleet_purchased,
+                            amount          = fleet_purchased.get_total(),
+                            token           = token )
     transaction.save()
 
-    # Payment Confirmation mail to the user
-    # send_mail('Payment Success',
-    #         f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
-    #         f'been successfully received, Payement confirmation token {token}.',
-    #         'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+    # On successful payment send mail to the user
+    send_mail('Payment Success',
+            f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
+            f'been successfully received, Payement confirmation token {token}.',
+            'randomfahad@gmail.com', [request.user.email], fail_silently=False )
 
     # Success message.
     messages.success(request, 'Your payment has been done successfully')
     # Redirecting to the fleet
     return HttpResponseRedirect(fleet_purchased.get_absolute_url())
-
-
-
-
-
-
-
 
 
 
