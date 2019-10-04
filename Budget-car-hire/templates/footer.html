@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="page-footer font-small bg-secondary">
+<footer class="page-footer font-small bg-secondary my-2">
 
     <!-- Footer Links -->
     <div class="text-center text-md-left px-5">
@@ -15,92 +15,41 @@
   
           <ul class="list-unstyled">
             <li>
-              <a href="#!">Vehicle Home Page</a>
+              <a href="{% url 'vehicle:vehicle_list' %}">Vehicles</a>
             </li>
+          </ul>
+  
+        </div>
+        <!-- Grid column -->
+
+  
+        <!-- Grid column -->
+        <div class="col-md-3 mx-auto">
+  
+          <!-- Links -->
+          <h5 class="font-weight-bold text-capitilize mt-3 mb-4">Blogs</h5>
+  
+          <ul class="list-unstyled">
             <li>
-              <a href="#!">Vehicle Registration</a>
-            </li>
-            <li>
-              <a href="#!">Hire</a>
+              <a href="{% url 'blogs:blog_list' %}">All Blogs</a>
             </li>
           </ul>
   
         </div>
         <!-- Grid column -->
   
-        <!-- <hr class="clearfix w-100 d-md-none"> -->
   
         <!-- Grid column -->
         <div class="col-md-3 mx-auto">
   
           <!-- Links -->
-          <h5 class="font-weight-bold text-capitilize mt-3 mb-4">Payments</h5>
+          <h5 class="font-weight-bold text-capitilize mt-3 mb-4">Contact Us</h5>
   
           <ul class="list-unstyled">
             <li>
-              <a href="#!">Link 1</a>
+              <a href="{% url 'blogs:about_us' %}">Contact</a>
             </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
-          </ul>
-  
-        </div>
-        <!-- Grid column -->
-  
-        <!-- <hr class="clearfix w-100 d-md-none"> -->
-  
-        <!-- Grid column -->
-        <div class="col-md-3 mx-auto">
-  
-          <!-- Links -->
-          <h5 class="font-weight-bold text-capitilize mt-3 mb-4">Links</h5>
-  
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
-          </ul>
-  
-        </div>
-        <!-- Grid column -->
-  
-        <!-- <hr class="clearfix w-100 d-md-none"> -->
-  
-        <!-- Grid column -->
-        <div class="col-md-3 mx-auto">
-  
-          <!-- Links -->
-          <h5 class="font-weight-bold text-capitilize mt-3 mb-4">Links</h5>
-  
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
+
           </ul>
   
         </div>
@@ -109,7 +58,6 @@
       </div>
       <!-- Grid row -->
   
-    <!-- Footer Links -->
   
     <!-- Copyright -->
     <div class="footer-copyright text-center py-3 text-light">© 2019 Copyright<span class="text-light h5" > @ Fahad-Md-Kamal (00171328)</span>
