@@ -44,7 +44,6 @@ class vehicle_reg_form(forms.ModelForm):
                     {'class':'form-control', 'placeholder':'Reg No: VMX 19654'}),
             'model_year': DateInputForm()
         }
-    
 
 
 class vehicle_model_form(forms.ModelForm):

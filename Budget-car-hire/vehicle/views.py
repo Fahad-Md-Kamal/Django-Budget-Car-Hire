@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 
-from datetime import date
+from datetime import date, datetime
 
 
 import re
@@ -67,11 +67,15 @@ def vehicle_registration(request):
         form = forms.vehicle_reg_form(request.POST, request.FILES)
         if form.is_valid():
             vehicle = form.save(commit=False)
-            vehicle.owner = request.user
-            vehicle = form.save()
-
-            messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully. We will notify you when approved')
-            return HttpResponseRedirect(vehicle.get_absolute_url())
+            model_date = form.cleaned_data['model_year']
+            # Check The Date
+            if (model_date - datetime.now().date()).days > 0:
+                messages.warning(request, "Invalid Date")
+            else:
+                vehicle.owner = request.user
+                vehicle = form.save()
+                messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully. We will notify you when approved')
+                return HttpResponseRedirect(vehicle.get_absolute_url())
     else:
         form = forms.vehicle_reg_form()
     context = {
@@ -91,10 +95,15 @@ def vehicle_update_view(request, pk):
             form     = forms.vehicle_reg_form(request.POST, instance = vehicle)
             if form.is_valid():
                 vehcile = form.save( commit= False)
-                vehcile.is_approved = False
-                vehcile.save()
-                messages.info(request, f'Vehicle {vehicle.reg_no} updated successfully')
-                return HttpResponseRedirect(vehicle.get_absolute_url())
+                model_date = form.cleaned_data['model_year']
+                # Check The Date
+                if (model_date - datetime.now().date()).days > 0:
+                    messages.warning(request, "Invalid Date")
+                else:
+                    vehcile.is_approved = False
+                    vehcile.save()
+                    messages.info(request, f'Vehicle {vehicle.reg_no} updated successfully')
+                    return HttpResponseRedirect(vehicle.get_absolute_url())
             else:
                 messages.error(request, 'Failed to update vehicle')
         else:
