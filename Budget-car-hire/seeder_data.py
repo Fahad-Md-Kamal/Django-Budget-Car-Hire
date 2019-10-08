@@ -24,12 +24,19 @@ from django.contrib.auth.hashers import make_password
 
 from django.shortcuts import get_object_or_404
 
+# python manage.py migrate
+# python seeder_data.py
+
+
+
 fakegen = Faker()
+
+
+
 def add_user():
     Fake_username       = fakegen.name()
     Fake_password       = make_password("test1234546")
     Fake_email          = fakegen.email()
-    # Fake_email          = 'hebocemac@appmail.top'
     Fake_firstname      = fakegen.first_name()
     Fake_lastname       = fakegen.last_name()
     Fake_staff          = False
@@ -39,6 +46,7 @@ def add_user():
                                                     first_name = Fake_firstname,
                                                     last_name = Fake_lastname,
                                                     is_staff = False )[0]
+    print('\n###   User Created   ###')
     return user
 
 def add_blog():
@@ -53,6 +61,7 @@ def add_blog():
                                                     topic = fake_topic,
                                                     is_approved = True,
                                                     posted_date = fake_posted_date)[0]
+    print('\n###   blog Created   ###')
     return blog
 
 
@@ -83,6 +92,7 @@ def add_vehicles():
     owner_profile.user_type = 1
     owner_profile.save()
     
+    print('\n###   vehicle Created   ###')
     return car
 
 
@@ -97,6 +107,7 @@ def create_comment(N=2):
                                             blog=post, 
                                             comment=fake_comment, 
                                             comment_date = fake_comment_date)
+    print('\n###   comment Created   ###')
 
 
 def populate_data(N=5):
@@ -144,6 +155,6 @@ if __name__ == '__main__':
 
     print("Populating Data... Please Wait.")
     print("#############################################################")
-    populate_data(30)
+    populate_data(20)
     print("Populating Data... Complete")
     print("#############################################################")
