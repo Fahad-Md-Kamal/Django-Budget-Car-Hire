@@ -5,10 +5,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from uuid import uuid4
-from datetime import datetime, date
+from datetime import (datetime, date)
 
 from users.models import Profile
-from .models import Fleet, Transaction
+from .models import (Fleet, Transaction)
 from vehicle.models import Vehicle
 
 import io
@@ -252,6 +252,7 @@ def update_payment_record(request, pk, token):
 # Generate Fleet Invoice Only after it is paid
 def report_generator(request, pk):
 
+
     fleet           = get_object_or_404(Fleet, pk= pk)
     payments        = Transaction.objects.filter(fleet=fleet)
     vehicles        = fleet.vehicles.all()
@@ -271,21 +272,14 @@ def report_generator(request, pk):
     p.drawString(30, 730, f'Customer Name : {fleet.user.user.username}' )
     p.drawString(30, 710, f'Booked On : {fleet.booked_date.date()}' )
     p.drawString(30, 690, f'Total Rent : {fleet.get_total()}/-')
-    # pos = 670
-    # for payment in payments:
-    #     p.drawString(30, pos, f'Paid On : {payment.timestamp.date()}')
-    #     pos -=30
-    # Right Side Information
+
     p.drawRightString(550, 730,  f'{fleet.fleet_ref} : Reference ID' )
     if fleet.is_approved:
         p.drawRightString(550, 710,  f'{fleet.approved_on.date()} : Start Date' )
         p.drawRightString(550, 690,  f'{fleet.expiration_date().date()} : Expires On' )
     else:
         p.drawRightString(550, 710,  f'Not-Approved Yet' )
-    # pos = 670
-    # for payment in payments:
-    #     p.drawRightString(550, pos,  f'{payment.token} : Token' )
-    #     pos -= 30
+
     for i in range(10,580):
         p.drawString(i, 755, '. .')
     for i in range(10,580):
