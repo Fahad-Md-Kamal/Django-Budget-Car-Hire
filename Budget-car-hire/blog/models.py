@@ -33,7 +33,7 @@ class Blog(models.Model):
         return reverse('blogs:blog_detail', kwargs={'pk': self.pk})
 
     class Meta:
-        ordering = ['-posted_date',]
+        ordering = ['-posted_date','-is_approved']
 
 
 class Comment(models.Model):
