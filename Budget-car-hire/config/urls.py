@@ -1,9 +1,6 @@
-
-
-
-
-
-##################         CONFIG APP
+# Deleveoped
+# Fahad Md Kamal
+# NCC ID: 00171328
 
 
 

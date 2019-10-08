@@ -1,3 +1,7 @@
+# Deleveoped By
+# Fahad Md Kamal
+# NCC ID: 00171328
+
 #pylint: disable = no-member, unused-variable
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
