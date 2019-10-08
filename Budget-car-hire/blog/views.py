@@ -165,7 +165,7 @@ def blog_approval(request, pk):
 
 def search(request):
     template        = 'blog/blog_list.html'
-    blog_list       = models.Blog.objects.all()
+    blog_list       = models.Blog.objects.filter(is_approved=True)
     query_text      = request.GET.get('query_text', None)
 
     if query_text   != '' and query_text is not None:

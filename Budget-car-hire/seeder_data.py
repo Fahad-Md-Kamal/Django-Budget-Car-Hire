@@ -25,6 +25,7 @@ def add_user():
     Fake_username       = fakegen.name()
     Fake_password       = make_password("test1234546")
     Fake_email          = fakegen.email()
+    # Fake_email          = 'hebocemac@appmail.top'
     Fake_firstname      = fakegen.first_name()
     Fake_lastname       = fakegen.last_name()
     Fake_staff          = False

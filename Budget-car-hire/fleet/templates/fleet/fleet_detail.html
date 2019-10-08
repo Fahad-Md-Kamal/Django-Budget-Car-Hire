@@ -83,7 +83,7 @@
                       {% if not fleet.is_purchased and fleet.vehicles.count < 10 %}
                         <a href="{% url 'fleet:existing_fleet' fleet.pk %}" id="button-addon3" class="btn btn-success btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Add Vehicles</a>
                       {% elif fleet.is_purchased or fleet.vehicles.count >= 10 %}
-                      <span class="text-warning h3 text-center" >Reached Fleet Vehicles Limit of 10</span>
+                      <span class="text-warning h3 text-center" >Reached Vehicles Limit of 10 For A Fleet</span>
                       <a href="{% url 'fleet:new_fleet' %}" id="button-addon3" class="btn btn-primary btn-block px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>New Fleet</a>
                       {% endif %}
                     </div>
@@ -115,10 +115,10 @@
                     {% if not fleet.is_purchased %}
                       <a href="{% url 'fleet:checkout' fleet.pk  %}" class="btn btn-info rounded-pill py-2 btn-block">Procceed to checkout</a>
                       <a href="{% url 'fleet:cancel_fleet' fleet.pk  %}" class="btn btn-warning rounded-pill py-2 btn-block text-dark">Cancel Fleet</a>
-                    {% elif fleet.is_approved %}
+                    {% elif fleet.is_purchased %}
                       <a href="{% url 'fleet:report_generator' fleet.pk  %}" class="btn btn-info rounded-pill p-3 btn-block">Fleet Report</a>
                     {% else %}
-                      <p class="h5 text-danger" >Please Wait For the Approval of the Fleet</p>
+                      <p class="h5 text-danger" >Collect Your Invoice After Payment</p>
                     {% endif %}
                   </div>
                 </div>

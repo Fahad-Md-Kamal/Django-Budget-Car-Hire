@@ -15,6 +15,7 @@
             <tr>
                 <th>Owner</th>
                 <th>Model</th>
+                <th>Reg. No.</th>
                 <th>Category</th>
                 <th>Status</th>
                 <th>Capacity</th>
@@ -29,6 +30,7 @@
                 <tr>
                     <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
                     <td>{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</td>
+                    <td>{{car.reg_no}}</td>
                     <td>{{car.get_vehicle_type_display}}</td>
                     <td>{% if car.is_hired %} Hired {% else %} Available {% endif %}</td>
                     <td>{{ car.capacity}}</td>

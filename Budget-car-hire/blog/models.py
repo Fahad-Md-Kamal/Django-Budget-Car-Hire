@@ -32,6 +32,8 @@ class Blog(models.Model):
     def get_absolute_url(self):
         return reverse('blogs:blog_detail', kwargs={'pk': self.pk})
 
+    class Meta:
+        ordering = ['-posted_date',]
 
 
 class Comment(models.Model):

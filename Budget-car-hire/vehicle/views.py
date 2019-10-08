@@ -139,9 +139,11 @@ def admin_vehicle_view(request):
 def approve_vehicle(request, pk):
     vehicle = get_object_or_404(models.Vehicle, pk =pk)
     vehicle.approve_vehicle()
+    
     send_mail('Vehicle Approved',
         f'Your vehicle {vehicle.reg_no} has been approved.',
-        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+        # From(sender), [to(sender)]
+        'randomfahad@gmail.com', [vehicle.owner.email], fail_silently=False )
     return redirect('vehicle:admin_vehicle')
 
 
@@ -153,11 +155,12 @@ def freeze_vehicle(request, pk):
 
 def owner_vehicle_list(request):
     template        = 'vehicle/vehicle_list.html'
-    owner           = request.user
-    CarsList        = models.Vehicle.objects.filter(owner = owner)
+    # owner           = request.user
+    CarsList        = models.Vehicle.objects.filter(owner = request.user)
     context = {
-        'cars':CarsList,
-        'page_heading' : owner.username + '\'s',
+        'cars': CarsList,
+        # 'msg': owner.username,
+        'page_heading' : request.user.username + '\'s',
         'form'          : forms.vehicle_model_form()
     }
     return render (request, template, context)
@@ -165,7 +168,7 @@ def owner_vehicle_list(request):
 
 def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
-    vehicle_list        = models.Vehicle.objects.all()
+    vehicle_list        = models.Vehicle.objects.filter(is_approved = True)
 
     vehicel_type    = request.GET.get('vehicel_type', None)
     model_name   = request.GET.get('model_name', None)
