@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView
-# from django.contrib.auth.views import LoginView, LogoutView
+# Deleveoped
+# Fahad Md Kamal
+# NCC ID: 00171328
 
 
 

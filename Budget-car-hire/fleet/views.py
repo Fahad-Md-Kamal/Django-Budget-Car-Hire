@@ -1,3 +1,7 @@
+# Deleveoped By
+# Fahad Md Kamal
+# NCC ID: 00171328
+
 from django.shortcuts import (render, get_object_or_404, redirect, reverse)
 from django.http import (HttpResponseRedirect, HttpResponse)
 from django.contrib.auth.decorators import login_required
@@ -5,10 +9,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from uuid import uuid4
-from datetime import datetime, date
+from datetime import (datetime, date)
 
 from users.models import Profile
-from .models import Fleet, Transaction
+from .models import (Fleet, Transaction)
 from vehicle.models import Vehicle
 
 import io
@@ -114,6 +118,9 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
     car             = get_object_or_404(Vehicle, pk = vehicle_pk)
     fleet           = get_object_or_404(Fleet, pk = fleet_pk)
     if request.user.is_staff or request.user.user_profile == fleet.user:
+        car.is_hired = False
+        car.is_booked = False
+        car.save()
         fleet.vehicles.remove(car)
         messages.info(request, f'{car.reg_no} removed form the Fleet')
     else:
@@ -125,14 +132,16 @@ def remove_from_fleet(request, fleet_pk, vehicle_pk):
 # Cancel a fleet
 @login_required
 def cancel_fleet(request, pk):
-    if not request.user.is_staff:
+    fleet      = get_object_or_404(Fleet, pk=pk)
+    if fleet.user == request.user.user_profile or request.user.is_staff:
+        fleet_vhicles                       = fleet.vehicles.all()
+        fleet_vhicles.update( is_hired=False )
+        fleet.delete()
+        del request.session['fleet_id']
+    else:
         messages.error(request, 'You cannot perform this action on this fleet')
         return HttpResponseRedirect(fleet.get_absolute_url())
-    fleet      = get_object_or_404(Fleet, pk=pk)
-    fleet_vhicles                       = fleet.vehicles.all()
-    fleet_vhicles.update( is_hired=False )
-    fleet.delete()
-    del request.session['fleet_id']
+
     return HttpResponseRedirect(reverse('fleet:fleets'))
 
 
@@ -171,7 +180,7 @@ def approve_fleet(request, pk):
     send_mail('Fleet Approved',
         f'Your fleet {fleet.fleet_ref} has ' +
         f'been approved, Your fleet will be active until {fleet.expiration_date().date()} .',
-        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+        'randomfahad@gmail.com', [fleet.user.user.email], fail_silently=False )
 
     return HttpResponseRedirect(reverse('fleet:admin_fleet_view'))
 
@@ -235,7 +244,7 @@ def update_payment_record(request, pk, token):
     send_mail('Payment Success',
             f'Payment for fleet {fleet_purchased.fleet_ref} has ' +
             f'been successfully received, Payement confirmation token {token}.',
-            'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+            'randomfahad@gmail.com', [fleet_purchased.user.user.email], fail_silently=False )
 
     # Success message.
     messages.success(request, 'Your payment has been done successfully')
@@ -247,8 +256,9 @@ def update_payment_record(request, pk, token):
 # Generate Fleet Invoice Only after it is paid
 def report_generator(request, pk):
 
+
     fleet           = get_object_or_404(Fleet, pk= pk)
-    paid_fleet      = get_object_or_404(Transaction, fleet=fleet)
+    payments        = Transaction.objects.filter(fleet=fleet)
     vehicles        = fleet.vehicles.all()
 
     buffer = io.BytesIO()
@@ -265,13 +275,15 @@ def report_generator(request, pk):
     # Left Side Information
     p.drawString(30, 730, f'Customer Name : {fleet.user.user.username}' )
     p.drawString(30, 710, f'Booked On : {fleet.booked_date.date()}' )
-    p.drawString(30, 690, f'Paid On : {paid_fleet.timestamp.date()}')
-    p.drawString(30, 670, f'Total Rent : {fleet.get_total()}/-')
-    # Right Side Information
+    p.drawString(30, 690, f'Total Rent : {fleet.get_total()}/-')
+
     p.drawRightString(550, 730,  f'{fleet.fleet_ref} : Reference ID' )
-    p.drawRightString(550, 710,  f'{fleet.approved_on.date()} : Start Date' )
-    p.drawRightString(550, 690,  f'{fleet.expiration_date().date()} : Expires On' )
-    p.drawRightString(550, 670,  f'{paid_fleet.token} : Token' )
+    if fleet.is_approved:
+        p.drawRightString(550, 710,  f'{fleet.approved_on.date()} : Start Date' )
+        p.drawRightString(550, 690,  f'{fleet.expiration_date().date()} : Expires On' )
+    else:
+        p.drawRightString(550, 710,  f'Not-Approved Yet' )
+
     for i in range(10,580):
         p.drawString(i, 755, '. .')
     for i in range(10,580):
@@ -292,14 +304,26 @@ def report_generator(request, pk):
         p.drawString(360, y, str(car.rent))
         p.drawString(500, y, car.get_vehicle_type_display())
         y -= 20
+    for i in range(30,540):
+        p.drawString(i, 255, '. .')
+
     for i in range(330,540):
         p.drawString(i, 70, '. .')
+
+    # Bottom Left Corner
+    pos = 240
+    for payment in payments:
+        p.drawString(30, pos, f'Paid on:: {payment.timestamp.date()}               Payment Token::     {payment.token}')
+        pos -= 20
+
+
+
     # Bottom Right Corner
     p.drawString(400, 120, 'Authorized by:')
     p.drawString(400, 50, 'Budget Car Hire')
     p.showPage()
     p.save()
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename=f'{fleet.fleet_ref}-invoice.pdf')
+    return FileResponse(buffer, as_attachment=True, filename=f'Fleet-{fleet.fleet_ref}-invoice.pdf')
 
 

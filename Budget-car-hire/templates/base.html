@@ -6,13 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %} Base Template {% endblock %}</title>
-    <link rel="icon" href="../static/media/favico.png" >
+    <link rel="icon" href="{% static 'media/favico.png' %}" >
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <!-- <link rel="stylesheet" href="{ static 'css/gijgo.min.css' }"> -->
     <link rel="stylesheet" href="{% static 'css/mdb.css' %}">
     <link rel="stylesheet" href="{% static 'css/datatable.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'css/stripe.css' %}"> -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
 <body>
@@ -34,13 +32,11 @@
 
 {% include 'footer.html' %}
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/fontawesome.min.js' %}"></script>
-    <!-- <script src="{ static 'js/gijgo.min.js' }"></script> -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/datatable.js' %}"></script>
+    <script src="{% static 'js/fontawesome.min.js' %}"></script>
     <script src="{% static 'js/mdb.min.js' %}"></script>
-    <!-- <script src="{% static 'js/stripe.js' %}"></script> -->
     <script src="{% static 'js/custom.js' %}"></script>
   </body>
 </html>

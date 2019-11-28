@@ -1,3 +1,7 @@
+# Deleveoped By
+# Fahad Md Kamal
+# NCC ID: 00171328
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -40,7 +44,6 @@ class vehicle_reg_form(forms.ModelForm):
                     {'class':'form-control', 'placeholder':'Reg No: VMX 19654'}),
             'model_year': DateInputForm()
         }
-    
 
 
 class vehicle_model_form(forms.ModelForm):

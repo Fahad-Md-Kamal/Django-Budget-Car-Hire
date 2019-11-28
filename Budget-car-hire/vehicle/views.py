@@ -1,15 +1,18 @@
-#pylint: disable = no-member, unused-variable
+# Deleveoped By
+# Fahad Md Kamal
+# NCC ID: 00171328
+
+#pylint: disable = no-member, unused-variable, undefined-variable
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.shortcuts import get_object_or_404
-# from django.urls import reverse_lazy ## Unnecessary Import
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 
-from datetime import date
+from datetime import date, datetime
 
 
 import re
@@ -64,11 +67,15 @@ def vehicle_registration(request):
         form = forms.vehicle_reg_form(request.POST, request.FILES)
         if form.is_valid():
             vehicle = form.save(commit=False)
-            vehicle.owner = request.user
-            vehicle = form.save()
-
-            messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully. We will notify you when approved')
-            return HttpResponseRedirect(vehicle.get_absolute_url())
+            model_date = form.cleaned_data['model_year']
+            # Check The Date
+            if (model_date - datetime.now().date()).days > 0:
+                messages.warning(request, "Invalid Date")
+            else:
+                vehicle.owner = request.user
+                vehicle = form.save()
+                messages.success(request, f'Vehicle {vehicle.reg_no} registared successfully. We will notify you when approved')
+                return HttpResponseRedirect(vehicle.get_absolute_url())
     else:
         form = forms.vehicle_reg_form()
     context = {
@@ -88,10 +95,15 @@ def vehicle_update_view(request, pk):
             form     = forms.vehicle_reg_form(request.POST, instance = vehicle)
             if form.is_valid():
                 vehcile = form.save( commit= False)
-                vehcile.is_approved = False
-                vehcile.save()
-                messages.info(request, f'Vehicle {vehicle.reg_no} updated successfully')
-                return HttpResponseRedirect(vehicle.get_absolute_url())
+                model_date = form.cleaned_data['model_year']
+                # Check The Date
+                if (model_date - datetime.now().date()).days > 0:
+                    messages.warning(request, "Invalid Date")
+                else:
+                    vehcile.is_approved = False
+                    vehcile.save()
+                    messages.info(request, f'Vehicle {vehicle.reg_no} updated successfully')
+                    return HttpResponseRedirect(vehicle.get_absolute_url())
             else:
                 messages.error(request, 'Failed to update vehicle')
         else:
@@ -139,9 +151,10 @@ def admin_vehicle_view(request):
 def approve_vehicle(request, pk):
     vehicle = get_object_or_404(models.Vehicle, pk =pk)
     vehicle.approve_vehicle()
+    
     send_mail('Vehicle Approved',
         f'Your vehicle {vehicle.reg_no} has been approved.',
-        'randomfahad@gmail.com', [request.user.email], fail_silently=False )
+        'randomfahad@gmail.com', [vehicle.owner.email], fail_silently=False )
     return redirect('vehicle:admin_vehicle')
 
 
@@ -153,11 +166,10 @@ def freeze_vehicle(request, pk):
 
 def owner_vehicle_list(request):
     template        = 'vehicle/vehicle_list.html'
-    owner           = request.user
-    CarsList        = models.Vehicle.objects.filter(owner = owner)
+    CarsList        = models.Vehicle.objects.filter(owner = request.user)
     context = {
-        'cars':CarsList,
-        'page_heading' : owner.username + '\'s',
+        'cars': CarsList,
+        'page_heading' : request.user.username + '\'s',
         'form'          : forms.vehicle_model_form()
     }
     return render (request, template, context)
@@ -165,7 +177,7 @@ def owner_vehicle_list(request):
 
 def search_vehicle(request):
     template        = 'vehicle/vehicle_list.html'
-    vehicle_list        = models.Vehicle.objects.all()
+    vehicle_list        = models.Vehicle.objects.filter(is_approved = True)
 
     vehicel_type    = request.GET.get('vehicel_type', None)
     model_name   = request.GET.get('model_name', None)

@@ -14,7 +14,7 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="{% url 'vehicle:vehicle_list' %}">All Vehicles</a>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.user_profile.user_type == 1 %}
             <a class="dropdown-item" href="{% url 'vehicle:owner_vehicle_list' %}">My Vehicles</a>
             <!-- If the user is Owner only then he can register vehicle -->
           {% if user.user_profile.user_type == 1 %} 
@@ -55,7 +55,7 @@
         </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'blogs:about_us' %}">Contact</a>
+            <a class="nav-link" href="{% url 'blogs:about_us' %}">About Us</a>
           </li>
       </ul>
     </div>

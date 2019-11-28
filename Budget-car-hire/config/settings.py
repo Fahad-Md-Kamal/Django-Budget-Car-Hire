@@ -1,3 +1,10 @@
+# Deleveoped
+# Fahad Md Kamal
+# NCC ID: 00171328
+
+
+
+
 """
 Django settings for config project.
 
