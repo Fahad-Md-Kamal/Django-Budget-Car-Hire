@@ -1,10 +1,9 @@
 from django.urls import path, include
 
-from appusers.views import UserDetailAPIView, UserListAPIView, UserCreateAPIView
+from appusers import views
 
 
 urlpatterns = [
-    path('', UserListAPIView.as_view() , name='user-list'),
-    path('create/', UserCreateAPIView.as_view(), name='user-detail'),
-    path('<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
+    path('', views.UserListAPIView.as_view() , name='user-list'),
+    path('<int:pk>/', views.UserDetailAPIView.as_view(), name='user-detail'),
 ]

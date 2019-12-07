@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, mixins, views
 
 from core.models import User
-from appusers.serializers import UserDetailSerializer, UserPublicSerializer
+from appusers import serializers
 
 
 class UserDetailAPIView(mixins.UpdateModelMixin, 
@@ -14,7 +14,7 @@ class UserDetailAPIView(mixins.UpdateModelMixin,
     permission_classes          = []
     authentication_classes      = []
     queryset                    = User.objects.all()
-    serializer_class            = UserDetailSerializer
+    serializer_class            = serializers.UserDetailSerializer
 
     def put(self, request, *args, **kwargs):
         """
@@ -42,23 +42,6 @@ class UserListAPIView(generics.ListAPIView):
     permission_classes          = []
     authentication_classes      = []
     queryset                    = User.objects.all()
-    serializer_class            = UserDetailSerializer
+    serializer_class            = serializers.UserPublicSerializer
 
-
-class UserCreateAPIView(mixins.CreateModelMixin, 
-                        # mixins.RetrieveModelMixin,
-                        generics.RetrieveAPIView):
-    """
-    CREATE user information
-    """
-    permission_classes          = []
-    authentication_classes      = []
-    queryset                    = User.objects.all()
-    serializer_class            = UserPublicSerializer
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handles post request to create users
-        """
-        return self.create(request, *args, **kwargs)
 

@@ -1,27 +1,31 @@
 from rest_framework import serializers
-from core import models
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
     """
-    Serializes User Details
+    User Public Details serializer
     """
     password            = serializers.CharField(style={'input_type':'password'}, write_only=True)
     class Meta:
-        model           = models.User
-        fields          = ( 'id', 
+        model           = User
+        fields          = ( 'id',
+                            'url',
                             'username', 
                             'email', 
-                            'password')
+                            'password', 
+                            'is_active')
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """
-    Serializes User Details
+    User Details serializer
     """
     class Meta:
-        model           = models.User
+        model           = User
         fields          = ( 'id', 
                             'url',
                             'username', 
