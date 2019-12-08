@@ -1,17 +1,33 @@
 from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from rest_framework import generics, mixins, views, permissions
 
 from core.models import User
 from appusers import serializers
 
+AppUser = get_user_model()
 
-class UserDetailAPIView(mixins.UpdateModelMixin, 
-                        mixins.DestroyModelMixin, 
-                        generics.RetrieveAPIView):
+class UserRegisterAPIView(generics.CreateAPIView):
+    """
+    CREATE user information
+    """
+    permission_classes          = []
+    authentication_classes      = []
+    queryset                    = AppUser.objects.all()
+    serializer_class            = serializers.UserRegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles post request to create users
+        """
+        return self.create(request, *args, **kwargs)
+
+
+class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     DETAIL and UPDATE User Information
     """
-    permission_classes          = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes          = []
     authentication_classes      = []
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserDetailSerializer
