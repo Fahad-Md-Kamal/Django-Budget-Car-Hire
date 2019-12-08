@@ -28,8 +28,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username            = models.CharField(max_length=50, unique=True)
     first_name          = models.CharField(max_length=50, blank=True, null=True)
     last_name           = models.CharField(max_length=50, blank=True, null=True)
-    is_active           = models.BooleanField(default=True)
-    is_staff            = models.BooleanField(default=True)
+    is_active           = models.BooleanField(default=False)
+    is_staff            = models.BooleanField(default=False)
     joined_on           = models.DateTimeField(auto_now_add=True)
     image               = models.ImageField(default='profile_defaul.png', upload_to= photo_upload)
 

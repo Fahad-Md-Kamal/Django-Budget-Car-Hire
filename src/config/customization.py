@@ -6,12 +6,12 @@ AUTH_USER_MODEL = 'core.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
@@ -28,9 +28,6 @@ JWT_AUTH = {
 
     'JWT_PAYLOAD_GET_USER_ID_HANDLER':
     'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
-    # 'JWT_PAYLOAD_GET_USERNAME_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_get_username_from_payload_handler',
 
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'config.utils.jwt_response_payload_handler',

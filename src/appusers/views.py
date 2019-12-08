@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, mixins, views, status
 from rest_framework.response import Response
 
-from core.permissions import IsOwnerOrAdmin
+from core.permissions import IsProfileOwnerOrReadOnly
 from appusers import serializers
 
 User = get_user_model()
@@ -28,7 +28,7 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserDetailSerializer
-    permission_classes          = [IsOwnerOrAdmin]
+    permission_classes          = [IsProfileOwnerOrReadOnly]
 
     def put(self, request, *args, **kwargs):
         """
