@@ -20,6 +20,16 @@ class UserPublicSerializer(serializers.ModelSerializer):
                             'is_active')
 
 
+class UserLoginSerializer(UserPublicSerializer):
+    """
+    User Login serializer
+    """
+    class Meta:
+        model           = User
+        fields          = ( 'username', 
+                            'email')
+
+
 class UserDetailSerializer(serializers.ModelSerializer):
     """
     User Details serializer

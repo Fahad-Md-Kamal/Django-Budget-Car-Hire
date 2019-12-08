@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party Apps
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 
     # Web Apps
     'core.apps.CoreConfig',
+    'blogs.apps.BlogsConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 from config.customization import *
+

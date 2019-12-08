@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, mixins, views
+from rest_framework import generics, mixins, views, permissions
 
 from core.models import User
 from appusers import serializers
@@ -11,7 +11,7 @@ class UserDetailAPIView(mixins.UpdateModelMixin,
     """
     DETAIL and UPDATE User Information
     """
-    permission_classes          = []
+    permission_classes          = [permissions.IsAuthenticatedOrReadOnly]
     authentication_classes      = []
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserDetailSerializer

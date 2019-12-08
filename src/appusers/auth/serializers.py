@@ -18,7 +18,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         fields          = ( 'id',
                             'url',
                             'username',
-                            'email', 
+                            'email',
+                            'message',
                             'password', 
                             'password2')
     def get_message(self, data):
