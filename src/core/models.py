@@ -9,9 +9,14 @@ from PIL import Image
 from core.manager import UserManager
 
 
-def photo_upload(insatnce, filename):
+def photo_upload(instance, filename):
     basefilename, file_extension = os.path.splitext(filename)
-    return f'profile_pics/{instance.user.username}/{datetime.datetime.now()}{file_extension}'
+    username            = instance.username
+    date                = datetime.datetime.now().date()
+    # Check if the instance have any username
+    # if instance.username:
+    #     print('Entered Here')
+    return f'{username}/profile_pics/{date}-{username}{file_extension}'
 
 
 class User(AbstractBaseUser, PermissionsMixin):

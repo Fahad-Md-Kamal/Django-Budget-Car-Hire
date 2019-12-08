@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -17,17 +18,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
                             'username', 
                             'email', 
                             'password', 
-                            'is_active')
-
-
-class UserLoginSerializer(UserPublicSerializer):
-    """
-    User Login serializer
-    """
-    class Meta:
-        model           = User
-        fields          = ( 'username', 
-                            'email')
+                            'image')
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -40,7 +31,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
                             'username', 
                             'email', 
                             'first_name', 
-                            'last_name')
+                            'last_name', 
+                            'image')
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -79,3 +71,66 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user_obj.is_active = False
         user_obj.save()
         return user_obj
+
+
+class UserLoginSerializer(UserPublicSerializer):
+    """
+    User Login serializer (Username or Email)
+    """
+    token               = serializers.CharField(read_only=True)
+    Identity            = serializers.CharField(label="Username/ Email")
+
+    class Meta:
+        model           = User
+        fields          = ( 'token',
+                            'Identity',
+                            'password')
+        extra_kwargs = {
+            "password":{
+                "write_only":True,
+                "styel":"password"
+            }
+        }
+
+    def validate(self, data):
+        user_obj = None
+        userid          = data.get('Identity', None)
+        password        = data.get('password')
+        if userid is None:
+            raise ValueError("Username or Email is required to Login")
+        user = User.objects.filter(
+            Q(email=userid) |
+            Q(username=userid))
+        if user.exists() and user.count() == 1:
+            user_obj = user.first()
+            if user_obj:
+                if not user_obj.check_password(password):
+                    raise serializers.ValidationError("Invalid Login Credentials, Please Try again !")
+        else:
+            raise serializers.ValidationError("This not a registared Email/ Username")
+        
+        data['token'] = "Some Random Token"
+        
+        return data
+
+
+
+
+# class UserLoginSerializer(UserPublicSerializer):
+#     """
+#     User Login serializer
+#     """
+#     token               = serializers.CharField(read_only=True)
+#     email               = serializers.EmailField(label="Email")
+
+#     class Meta:
+#         model           = User
+#         fields          = ( 'token',
+#                             'email', 
+#                             'password')
+#         extra_kwargs = {
+#             "password":{
+#                 "write_only":True,
+#                 "styel":"password"
+#             }
+#         }

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from rest_framework import generics, mixins, views, permissions
+from rest_framework import generics, mixins, views, permissions, status
+from rest_framework.response import Response
 
 from core.models import User
 from appusers import serializers
@@ -11,8 +12,6 @@ class UserRegisterAPIView(generics.CreateAPIView):
     """
     CREATE user information
     """
-    permission_classes          = []
-    authentication_classes      = []
     queryset                    = AppUser.objects.all()
     serializer_class            = serializers.UserRegisterSerializer
 
@@ -27,8 +26,6 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     DETAIL and UPDATE User Information
     """
-    permission_classes          = []
-    authentication_classes      = []
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserDetailSerializer
 
@@ -55,9 +52,18 @@ class UserListAPIView(generics.ListAPIView):
     """
     LIST of user information
     """
-    permission_classes          = []
-    authentication_classes      = []
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserPublicSerializer
 
 
+class UserLoginAPIView(views.APIView):
+    permission_classes  = [permissions.AllowAny]
+    serializer_class    = serializers.UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer    = serializers.UserLoginSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            new_data = serializer.data
+            return Response(new_data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
