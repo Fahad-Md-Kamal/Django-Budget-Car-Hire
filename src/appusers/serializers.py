@@ -75,15 +75,12 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 class UserLoginSerializer(UserPublicSerializer):
     """
-    User Login serializer (Username or Email)
+    User Login serializer
     """
-    token               = serializers.CharField(read_only=True)
-    Identity            = serializers.CharField(label="Username/ Email")
-
     class Meta:
         model           = User
-        fields          = ( 'token',
-                            'Identity',
+        fields          = ( 'username',
+                            'email', 
                             'password')
         extra_kwargs = {
             "password":{
@@ -92,41 +89,20 @@ class UserLoginSerializer(UserPublicSerializer):
             }
         }
 
-    def validate(self, data):
-        user_obj = None
-        userid          = data.get('Identity', None)
-        password        = data.get('password')
-        if userid is None:
-            raise ValueError("Username or Email is required to Login")
-        user = User.objects.filter(
-            Q(email=userid) |
-            Q(username=userid))
-        if user.exists() and user.count() == 1:
-            user_obj = user.first()
-            if user_obj:
-                if not user_obj.check_password(password):
-                    raise serializers.ValidationError("Invalid Login Credentials, Please Try again !")
-        else:
-            raise serializers.ValidationError("This not a registared Email/ Username")
-        
-        data['token'] = "Some Random Token"
-        
-        return data
-
 
 
 
 # class UserLoginSerializer(UserPublicSerializer):
 #     """
-#     User Login serializer
+#     User Login serializer (Username or Email)
 #     """
 #     token               = serializers.CharField(read_only=True)
-#     email               = serializers.EmailField(label="Email")
+#     Identity            = serializers.CharField(label="Username/ Email")
 
 #     class Meta:
 #         model           = User
 #         fields          = ( 'token',
-#                             'email', 
+#                             'Identity',
 #                             'password')
 #         extra_kwargs = {
 #             "password":{
@@ -134,3 +110,24 @@ class UserLoginSerializer(UserPublicSerializer):
 #                 "styel":"password"
 #             }
 #         }
+
+    # def validate(self, data):
+    #     user_obj = None
+    #     userid          = data.get('Identity', None)
+    #     password        = data.get('password')
+    #     if userid is None:
+    #         raise ValueError("Username or Email is required to Login")
+    #     user = User.objects.filter(
+    #         Q(email=userid) |
+    #         Q(username=userid))
+    #     if user.exists() and user.count() == 1:
+    #         user_obj = user.first()
+    #         if user_obj:
+    #             if not user_obj.check_password(password):
+    #                 raise serializers.ValidationError("Invalid Login Credentials, Please Try again !")
+    #     else:
+    #         raise serializers.ValidationError("This not a registared Email/ Username")
+        
+    #     return data
+
+

@@ -7,5 +7,4 @@ urlpatterns = [
     path('', views.UserListAPIView.as_view() , name='user-list'),
     path('register/', views.UserRegisterAPIView.as_view(), name='register-user'),
     path('<int:pk>/', views.UserDetailAPIView.as_view(), name='user-detail'),
-    path('login/', views.UserLoginAPIView.as_view(), name='login-user'),
 ]

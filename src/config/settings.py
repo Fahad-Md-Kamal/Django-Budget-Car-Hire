@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party Apps
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
 
     # Web Apps
     'core.apps.CoreConfig',

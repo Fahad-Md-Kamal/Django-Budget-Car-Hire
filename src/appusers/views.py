@@ -56,14 +56,14 @@ class UserListAPIView(generics.ListAPIView):
     serializer_class            = serializers.UserPublicSerializer
 
 
-class UserLoginAPIView(views.APIView):
-    permission_classes  = [permissions.AllowAny]
-    serializer_class    = serializers.UserLoginSerializer
+# class UserLoginAPIView(views.APIView):
+#     permission_classes  = [permissions.AllowAny]
+#     serializer_class    = serializers.UserLoginSerializer
 
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer    = serializers.UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            new_data = serializer.data
-            return Response(new_data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, *args, **kwargs):
+#         data = request.data
+#         serializer    = serializers.UserLoginSerializer(data=data)
+#         if serializer.is_valid(raise_exception=True):
+#             new_data = serializer.data
+#             return Response(new_data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
