@@ -55,3 +55,4 @@ class UserListAPIView(generics.ListAPIView):
     """
     queryset                    = User.objects.all()
     serializer_class            = serializers.UserPublicSerializer
+    

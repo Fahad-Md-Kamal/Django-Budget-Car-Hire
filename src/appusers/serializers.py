@@ -34,6 +34,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
                             'last_name', 
                             'image')
 
+        extra_kwargs = { "email":{ "read_only":True } }
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     """
@@ -82,12 +84,7 @@ class UserLoginSerializer(UserPublicSerializer):
         fields          = ( 'username',
                             'email', 
                             'password')
-        extra_kwargs = {
-            "password":{
-                "write_only":True,
-                "styel":"password"
-            }
-        }
+        extra_kwargs = { "password":{ "write_only":True, "styel":"password" } }
 
 
 

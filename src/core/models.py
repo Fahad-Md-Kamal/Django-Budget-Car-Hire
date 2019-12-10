@@ -33,9 +33,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     joined_on           = models.DateTimeField(auto_now_add=True)
     image               = models.ImageField(default='profile_defaul.png', upload_to= photo_upload)
 
-    objects = UserManager()
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    objects             = UserManager()
+    USERNAME_FIELD      = 'email'
+    REQUIRED_FIELDS     = ['username']
 
     def __str__(self):
         """
@@ -45,15 +45,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 AppUser = get_user_model()
 class Blog(models.Model):
-    """ Stores and Retrieves Blogs of Database"""
-    OT  = 0
-    VH  = 1
-    SV  = 2
-    BLOG_TOPICS = [
-        (OT, 'OTHERS'),
-        (VH, 'VEHICLES'),
-        (SV, 'SERVICES'),
-        ]
+    """ 
+    Stores and Retrieves Blogs of Database
+    """
+    
+    OT                  = 0
+    VH                  = 1
+    SV                  = 2
+    BLOG_TOPICS         = [ (OT, 'OTHERS'),
+                            (VH, 'VEHICLES'),
+                            (SV, 'SERVICES')]
+
     user                = models.ForeignKey( AppUser, on_delete = models.CASCADE)
     title               = models.CharField(max_length=250)
     content             = models.TextField(max_length=600)
@@ -64,3 +66,5 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+
