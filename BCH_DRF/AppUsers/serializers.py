@@ -6,8 +6,9 @@ from CoreApp.models import User
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    password            = serializers.CharField(label='Password', write_only=True)
+    password            = serializers.CharField(label='Password')
     password2           = serializers.CharField(label='Confirm Password', write_only=True)
+    
 
     class Meta:
         model           = User
@@ -59,7 +60,15 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'is_owner'  : {  'read_only':True,},
             'email'     : {  'read_only':True,},
             'password'  : {  'write_only':True,
-                             'style':{'input_style':'password'}}}
+                             'style':{'input_style':'password'}} }
+
+    def update(self, instance, validated_data):
+        instance.username=(validated_data.get('username'))
+        instance.first_name=(validated_data.get('first_name'))
+        instance.last_name=(validated_data.get('last_name'))
+        instance.set_password(validated_data.get('password'))
+        instance.save()
+        return instance
 
     def get_joined_since(self, obj):
         return (timezone.now() - obj.timestamp).days
