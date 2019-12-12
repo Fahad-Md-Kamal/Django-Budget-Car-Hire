@@ -2,18 +2,16 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from CoreApp.models import User
-
+from CoreApp.models import User, ProfilePics
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    password            = serializers.CharField(label='Password')
+    password            = serializers.CharField(label='Password', write_only=True)
     password2           = serializers.CharField(label='Confirm Password', write_only=True)
-    
 
     class Meta:
         model           = User
-        fields          = ( 'url', 
-                            'id', 
+        fields          = ( 'id', 
+                            'url', 
                             'email', 
                             'username',
                             'password', 
@@ -37,24 +35,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user_obj
 
 
-
 class UserDetailSerializer(serializers.ModelSerializer):
     joined_since         = serializers.SerializerMethodField(read_only=True)
-    image                = serializers.ImageField(required=False)
 
     class Meta:
         model           = User
-        fields          = ( 'url', 
-                            'id', 
+        fields          = ( 'id',
+                            'url',
                             'email', 
                             'username',
                             'first_name', 
                             'last_name', 
+                            'image', 
                             'joined_since', 
                             'password',
-                            'image', 
                             'is_owner',
-                            'is_staff')
+                            'is_staff', )
         extra_kwargs    = {
             'is_staff'  : {  'read_only':True,},
             'is_owner'  : {  'read_only':True,},
@@ -78,8 +74,8 @@ class UserDetailAdminSerializer(UserDetailSerializer):
     
     class Meta:
         model           = User
-        fields          = ( 'url', 
-                            'id', 
+        fields          = ( 'id',
+                            'url', 
                             'email', 
                             'username', 
                             'first_name', 
@@ -99,13 +95,12 @@ class UserDetailStaffSerializer(UserDetailSerializer):
     
     class Meta:
         model           = User
-        fields          = ( 'url', 
-                            'id', 
+        fields          = ( 'id', 
+                            'url',
                             'email', 
                             'username', 
                             'first_name', 
                             'last_name', 
-                            'image', 
                             'joined_since',
                             'is_owner', 
                             'is_staff', 
@@ -115,13 +110,13 @@ class UserDetailStaffSerializer(UserDetailSerializer):
                              'style':{'input_style':'password'}}}
 
 class UserListSerializer(UserDetailSerializer):
-
     class Meta:
         model           = User
-        fields          = ( 'url', 
-                            'id', 
+        fields          = ( 'id', 
+                            'url',
                             'username', 
                             'image')
+
 
 
 class UserInfoSerializer(UserDetailSerializer):
