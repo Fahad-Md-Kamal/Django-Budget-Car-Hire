@@ -3,9 +3,7 @@ from config.settings import *
 
 
 INSTALLED_APPS +=[
-    # Third Parties
     'rest_framework',
-
     # Apps
     'AppUsers.apps.AppusersConfig',
     'CoreApp.apps.CoreappConfig',
@@ -13,21 +11,27 @@ INSTALLED_APPS +=[
 
 
 AUTH_USER_MODEL = 'CoreApp.User'
-
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL   = '/media/'
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS' : (
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
+    'SEARCH_PARAM': 'q',
+    'ORDERING_PARAM' : 'ordering'
 }
+
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':

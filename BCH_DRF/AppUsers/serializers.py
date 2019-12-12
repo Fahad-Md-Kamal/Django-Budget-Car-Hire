@@ -94,6 +94,26 @@ class UserDetailAdminSerializer(UserDetailSerializer):
             'password'  : {  'write_only':True,
                              'style':{'input_style':'password'}}}
 
+
+class UserDetailStaffSerializer(UserDetailSerializer):
+    
+    class Meta:
+        model           = User
+        fields          = ( 'url', 
+                            'id', 
+                            'email', 
+                            'username', 
+                            'first_name', 
+                            'last_name', 
+                            'image', 
+                            'joined_since',
+                            'is_owner', 
+                            'is_staff', 
+                            'is_active')
+        extra_kwargs    = {
+            'password'  : {  'write_only':True,
+                             'style':{'input_style':'password'}}}
+
 class UserListSerializer(UserDetailSerializer):
 
     class Meta:
