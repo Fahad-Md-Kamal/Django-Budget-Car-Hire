@@ -88,7 +88,7 @@ class Blog(models.Model):
                                 on_delete=models.SET_NULL, 
                                 related_name= 'blog_topic',
                                 blank=True, null=True)
-    image                   = models.ImageField( upload_to=blog_photo_path, blank=True, null=True)
+    image                   = models.ImageField( default='blog.png', upload_to=blog_photo_path, blank=True, null=True)
     posted_on               = models.DateTimeField(auto_now_add=True)
     updated_on              = models.DateTimeField(auto_now=True)
     is_approved             = models.BooleanField(default=False)

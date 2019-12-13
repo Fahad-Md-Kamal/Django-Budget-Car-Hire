@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from PIL import Image
 
@@ -40,7 +41,8 @@ class BlogCategorySerializer(serializers.ModelSerializer):
 class BlogDetailSerializer(serializers.ModelSerializer):
     content             = serializers.CharField(required= False)
     user                = UserInfoSerializer(read_only= True)
-    image               = serializers.ImageField(max_length=None, allow_empty_file=True, use_url=True)
+    # topic               = BlogCategorySerializer()
+    topic_blog          = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model           = models.Blog
@@ -52,7 +54,9 @@ class BlogDetailSerializer(serializers.ModelSerializer):
                             'updated_on', 
                             'is_approved', 
                             'user', 
+                            'topic_blog' ,
                             'topic')
+        
 
     def validate(self, data):
         content         = data.get('content', None)
@@ -63,6 +67,10 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         if content is None and image is None:
             raise serializers.ValidationError('Image or content is required.')
         return data
+    
+    def get_topic_blog(self, obj):
+        return obj.topic.topic
+
 
 
 class BlogListSerializer(serializers.ModelSerializer):
