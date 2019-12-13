@@ -71,7 +71,7 @@ class BlogTopic(models.Model):
                                 related_name= 'blog_topic_editor',
                                 blank=True, null=True)
     created_on              = models.DateTimeField(auto_now_add=True)
-    updated_on              = models.DateTimeField(auto_now_add=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.topic
@@ -90,7 +90,7 @@ class Blog(models.Model):
                                 blank=True, null=True)
     image                   = models.ImageField( default='blog.png', upload_to=blog_photo_path, blank=True, null=True)
     posted_on               = models.DateTimeField(auto_now_add=True)
-    updated_on              = models.DateTimeField(auto_now=True)
+    updated_on              = models.DateTimeField()
     approved_by             = models.ForeignKey(AppUser, 
                                 on_delete = models.SET_NULL, 
                                 related_name= 'blog_approver',
@@ -104,10 +104,22 @@ class Blog(models.Model):
     def author(self):
         return self.user
 
-    # def save(self, *args, **kwargs):
-    #     super(Blog, self).save(*args, **kwargs)
-    #     img = Image.open(self.image.path)
-    #     if img.height > 600 or img.width > 650:
-    #         output_size = (600, 650)
-    #         img.thumbnail(output_size)
-    #         img.save(self.image.path)
+
+class Comment(models.Model):
+    content                 = models.TextField(max_length=300)
+    commented_on            = models.DateTimeField(auto_now_add=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
+    user                    = models.ForeignKey(AppUser, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'Blog_commenter',
+                                blank=True, null=True)
+    blog                    = models.ForeignKey(Blog,
+                                on_delete = models.CASCADE, 
+                                related_name= "commented_blog", 
+                                blank=True, null=True)
+    parent_comment          = models.ForeignKey('self', 
+                                on_delete = models.CASCADE, 
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.content[:10]
