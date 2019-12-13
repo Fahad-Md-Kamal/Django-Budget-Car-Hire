@@ -40,9 +40,8 @@ class BlogCategorySerializer(serializers.ModelSerializer):
 ## BLOG Serializers
 class BlogDetailSerializer(serializers.ModelSerializer):
     content             = serializers.CharField(required= False)
-    user                = UserInfoSerializer(read_only= True)
-    # topic               = BlogCategorySerializer()
-    topic_blog          = serializers.SerializerMethodField(read_only=True)
+    author              = UserInfoSerializer(read_only= True)
+    blog_topic          = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model           = models.Blog
@@ -52,28 +51,45 @@ class BlogDetailSerializer(serializers.ModelSerializer):
                             'image', 
                             'posted_on', 
                             'updated_on', 
-                            'is_approved', 
-                            'user', 
-                            'topic_blog' ,
+                            'author', 
+                            'blog_topic' ,
                             'topic')
-        
 
     def validate(self, data):
         content         = data.get('content', None)
+        topic           = data.get('topic', None)
         if content      == "":
             content     = None
         image           = data.get('image', None)
-        
         if content is None and image is None:
             raise serializers.ValidationError('Image or content is required.')
+        if topic is None:
+            raise serializers.ValidationError('Please Choose a topic for the blog')
         return data
     
-    def get_topic_blog(self, obj):
+    def get_blog_topic(self, obj):
         return obj.topic.topic
 
 
+class AdminBlogDetailSerializer(BlogDetailSerializer):
 
-class BlogListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model           = models.Blog
+        fields          = ( 'id', 
+                            'title', 
+                            'content', 
+                            'image', 
+                            'posted_on', 
+                            'updated_on', 
+                            'approved_by',
+                            'is_approved', 
+                            'author', 
+                            'blog_topic' ,
+                            'topic')
+        extra_kwargs    = { 'approved_by':{'read_only':True} }
+        
+
+class BlogListSerializer(BlogDetailSerializer):
 
     class Meta:
         model           = models.Blog
@@ -82,5 +98,5 @@ class BlogListSerializer(serializers.ModelSerializer):
                             'title', 
                             'posted_on', 
                             'is_approved', 
-                            'user', 
-                            'topic')
+                            'author', 
+                            'blog_topic')

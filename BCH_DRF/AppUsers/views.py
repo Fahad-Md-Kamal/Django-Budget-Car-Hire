@@ -7,6 +7,7 @@ from config import permissions
 from CoreApp.models import ProfilePics
 from AppUsers import serializers
 
+
 User = get_user_model()
 class UserCreateAPIView(generics.CreateAPIView):
     queryset                    = User.objects.all()

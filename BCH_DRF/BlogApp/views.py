@@ -35,8 +35,9 @@ class BlogTopicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 ##############################          BLOG               #############################
 
 class BlogListAPIView(generics.ListAPIView):
-    queryset                = Blog.objects.all()
+    queryset                = Blog.objects.filter(is_approved=True)
     serializer_class        = serializers.BlogListSerializer
+    search_fields           = ('title', 'content')
 
 
 class BlogCreationAPIView(generics.CreateAPIView):
@@ -46,9 +47,18 @@ class BlogCreationAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class BlogDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset                = Blog.objects.all()
     serializer_class        = serializers.BlogDetailSerializer
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
+
+
+class AdminBlogDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset                = Blog.objects.all()
+    serializer_class        = serializers.AdminBlogDetailSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(approved_by=self.request.user)
