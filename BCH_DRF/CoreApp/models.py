@@ -40,7 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class ProfilePics(models.Model):
     user                    = models.ManyToManyField(User, related_name='profile_pics' )
-    image                   = models.ImageField(default='ProPic.png', upload_to=photo_path)
+    image                   = models.ImageField(default='ProPic.png', 
+                                upload_to=photo_path)
     is_approved             = models.BooleanField(default=False)
     timestamp               = models.DateTimeField(auto_now_add=True)
 
@@ -88,7 +89,9 @@ class Blog(models.Model):
                                 on_delete=models.SET_NULL, 
                                 related_name= 'blog_topic',
                                 blank=True, null=True)
-    image                   = models.ImageField( default='blog.png', upload_to=blog_photo_path, blank=True, null=True)
+    image                   = models.ImageField( default='blog.png', 
+                                upload_to=blog_photo_path, 
+                                blank=True, null=True)
     posted_on               = models.DateTimeField(auto_now_add=True)
     updated_on              = models.DateTimeField()
     approved_by             = models.ForeignKey(AppUser, 
@@ -106,7 +109,7 @@ class Blog(models.Model):
 
 
 class Comment(models.Model):
-    content                    = models.TextField(max_length=300)
+    content                 = models.TextField(max_length=300)
     commented_on            = models.DateTimeField(auto_now_add=True)
     updated_on              = models.DateTimeField(blank=True, null=True)
     user                    = models.ForeignKey(AppUser, 
@@ -124,7 +127,7 @@ class Comment(models.Model):
 
 class Replay(models.Model):
     text                    = models.TextField(max_length=300)
-    replaied_on             = models.DateTimeField(auto_now_add=True)
+    replied_on              = models.DateTimeField(auto_now_add=True)
     updated_on              = models.DateTimeField(blank=True, null=True)
     user                    = models.ForeignKey(AppUser, 
                                 on_delete = models.SET_NULL, 
@@ -134,6 +137,11 @@ class Replay(models.Model):
                                 on_delete = models.SET_NULL, 
                                 related_name= 'replayed_comment',
                                 blank=True, null=True)
+    blog                    = models.ForeignKey(Blog,
+                                on_delete = models.CASCADE, 
+                                related_name= "repalied_blog", 
+                                blank=True, null=True)
+
 
     def __str__(self):
         return self.text[:20]

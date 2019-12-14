@@ -3,7 +3,7 @@ from rest_framework import serializers
 from PIL import Image
 
 from CoreApp import models
-from BlogApp.comment.serializers import CommentSerializer
+from BlogApp.comment_api.serializers import CommentSerializer
 from AppUsers.serializers import UserInfoSerializer
 
 
@@ -77,7 +77,11 @@ class BlogDetailSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         request     = self.context.get('request')
         qs          = models.Comment.objects.filter(blog=obj).order_by('-commented_on')[:10]
-        data        = { 'comments': CommentSerializer(qs, many=True, context={'request':request}).data }
+        data        = { 
+            'total-comments': qs.count(),
+            'comments': CommentSerializer(qs, many=True, context={'request':request}).data, 
+            
+            }
         return data
 
 

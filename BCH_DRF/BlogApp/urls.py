@@ -13,5 +13,6 @@ urlpatterns =[
     path('topic/', views.BlogTopicListAPIView.as_view(), name='blog-category-list'),
     path('topic/create/', views.BlogTopicCreationAPIView.as_view(), name='blogtopic-create'),
     path('topic/<int:pk>/', views.BlogTopicDetailAPIView.as_view(), name='blogtopic-detail'),
-    path('comment/', include('BlogApp.comment.urls')),
+    path('comment/', include('BlogApp.comment_api.urls')),
+    path('repaly/', include('BlogApp.replay_api.urls')),
 ]

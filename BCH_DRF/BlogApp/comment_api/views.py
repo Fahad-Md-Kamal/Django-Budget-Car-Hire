@@ -3,7 +3,7 @@ from rest_framework import generics, permissions
 
 from CoreApp import models
 from config.permissions import IsOwnerStaffOrReadonly
-from BlogApp.comment import serializers
+from BlogApp.comment_api import serializers
 
 
 class CommentCreateAPIView(generics.CreateAPIView):
@@ -27,3 +27,4 @@ class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_context(self):
         return {'request':self.request}
+        
