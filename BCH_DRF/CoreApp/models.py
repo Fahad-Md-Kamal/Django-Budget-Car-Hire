@@ -106,7 +106,7 @@ class Blog(models.Model):
 
 
 class Comment(models.Model):
-    content                 = models.TextField(max_length=300)
+    content                    = models.TextField(max_length=300)
     commented_on            = models.DateTimeField(auto_now_add=True)
     updated_on              = models.DateTimeField(blank=True, null=True)
     user                    = models.ForeignKey(AppUser, 
@@ -117,9 +117,23 @@ class Comment(models.Model):
                                 on_delete = models.CASCADE, 
                                 related_name= "commented_blog", 
                                 blank=True, null=True)
-    parent_comment          = models.ForeignKey('self', 
-                                on_delete = models.CASCADE, 
-                                blank=True, null=True)
 
     def __str__(self):
         return self.content[:10]
+
+
+class Replay(models.Model):
+    text                    = models.TextField(max_length=300)
+    replaied_on             = models.DateTimeField(auto_now_add=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
+    user                    = models.ForeignKey(AppUser, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'commenter_replayer',
+                                blank=True, null=True)
+    comment                 = models.ForeignKey( Comment, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'replayed_comment',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.text[:20]

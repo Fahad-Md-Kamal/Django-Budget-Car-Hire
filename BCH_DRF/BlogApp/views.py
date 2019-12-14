@@ -52,6 +52,9 @@ class BlogDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset                = Blog.objects.all()
     serializer_class        = serializers.BlogDetailSerializer
 
+    def get_serializer_context(self):
+        return {'request':self.request}
+
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 

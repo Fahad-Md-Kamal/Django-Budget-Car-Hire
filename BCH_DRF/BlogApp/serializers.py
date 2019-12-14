@@ -3,6 +3,7 @@ from rest_framework import serializers
 from PIL import Image
 
 from CoreApp import models
+from BlogApp.comment.serializers import CommentSerializer
 from AppUsers.serializers import UserInfoSerializer
 
 
@@ -37,11 +38,13 @@ class BlogCategorySerializer(serializers.ModelSerializer):
         fields          = ( 'topic', )
 
 
-## BLOG Serializers
+# ## BLOG Serializers
 class BlogDetailSerializer(serializers.ModelSerializer):
     content             = serializers.CharField(required= False)
     author              = UserInfoSerializer(read_only= True)
     blog_topic          = serializers.SerializerMethodField(read_only=True)
+    updated_on          = serializers.ReadOnlyField(read_only=True)
+    comments             = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model           = models.Blog
@@ -53,7 +56,8 @@ class BlogDetailSerializer(serializers.ModelSerializer):
                             'updated_on', 
                             'author', 
                             'blog_topic' ,
-                            'topic')
+                            'topic', 
+                            'comments')
 
     def validate(self, data):
         content         = data.get('content', None)
@@ -69,6 +73,13 @@ class BlogDetailSerializer(serializers.ModelSerializer):
     
     def get_blog_topic(self, obj):
         return obj.topic.topic
+    
+    def get_comments(self, obj):
+        request     = self.context.get('request')
+        qs          = models.Comment.objects.filter(blog=obj).order_by('-commented_on')[:10]
+        data        = { 'comments': CommentSerializer(qs, many=True, context={'request':request}).data }
+        return data
+
 
 
 class AdminBlogDetailSerializer(BlogDetailSerializer):
