@@ -9,6 +9,6 @@ urlpatterns = [
      path('api-auth/', include('rest_framework.urls')),
     path('api/auth/', include('AppUsers.auth.urls')),
     path('api/user/', include('AppUsers.urls')),
-    path('api/blog/', include('BlogApp.urls')),
+    path('api/status/', include('StatusApp.urls')),
     path('api/all/', include('AppUsers.api.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,5 +4,5 @@ from AppUsers.api import views
 
 
 urlpatterns =[
-    path('blogs/', views.UserBlogListAPIView.as_view(), name='user-blog-list'),
+    path('', views.UserBlogListAPIView.as_view(), name='user-blog-list'),
 ]
