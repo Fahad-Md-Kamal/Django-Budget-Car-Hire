@@ -7,7 +7,7 @@ INSTALLED_APPS +=[
     # Apps
     'AppUsers.apps.AppusersConfig',
     'CoreApp.apps.CoreappConfig',
-    'StatusApp.apps.StatusappConfig',
+    'StatusApp.apps.StatusAppConfig',
 ]
 
 

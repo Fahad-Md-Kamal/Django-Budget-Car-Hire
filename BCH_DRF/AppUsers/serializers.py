@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from CoreApp.models import User, ProfilePics
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.HyperlinkedModelSerializer):
     password            = serializers.CharField(label='Password', write_only=True)
     password2           = serializers.CharField(label='Confirm Password', write_only=True)
 
@@ -35,7 +35,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user_obj
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
     joined_since         = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -112,11 +112,9 @@ class UserDetailStaffSerializer(UserDetailSerializer):
 class UserListSerializer(UserDetailSerializer):
     class Meta:
         model           = User
-        fields          = ( 'id', 
-                            'url',
+        fields          = ( 'url',
                             'username', 
                             'image')
-
 
 
 class UserInfoSerializer(UserDetailSerializer):

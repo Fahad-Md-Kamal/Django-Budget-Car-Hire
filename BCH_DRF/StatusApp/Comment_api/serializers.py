@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from CoreApp.models import Comment
-from AppUsers.serializers import UserInfoSerializer
-from StatusApp.serializers import BlogListSerializer
+from AppUsers.serializers import UserListSerializer
 
 class CommentListSerializer(serializers.HyperlinkedModelSerializer):
     user                    = serializers.SerializerMethodField(read_only=True)
@@ -19,7 +18,7 @@ class CommentListSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentDetailSerializer(serializers.HyperlinkedModelSerializer):
-    user                    = UserInfoSerializer(read_only=True)
+    user                    = UserListSerializer(read_only=True)
     parent_comment          = serializers.SerializerMethodField(read_only=True)
     repalys                 = serializers.SerializerMethodField(read_only=True)
 
@@ -29,13 +28,13 @@ class CommentDetailSerializer(serializers.HyperlinkedModelSerializer):
                                 'url', 
                                 'text',
                                 'commented_on',
+                                'updated_on',
                                 'user',
                                 'blog',
                                 'repalys',
                                 'parent_comment' )
 
     def get_repalys(self, obj):
-        request             = self.context.get('request')
         qs                  = Comment.objects.filter(parent_comment=obj).order_by('-commented_on')
         return qs.count()
 
