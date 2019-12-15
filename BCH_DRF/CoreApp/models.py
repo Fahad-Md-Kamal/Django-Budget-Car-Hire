@@ -1,4 +1,4 @@
-import datetime, os
+import datetime, os, uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -6,7 +6,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from PIL import Image
 
 from CoreApp.manager import UserManager
-
 
 def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
@@ -17,6 +16,11 @@ def blog_photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     date = datetime.datetime.now()
     return f'blog_pics/{instance.user.username}/{date}-{instance.title}{file_extension}'
+
+def vehicle_photo_path(instance, filename):
+    basefilename, file_extension= os.path.splitext(filename)
+    uid  = uuid.uuid4()
+    return f'vehicle_pics/{instance.registration_no}/{uid}-{instance.registration_no}{file_extension}'
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -128,9 +132,89 @@ class Comment(models.Model):
         return self.text[:30]
 
 
+class VehicleCategory(models.Model):
+    name                    = models.CharField(max_length=20, unique=True)
+    description             = models.TextField(max_length=100)
+    created_on              = models.DateTimeField(auto_now_add=True)
+    created_by              = models.ForeignKey(AppUser, 
+                                on_delete= models.SET_NULL, 
+                                related_name= 'category_creator',
+                                blank=True, null=True)
+    updated_on              = models.DateTimeField(auto_now_add=True)
+    updated_by              = models.ForeignKey(AppUser, 
+                                on_delete= models.SET_NULL, 
+                                related_name= 'category_updator',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
+class VehicleModel(models.Model):
+    name                    = models.CharField(max_length=20, unique=True)
+    description             = models.TextField(max_length=100)
+    created_on              = models.DateTimeField(auto_now_add=True)
+    created_by              = models.ForeignKey(AppUser, 
+                                on_delete= models.SET_NULL, 
+                                related_name= 'model_creator',
+                                blank=True, null=True)
+    updated_on              = models.DateTimeField(auto_now_add=True)
+    updated_by              = models.ForeignKey(AppUser, 
+                                on_delete= models.SET_NULL, 
+                                related_name= 'model_updator',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
+class Vehicle(models.Model):
+    registration_no         = models.CharField(max_length=20, unique=True)
+    registared_on           = models.DateTimeField(auto_now_add=True)
+    rent                    = models.PositiveIntegerField(default = 2000)
+    capacity                = models.PositiveIntegerField(default = 2)
+    is_blocked              = models.BooleanField(default=False)
+    is_approved             = models.BooleanField(default=False)
+    is_booked               = models.BooleanField(default=False)
+    is_hired                = models.BooleanField(default=True)
+    booked_date             = models.DateTimeField(blank=True, null=True)
+    user                    = models.ForeignKey(AppUser, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'vehicle_owner',
+                                blank=True, null=True)
+    model                   = models.ForeignKey(VehicleModel, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'vehicle_model',
+                                blank=True, null=True)
+    category                = models.ForeignKey(VehicleCategory, 
+                                on_delete = models.SET_NULL, 
+                                related_name= 'vehicle_category',
+                                blank=True, null=True)
+
+    @property
+    def owner(self):
+        return self.user
+    
+    def __str__(self):
+        return self.registration_no
 
 
+class VehiclePics(models.Model):
+    vehicle                 = models.ForeignKey(Vehicle, related_name='vehicle_pics' )
+    image                   = models.ImageField(default='ProPic.png', 
+                                upload_to=photo_path)
+    is_approved             = models.BooleanField(default=False)
+    timestamp               = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.image
+
+    def save(self, *args, **kwargs):
+        super(VehiclePics, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+        
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
