@@ -1,5 +1,6 @@
 import datetime, os, uuid
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
@@ -176,7 +177,7 @@ class Vehicle(models.Model):
     is_blocked              = models.BooleanField(default=False)
     is_approved             = models.BooleanField(default=False)
     is_booked               = models.BooleanField(default=False)
-    is_hired                = models.BooleanField(default=True)
+    is_hired                = models.BooleanField(default=False)
     booked_date             = models.DateTimeField(blank=True, null=True)
     user                    = models.ForeignKey(AppUser, 
                                 on_delete = models.SET_NULL, 
@@ -196,25 +197,27 @@ class Vehicle(models.Model):
         return self.user
     
     def __str__(self):
-        return self.registration_no
+        return self.registration_no 
 
 
 class VehiclePics(models.Model):
-    vehicle                 = models.ForeignKey(Vehicle, related_name='vehicle_pics' )
+    vehicle                 = models.ForeignKey(Vehicle, 
+                                related_name='vehicle_pics', 
+                                on_delete = models.SET_DEFAULT, 
+                                default = 1 )
     image                   = models.ImageField(default='ProPic.png', 
                                 upload_to=photo_path)
     is_approved             = models.BooleanField(default=False)
     timestamp               = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.image
+        return self.vehicle.registration_no + " - Picture"
 
     def save(self, *args, **kwargs):
         super(VehiclePics, self).save(*args, **kwargs)
-
         img = Image.open(self.image.path)
-        
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+        if img.height > 400 or img.width > 600:
+            output_size = (400, 600)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
