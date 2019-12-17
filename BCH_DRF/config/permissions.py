@@ -6,3 +6,10 @@ class IsOwnerStaffOrReadonly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj == request.user or request.user.is_staff
+
+
+class IsVehicleOwnerReadonly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.vehicle.user == request.user or request.user.is_staff

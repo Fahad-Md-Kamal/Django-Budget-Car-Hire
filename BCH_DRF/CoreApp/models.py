@@ -21,7 +21,7 @@ def blog_photo_path(instance, filename):
 def vehicle_photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     uid  = uuid.uuid4()
-    return f'vehicle_pics/{instance.registration_no}/{uid}-{instance.registration_no}{file_extension}'
+    return f'vehicle_pics/{instance.vehicle.registration_no}/{uid}-{instance.vehicle.registration_no}{file_extension}'
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -141,7 +141,7 @@ class VehicleCategory(models.Model):
                                 on_delete= models.SET_NULL, 
                                 related_name= 'category_creator',
                                 blank=True, null=True)
-    updated_on              = models.DateTimeField(auto_now_add=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
     updated_by              = models.ForeignKey(AppUser, 
                                 on_delete= models.SET_NULL, 
                                 related_name= 'category_updator',
@@ -159,7 +159,7 @@ class VehicleModel(models.Model):
                                 on_delete= models.SET_NULL, 
                                 related_name= 'model_creator',
                                 blank=True, null=True)
-    updated_on              = models.DateTimeField(auto_now_add=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
     updated_by              = models.ForeignKey(AppUser, 
                                 on_delete= models.SET_NULL, 
                                 related_name= 'model_updator',
@@ -191,6 +191,12 @@ class Vehicle(models.Model):
                                 on_delete = models.SET_NULL, 
                                 related_name= 'vehicle_category',
                                 blank=True, null=True)
+    updated_on              = models.DateTimeField(blank=True, null=True)
+    updated_by              = models.ForeignKey(AppUser, 
+                                on_delete= models.SET_NULL, 
+                                related_name= 'vehicle_updator',
+                                blank=True, null=True)
+
 
     @property
     def owner(self):
@@ -205,8 +211,10 @@ class VehiclePics(models.Model):
                                 related_name='vehicle_pics', 
                                 on_delete = models.SET_DEFAULT, 
                                 default = 1 )
+    booked_date             = models.DateTimeField(blank=True, null=True)
     image                   = models.ImageField(default='ProPic.png', 
-                                upload_to=photo_path)
+                                upload_to=vehicle_photo_path)
+    is_main                 = models.BooleanField(default=False)
     is_approved             = models.BooleanField(default=False)
     timestamp               = models.DateTimeField(auto_now_add=True)
 

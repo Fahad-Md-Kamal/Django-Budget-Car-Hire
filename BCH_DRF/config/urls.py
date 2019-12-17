@@ -10,5 +10,6 @@ urlpatterns = [
     path('api/auth/', include('AppUsers.auth.urls')),
     path('api/user/', include('AppUsers.urls')),
     path('api/status/', include('StatusApp.urls')),
+    path('api/vehicle/', include('VehicleApp.urls')),
     path('api/all/', include('AppUsers.api.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
