@@ -100,5 +100,5 @@ class VehicleListSerializer(ADMINVehicleSerializer):
 
     def get_vehicle_image(self, obj):
         request             = self.context.get('request')
-        qs                  = VehiclePics.objects.filter(vehicle=obj, is_main=True)
+        qs                  = VehiclePics.objects.filter(vehicle=obj, is_main=True, is_approved=True)
         return VehiclePictureSerializer(qs, many=True, context={'request':request}).data
