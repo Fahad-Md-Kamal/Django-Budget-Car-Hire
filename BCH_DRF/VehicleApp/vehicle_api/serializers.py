@@ -14,7 +14,7 @@ class ADMINVehicleSerializer(serializers.HyperlinkedModelSerializer):
     updated_on                  = serializers.ReadOnlyField(read_only=True)
     vehicle_category            = serializers.SerializerMethodField(read_only=True)
     vehicle_model               = serializers.SerializerMethodField(read_only=True)
-    vehicle_images              = serializers.SerializerMethodField(read_only=True)
+    vehicle_image               = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model                   = Vehicle
@@ -35,7 +35,7 @@ class ADMINVehicleSerializer(serializers.HyperlinkedModelSerializer):
                                     'vehicle_category', 
                                     'updated_on',              
                                     'updated_by',
-                                    'vehicle_images' )
+                                    'vehicle_image' )
     
     def get_vehicle_category(self, data):
         return data.category.name
@@ -45,7 +45,7 @@ class ADMINVehicleSerializer(serializers.HyperlinkedModelSerializer):
         return data.model.name
     
 
-    def get_vehicle_images(self, obj):
+    def get_vehicle_image(self, obj):
         request             = self.context.get('request')
         qs                  = VehiclePics.objects.filter(vehicle=obj).order_by('is_main')
         return VehiclePictureSerializer(qs, many=True, context={'request':request}).data
@@ -71,7 +71,7 @@ class VehicleSerializer(ADMINVehicleSerializer):
                                     'owner',                    
                                     'model', 
                                     'category',
-                                    'vehicle_images')
+                                    'vehicle_image')
 
         read_only_fields        = ( 'is_blocked',
                                     'is_approved',
@@ -80,7 +80,7 @@ class VehicleSerializer(ADMINVehicleSerializer):
 
 
 class VehicleListSerializer(ADMINVehicleSerializer):
-    vehicle_image               = serializers.SerializerMethodField(read_only=True)
+    
     class Meta:
         model                   = Vehicle
         fields                  = ( 'url',
@@ -102,3 +102,17 @@ class VehicleListSerializer(ADMINVehicleSerializer):
         request             = self.context.get('request')
         qs                  = VehiclePics.objects.filter(vehicle=obj, is_main=True, is_approved=True)
         return VehiclePictureSerializer(qs, many=True, context={'request':request}).data
+
+
+
+class VehiclePublicSerializer(VehicleListSerializer):
+    vehicle_image               = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model                   = Vehicle
+        fields                  = ( 'url',
+                                    'vehicle_model',  
+                                    'vehicle_category',
+                                    'rent',        
+                                    'capacity',
+                                    'vehicle_image')
+

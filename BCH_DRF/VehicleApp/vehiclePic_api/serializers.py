@@ -10,7 +10,6 @@ class VehiclePictureUploadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model               = VehiclePics
         fields              = ( 'url', 
-                                'booked_date', 
                                 'image', 
                                 'is_main', 
                                 'is_approved', 

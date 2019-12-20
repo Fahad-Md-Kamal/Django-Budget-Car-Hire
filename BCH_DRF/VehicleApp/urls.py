@@ -7,4 +7,5 @@ urlpatterns =[
     path('category/', include('VehicleApp.category_api.urls')),
     path('model/', include('VehicleApp.vehicleModel_api.urls')),
     path('image/', include('VehicleApp.vehiclePic_api.urls')),
+    path('fleet/', include('VehicleApp.fleet_api.urls')),
 ]

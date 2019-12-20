@@ -197,7 +197,6 @@ class Vehicle(models.Model):
                                 related_name= 'vehicle_updator',
                                 blank=True, null=True)
 
-
     @property
     def owner(self):
         return self.user
@@ -211,7 +210,6 @@ class VehiclePics(models.Model):
                                 related_name='vehicle_pics', 
                                 on_delete = models.SET_DEFAULT, 
                                 default = 1 )
-    booked_date             = models.DateTimeField(blank=True, null=True)
     image                   = models.ImageField(default='ProPic.png', 
                                 upload_to=vehicle_photo_path)
     is_main                 = models.BooleanField(default=False)
@@ -229,3 +227,44 @@ class VehiclePics(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
+
+class Fleet(models.Model):
+    user                    = models.ForeignKey(AppUser, 
+                                related_name= 'fleet_owner', 
+                                on_delete = models.SET_DEFAULT, 
+                                default=1)
+    fleet_ref               = models.CharField(max_length=50, unique=True)
+    booked_date             = models.DateTimeField(auto_now_add=True)
+    vehicle                 = models.ManyToManyField(Vehicle, 
+                                related_name= 'fleet_vehicle')
+    is_purchased            = models.BooleanField(default=False)
+    is_approved             = models.BooleanField(default=False)
+    is_freezed              = models.BooleanField(default=False)
+    approved_on             = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.fleet_ref
+
+    def get_total(self):
+        return sum([car.rent for car in self.vehicle.all()])
+
+    def set_booked(self):
+        for car in self.vehicle.all():
+            car.is_booked = True
+            car.save()
+
+    def set_unbook(self):
+        for car in self.vehicle.all():
+            car.is_booked = False
+            car.save()
+
+    def set_hired(self):
+        for car in self.vehicle.all():
+            car.is_booked = False
+            car.is_hired = True
+            car.save()
+
+    def set_available(self):
+        for car in self.vehicle.all():
+            car.is_hired = False
+            car.save()
