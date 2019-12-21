@@ -178,7 +178,6 @@ class Vehicle(models.Model):
     is_approved             = models.BooleanField(default=False)
     is_booked               = models.BooleanField(default=False)
     is_hired                = models.BooleanField(default=False)
-    booked_date             = models.DateTimeField(blank=True, null=True)
     user                    = models.ForeignKey(AppUser, 
                                 on_delete = models.SET_NULL, 
                                 related_name= 'vehicle_owner',
@@ -268,3 +267,9 @@ class Fleet(models.Model):
         for car in self.vehicle.all():
             car.is_hired = False
             car.save()
+    
+    def check_hired(self):
+        for car in (self.vehicle.all()):
+            if car.is_hired or not car.is_approved:
+                return True
+        return False

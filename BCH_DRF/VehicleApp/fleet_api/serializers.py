@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from uuid import uuid4
+from django.shortcuts import get_object_or_404
 
 from CoreApp.models import Fleet, Vehicle
 
@@ -38,7 +39,7 @@ class FleetDetailSerializers(serializers.ModelSerializer):
         data                    = {
             'total_vehicle': obj.vehicle.count(),
             'total_rent': obj.get_total(),
-            'vehicle': VehiclePublicSerializer(obj.vehicle, many=True, context={'request':request} ).data,
+            'vehicle': VehicleListSerializer(obj.vehicle, many=True, context={'request':request} ).data,
         }
         return data  
 
@@ -58,7 +59,7 @@ class FleetListSerializers(FleetDetailSerializers):
                                 'fleet_info',)
 
 
-class FleetCreateSerializers(FleetDetailSerializers):
+class FleetCreateSerializers(serializers.ModelSerializer):
 
     class Meta:
         model               = Fleet
@@ -70,10 +71,12 @@ class FleetCreateSerializers(FleetDetailSerializers):
                                 'is_freezed', 
                                 'approved_on', 
                                 'user',
-                                'vehicle',
-                                'fleet_info', )
+                                'vehicle', )
 
-        read_only_fields    = ( 'is_purchased', 
+        read_only_fields    = ( 'fleet_ref',
+                                'user',
+                                'approved_on', 
+                                'is_purchased', 
                                 'is_approved', 
                                 'is_freezed', )
     
@@ -85,15 +88,21 @@ class FleetCreateSerializers(FleetDetailSerializers):
         obj = Fleet(fleet_ref = rf_id) 
         obj.save()
         obj.vehicle.set(validated_data.get('vehicle'))
-        obj.set_booked()
+        if fleet.check_hired():
+            raise serializers.ValidationError('Unapproved or Hired vehicle cannot be choosed')
+        obj.vehicle.update(is_booked = True)
         obj.save()
         return obj
     
 
-    # def update(self, instance, validated_data):
-    #     fleet           = Fleet.objects.filter(id = instance.id)
-    #     print(fleet)
-    #     fleet.vehicle.set(validated_data.get('vehicle'))
-    #     fleet.set_booked()
-    #     fleet.save()
-    #     return instance 
+    def update(self, instance, validated_data):
+        fleet           = get_object_or_404(Fleet, id=instance.id)
+        fleet.vehicle.set(validated_data.get('vehicle'))
+        if fleet.check_hired():
+            fleet.vehicle.update(is_booked = False)
+            raise serializers.ValidationError('Unapproved or Hired vehicle cannot be choosed')
+        fleet.vehicle.update(is_booked = True)
+        fleet.save()
+        return instance
+
+          

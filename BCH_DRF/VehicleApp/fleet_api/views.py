@@ -1,9 +1,10 @@
+from django.db.models import Prefetch
 from rest_framework import generics
 
 from VehicleApp.fleet_api import serializers
-from CoreApp.models import Fleet
+from CoreApp.models import Fleet, Vehicle
 
-# 
+
 class FleetListAPIView(generics.ListAPIView):
     serializer_class            = serializers.FleetListSerializers
     queryset                    = Fleet.objects.all()

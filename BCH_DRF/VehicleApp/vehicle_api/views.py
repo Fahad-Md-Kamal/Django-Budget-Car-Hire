@@ -7,8 +7,8 @@ from CoreApp.models import Vehicle
 
 class VehicleListAPIView(generics.ListAPIView):
     serializer_class                = serializers.VehicleListSerializer
-    # queryset                        = Vehicle.objects.all(is_approved=True)
-    queryset                        = Vehicle.objects.all()
+    queryset                        = Vehicle.objects.filter(is_approved=True, is_hired=False)
+    # queryset                        = Vehicle.objects.all()
     search_fields                   = ( 'model__name', 
                                         'category__name', 
                                         'registration_no', 

@@ -116,3 +116,5 @@ class VehiclePublicSerializer(VehicleListSerializer):
                                     'capacity',
                                     'vehicle_image')
 
+
+
