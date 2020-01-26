@@ -4,10 +4,15 @@ from config.settings import *
 
 INSTALLED_APPS +=[
     'rest_framework',
+    'corsheaders',
     # Apps
     'AppUsers.apps.AppusersConfig',
     'CoreApp.apps.CoreappConfig',
     'StatusApp.apps.StatusAppConfig',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:4200",
 ]
 
 
