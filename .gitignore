@@ -90,7 +90,6 @@ celerybeat-schedule
 .env
 .venv
 env/
-Env/
 venv/
 ENV/
 env.bak/
@@ -108,3 +107,20 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+
+
+# devefile
+.vscode
+
+000*
+bootstrap*
+datatable*
+font*
+popper*
+mdb*
+jquery*
+
+webfonts/
+images/

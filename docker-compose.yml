@@ -1,0 +1,27 @@
+version: '3'
+volumes: 
+    pgdata:
+
+services: 
+    python:
+        # image: python:3.8
+        build: 
+            context: .
+            dockerfile: docker/python/Dockerfile
+        volumes: 
+            - ./app:/app
+        ports: 
+            - 8000:8000
+        command: python manage.py runserver 0.0.0.0:8000
+    postgres:
+        image: postgres
+        restart: always
+        volumes: 
+            - pgdata:/var/lib/postgresql/data
+        environment: 
+            POSTGRES_USER: bch
+            POSTGRES_DB: bch_db
+            POSTGRES_PASSOWRD: bch123
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports: 
+            - 5432:5432

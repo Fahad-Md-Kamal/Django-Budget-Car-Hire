@@ -1,0 +1,8 @@
+django
+pillow
+django-bootstrap4
+django-crispy-forms
+faker
+stripe
+reportlab
+psycopg2
