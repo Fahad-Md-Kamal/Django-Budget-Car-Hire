@@ -1,28 +1,26 @@
-version: '3.7'
-
-services:
-  web:
-    build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./app/:/usr/src/app/
-    ports:
-      - 8000:8000
-    env_file:
-      - ./.env.dev
-    depends_on: 
-      - db
-
-  db:
-    image: postgres:12.2-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment: 
-      - POSTGRES_USER=fahad
-      - POSTGRES_PASSWORD=12345678
-      - POSTGRES_DB=bch_db
-    # ports: 
-    #   - 5432:5432
-
+version: '3'
 volumes: 
-  postgres_data:
+    pgdata:
+
+services: 
+    python:
+        build: 
+            context: .
+            dockerfile: docker/dev/python/Dockerfile
+        volumes: 
+            - ./app:/app
+        ports: 
+            - 8000:8000
+        command: python manage.py runserver 0.0.0.0:8000
+    postgres:
+        image: postgres
+        restart: always
+        volumes: 
+            - pgdata:/var/lib/postgresql/data
+        environment: 
+            POSTGRES_USER: bch
+            POSTGRES_DB: bch_db
+            POSTGRES_PASSOWRD: bch123
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports: 
+            - 5432:5432
