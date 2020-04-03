@@ -4,9 +4,4 @@ django-bootstrap4
 django-crispy-forms
 stripe
 reportlab
-psycopg2-binary
-
-faker
-django-debug-toolbar
-
-# gunicorn
+psycopg2
