@@ -3,7 +3,7 @@ volumes:
     pgdata:
 
 services: 
-    python:
+    web:
         build: 
             context: .
             dockerfile: docker/dev/python/Dockerfile
