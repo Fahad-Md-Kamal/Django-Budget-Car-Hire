@@ -1,0 +1,50 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block blog_content%}
+<div class="container">
+        <!-- row -->
+        <div class="row">
+{% if user.is_staff %}
+
+<table id="table_id" class="display my-5">
+        <thead>
+            <tr>
+                <th>Author</th>
+                <th>Title</th>
+                <th>Topic</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <tr>
+                        <td>{{ blog.author }}</td>
+                        <td>{{ blog.title }}</td>
+                        <td>{{ blog.get_topic_display }}</td>
+                        <td>
+                            <div class="btn-group"> 
+                                {% if not blog.is_approved%}
+                                    <a class="btn btn-success" href="{% url 'blogs:blog_approval' blog.pk %}">Approve</a>
+                                {% else%}
+                                    <a class="btn btn-warning" href="{% url 'blogs:blog_approval' blog.pk %}">Block</a>
+                                {% endif %}
+                                <a class="btn btn-primary" href="{% url 'blogs:admins_blog_detail' blog.pk %}">Detail</a>
+                                <a class="btn btn-danger" href="{% url 'blogs:blog_delete' blog.pk %}">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+{% else %}
+    <p class="display-1">You don't have permission</p>
+{% endif %}
+</div>
+</div>
+
+{% endblock blog_content%}
+  

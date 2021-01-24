@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">BCH</a>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Vehicle
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'vehicle:vehicle_list' %}">All Vehicles</a>
+            {% if user.is_authenticated and user.user_profile.user_type == 1 %}
+            <a class="dropdown-item" href="{% url 'vehicle:owner_vehicle_list' %}">My Vehicles</a>
+            <!-- If the user is Owner only then he can register vehicle -->
+            {% if user.user_profile.user_type == 1 %}
+            <a class="dropdown-item" href="{% url 'vehicle:reg_vehicle' %}">Register Vehicle</a>
+            {% endif %}
+
+            {% endif %}
+            {% if user.is_staff %}
+            <a class="dropdown-item" href="{% url 'vehicle:admin_vehicle' %}">Admin View</a>
+            {% endif %}
+          </div>
+        </li>
+        {% if user.user_profile.user_type == 0 %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Fleet
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% if not user.is_staff %}
+            <a class="dropdown-item" href="{% url 'fleet:fleets' %}">Fleets</a>
+            <a class="dropdown-item" href="{% url 'fleet:new_fleet' %}">New Fleet</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'fleet:admin_fleet_view' %}">Admin View</a>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Blog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'blogs:blog_list' %}">All Blogs</a>
+            <a class="dropdown-item" href="{% url 'blogs:blog_create' %}">Write Blog</a>
+            {% if user.is_staff %}
+            <a class="dropdown-item" href="{% url 'blogs:admin_blog_list' %}">Admin View</a>
+            {% endif %}
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'blogs:about_us' %}">About Us</a>
+        </li>
+      </ul>
+    </div>
+    <span class="nav-item dropdown ml-auto mr-3">
+      {% if user.is_authenticated %}
+      <a id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="user_dp" src="{{ user.user_profile.image.url }}" alt="{{user.username}}">
+      </a>
+
+      {% else %}
+      <a class="nav-link text-light btn-dark-green btn-blue-grey px-3 rounded-circle" id="navbarDropdownMenuLink-333"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
+      </a>
+      {% endif %}
+
+      <!-- https://res.cloudinary.com/dkkwgjhri/image/upload/v1611466678/media/default_profile_kz14r4.png -->
+
+      <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+        {% if user.is_authenticated %}
+        <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+        <a class="dropdown-item" href="{% url 'register' %}">Join Now</a>
+        {% endif %}
+      </div>
+    </span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>

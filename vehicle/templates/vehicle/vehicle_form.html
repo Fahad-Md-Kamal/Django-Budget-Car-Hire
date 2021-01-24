@@ -1,0 +1,22 @@
+{% extends 'vehicle/vehicle_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block vehicle_content%}
+<div class="jumbotron col-sm-10 col-md-8 col-xl-4 offset-sm-1 offset-md-2 offset-xl-4 my-5">
+    <form method="post" enctype="multipart/form-data">
+        <fieldset>
+            <legend class="border-bottom mb-4 h1 text-center">Vehicle {{state}} Form</legend>
+            {% csrf_token %}
+                {{ form|crispy }}
+        </fieldset>
+        <button class="btn btn-outline-success btn-block" type="submit">{{state}}</button>
+
+        {% if vehicle.pk %}
+            <!-- <div class="card-footer"> -->
+                <a class="btn btn-outline-primary btn-block" href="{% url 'vehicle:detail_vehicle' object.pk %}">Cancel</a>
+            <!-- </div> -->
+        {% endif%}
+    </form>
+</div>
+
+{% endblock %}

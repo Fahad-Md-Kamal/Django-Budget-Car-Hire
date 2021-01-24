@@ -1,0 +1,71 @@
+{% extends 'vehicle/vehicle_base.html' %}
+
+{% block vehicle_content%}
+
+
+<!-- <div class="col-sm-12 col-md-8 col-lg-10"> -->
+{% if not user.is_staff %}
+<p class="display-3 container"> Sorry !! Only admins and moderators can visit this page</p>
+
+{% else %}
+
+<div class="p-5">
+    <table id="table_id" class="display table">
+        <thead>
+            <tr>
+                <th>Owner</th>
+                <th>Model</th>
+                <th>Reg. No.</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>Rent / month</th>
+                <th>Joined Since</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if cars_list %}
+            {% for car in cars_list %}
+            <tr>
+                <td><i class="fa fa-user"></i> {{car.owner.username}}</td>
+                <td>{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</td>
+                <td>{{car.reg_no}}</td>
+                <td>{{car.get_vehicle_type_display}}</td>
+                <td>{% if car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                <td>{{ car.capacity}}</td>
+                <td>{{car.rent}}</td>
+                <td>{{ car.added_on|date:"d M Y" }}</td>
+                <td>
+                    <div class="btn-group">
+                        {% if not car.is_approved %}
+                        <a class="btn btn-success" href="{% url 'vehicle:approve_vehicle' car.pk %}">Approve</a>
+                        <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Reject</a>
+                        {% else %}
+                        {% if not car.is_freezed %}
+                        <a class="btn btn-warning" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Freeze</a>
+                        {% else %}
+                        <a class="btn btn-success" href="{% url 'vehicle:freeze_vehicle' car.pk %}">Free</a>
+                        {% endif %}
+                        <a class="btn btn-primary" href="{% url 'vehicle:detail_vehicle' car.pk %}">Detail</a>
+                        <a class="btn btn-danger" href="{% url 'vehicle:delete_vehicle' car.pk %}">Delete</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endif %}
+
+
+<!-- </div> -->
+
+
+
+
+{% endblock %}

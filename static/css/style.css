@@ -1,0 +1,145 @@
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.account-img {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #75ccff;
+  padding: 2px;
+}
+
+.rounded-circle {
+  box-shadow: 0 0 10px #080808 !important;
+}
+
+.blog-img {
+  width: 100px;
+  height: 100px;
+}
+
+.profile-img {
+  width: 300px;
+  height: 300px;
+  border: 3px dotted #cacfa9;
+  padding: 2px;
+}
+
+.comment-img {
+  width: 50px;
+  height: 50px;
+}
+
+.nav-scroller {
+  border-radius: 100px;
+}
+
+.nav-scroller a {
+  font-size: 1.5em;
+}
+
+.nav-scroller a:hover {
+  box-shadow: 0 0 5px #edd8ff;
+  border-radius: 50%;
+}
+
+.list-group-item a {
+  color: #1a1919;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  transition: background-color 0.5s;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #3088ec;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  /* font-size: 1em; */
+  color: #ffffff;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #ffc164;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left 0.5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+}
+
+.dropdown-container a {
+  color: darkslateblue;
+}
+
+.card-comments img {
+  width: 4rem;
+}
+
+.vehicle_img {
+  width: 400px;
+}
+.vh_table td {
+  font-size: 1.2em;
+}
+
+.user_dp {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #f5f4f4;
+  border-radius: 80%;
+  padding: 3px;
+}
+
+.text-warning {
+  color: #b37615 !important;
+}
+
+.landing-image {
+  width: 100%;
+}
+
+.text_style {
+  color: #530f64;
+}

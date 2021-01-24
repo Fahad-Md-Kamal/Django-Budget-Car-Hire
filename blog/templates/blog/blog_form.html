@@ -1,0 +1,28 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block blog_content%}
+<div class="container">
+        <!-- row -->
+        <div class="row">
+
+<div class="jumbotron col-sm-12 col-md-8 col-xl-8 offset-md-2 col-xl-2 my-5">
+    <form method="post">
+        <fieldset>
+            <legend class="border-bottom mb-4 h1 text-center">{{state}} Blog</legend>
+            {% csrf_token %}
+                {{ form|crispy }}
+        </fieldset>
+        <button class="btn btn-success btn-block" type="submit">{{state}}</button>
+    </form>
+
+        {% if blog.pk %}
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" href="{% url 'blogs:blog_detail' object.pk %}">Cancel</a>
+            </div>
+        {% endif%}
+</div>
+</div>
+</div>
+
+{% endblock  %}

@@ -1,0 +1,48 @@
+<p class="h3">{{car.get_model_name_display}} - {{car.model_year|date:"Y"}}</p>
+
+          <div class="table-responsivv">  
+        <table class="table table-striped vh_table">
+          <legend class="my-5"></legend>
+                <tbody>
+                  <tr>
+                    <td colspan="2"><img class="mx-auto d-block vehicle_img" src="{{ car.image.url }}" alt="{{ car.model_name }}"></td>
+                  </tr>
+                  <tr class="table-success">
+                    <td>Owner:</td>
+                    <td> <i class="fa fa-user"></i> <a href="{% url 'user_profile' car.owner.pk %}"> {{car.owner.username}}</a></td>
+                  </tr>
+                  <tr class="table-danger">
+                    <td>Model Name: </td>
+                    <td>{{car.get_model_name_display}}</td>
+                  </tr>
+                  <tr class="table-primary">
+                    <td>Model Year: </td>
+                    <td>{{car.model_year|date:"Y"}}</td>
+                  </tr>
+                  <tr class="table-info">
+                    <td>Registration No: </td>
+                    <td>"{{car.reg_no}}"</td>
+                  </tr>
+                  <tr class="table-warning">
+                    <td>Category</td>
+                    <td>{{car.get_vehicle_type_display}}</td>
+                  </tr>
+                  <tr class="table-danger">
+                    <td>Status</td>
+                    <td>{% if car.is_booked %} Booked {% elif car.is_hired %} Hired {% else %} Available {% endif %}</td>
+                  </tr>
+                  <tr class="table-primary">
+                    <td>Capacity</td>
+                    <td><i class="fas fa-chair"></i> {{car.capacity}}</td>
+                  </tr>
+                  <tr class="table-warning">
+                    <td>Rent / month</td>
+                    <td>&#2547; {{car.rent}}</td>
+                  </tr>
+                  <tr class="table-dark">
+                    <td class="text-dark">Registared Since</td>
+                    <td class="text-dark">{{ car.added_on|date:"d M Y" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>

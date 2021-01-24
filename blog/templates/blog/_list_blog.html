@@ -1,0 +1,36 @@
+  <!-- Card -->
+  <div class="card card-cascade wider my-5 ">
+  
+        <!-- Card image -->
+        <div class="p-3 d-flex view view-cascade gradient-card-header tempting-azure-gradient">
+            <img class="rounded-circle blog-img mr-3" src="{{ post.author.user_profile.image.url }}" alt="" srcset="">
+        <div class="mt-4">
+            <span>@ <a href="{% url 'user_profile' post.author.pk %}"> {{post.author.username}}</a></span>
+            <!-- Title -->
+          <!-- Text -->
+          <p class="text-muted">on: {{ post.posted_date|date:'d-M-Y' }}</p>
+        </div>
+        </div>
+    
+        <div class=" card-body">
+            <p class="card-title h5 ">{{ post.title }}</p>
+            <p class="text-truncate">{{post.content}}</p>
+            
+      </div>
+    
+        <div class="card-footer d-flex justify-content-between">
+        <div>
+          <a class="btn btn-outline-cyan rounded-pill"  href="{% url 'blogs:blog_detail' post.id%}" class="orange-text p-2">
+              Read more<i class="fas fa-angle-double-right ml-2"></i>
+            </a>
+        </div>
+        {% if post.comments.count > 0 %}
+      <div class="ml-auto mt-3">
+          <a class="card-title text-decoration-none ml-auto" href="{% url 'blogs:blog_detail' post.id%}">
+              <span class="badge badge-success badge-pill ml-3">{{post.comments.count}}</span> Comment(s)
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      </div>
+      <!-- Card -->

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Budget-Car-Hire || Home {% endblock %}
+
+
+{% block content%}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <!-- Jumbotron -->
+      <div class="jumbotron p-0">
+
+        <!-- Card image -->
+        <div class="view overlay rounded-top">
+          <img src="../static/media/landing_page_image.png" class="img-fluid landing-image" alt="Sample image">
+
+        </div>
+
+        <!-- Card content -->
+        <div class="card-body text-center mb-3">
+
+          <!-- Title -->
+          <h3 class="card-title display-1 my-4 text-warning"><strong>Budget Car Hire</strong></h3>
+          <!-- Text -->
+          <p class="card-text h1 py-2 text_style">Your Business Transportation Solution</p>
+          <!-- Button -->
+          <a href="{% url 'vehicle:vehicle_list' %}" class="btn purple-gradient badge-pill my-4 px-5">V E H I C L E
+            S</a>
+
+        </div>
+
+      </div>
+      <!-- Jumbotron -->
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+
+</div>
+
+
+
+{% endblock content%}

@@ -1,0 +1,200 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block blog_content%}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-5">
+        <div class="container">
+    
+          <!--Section: Post-->
+          <section class="mt-4">
+    
+            <!--Grid row-->
+            <div class="row">
+    
+              <!--Grid column-->
+              <div class="col-md-8 mb-4">
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <blockquote class="blockquote">
+                      <p class="mb-0">{{ blog.title }}</p>
+                      <footer class="blockquote-footer">by @ <a href="{% url 'user_profile' blog.author.pk %}">{{ blog.author }} </a><br>
+                        <cite title="Source Title">{{ blog.posted_date }}</cite>
+                      </footer>
+                    </blockquote>
+    
+                    <p>{{ blog.content }}</p>
+    
+                  </div>
+                <div class="card-footer">
+                    {% if user.is_authenticated %}
+                        {% if user.id == blog.author.id %}
+                        <div>
+                            <a class="btn btn-outline-success mr-auto" href="{% url 'blogs:blog_update' blog.pk %}">Edit Post</a>
+                            <a class="btn btn-outline-danger" href="{% url 'blogs:blog_delete' blog.pk %}">Delete Post</a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                </div>
+                <!--/.Card-->
+    
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <div class="card-header font-weight-bold">
+                    <span>About author</span>
+                    <span class="pull-right">
+                      <a href="https://www.facebook.com" target="_blank">
+                        <i class="fab fa-facebook-f mr-2"></i>
+                      </a>
+                      <a href="https://www.twitter.com" target="_blank">
+                        <i class="fab fa-twitter mr-2"></i>
+                      </a>
+                      <a href="https://www.instagram.com" target="_blank">
+                        <i class="fab fa-instagram mr-2"></i>
+                      </a>
+                      <a href="https://www.linkedin.com" target="_blank">
+                        <i class="fab fa-linkedin-in mr-2"></i>
+                      </a>
+                    </span>
+                  </div>
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <div class="media d-block d-md-flex mt-3">
+                   <a href="{% url 'user_profile' blog.author.pk %}"> <img class="d-flex mb-3 mx-auto z-depth-1" src="{{ blog.author.user_profile.image.url }}"
+                        alt="Generic placeholder image" style="width: 100px;">
+                      <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                        <h5 class="mt-0 font-weight-bold">{{ blog.author }}
+                        </h5>
+                        {{blog.author.profile.first_name}}
+                      </div>
+                    </a>
+                    </div>
+    
+                  </div>
+    
+                </div>
+                <!--/.Card-->
+
+                <!--Comments-->
+                {% if blog.comments.all %} 
+                <div class="card card-comments mb-3 wow fadeIn">
+                  <div class="card-header font-weight-bold">{{blog.comments.count}} comment(s)</div>
+                  <div class="card-body">
+    
+                {% for cmt in blog.comments.all %}
+                <div class="media d-block d-md-flex mt-4">
+                      <img class="d-flex mb-3 mx-auto " src="{{ cmt.user.user_profile.image.url }}" alt="Generic placeholder image">
+                      <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                        <h5 class="mt-0 font-weight-bold">@ <a href="{% url 'user_profile' cmt.user.pk %}">{{cmt.user.username}}</a>
+                                <small class="text-muted">{{cmt.comment_date}}</small>
+                          <!-- <a href="" class="pull-right">
+                            <i class="fas fa-reply"></i>
+                          </a> -->
+                        </h5>
+                        {{cmt.comment}}
+                        {% if user.id == cmt.user.id or user.is_staff %}
+                        <div class="mt-5">
+                                <a class="btn btn-danger rounded-pill" href="{% url 'blogs:delete_blog_comment' cmt.pk %}">Delete</a>
+                            </div>
+                            {% endif %}
+                        
+    
+
+                      </div>
+                    </div>
+                    {% endfor %}
+  
+                  </div>
+                </div>
+                {% endif %}
+                <!--/.Comments-->
+    
+                <!--Reply-->
+                <div class="card mb-3 wow fadeIn">
+                  <div class="card-header font-weight-bold">Leave a reply</div>
+                  <div class="card-body">
+    
+                    <!-- Default form reply -->
+                    <form action="{% url 'blogs:add_blog_comment' blog.pk %}" method="post">
+                            {% csrf_token %}
+                            {{ cmt_form|crispy }}
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                        </form>
+    
+                    <!-- Default form reply -->
+    
+    
+    
+                  </div>
+                </div>
+                <!--/.Reply-->
+    
+              </div>
+              <!--Grid column-->
+    
+              <!--Grid column-->
+              <div class="col-md-4 mb-4">
+
+                <!--Card-->
+                <div class="card mb-4 wow fadeIn">
+    
+                  <div class="card-header">Related blogs</div>
+    
+                  <!--Card content-->
+                  <div class="card-body">
+    
+                    <ul class="list-unstyled">
+                      <li class="media">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1">Vehicle Post</h5>
+                          </a>
+                          
+                        </div>
+                      </li>
+                      <li class="media my-4">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1">Latest Post</h5>
+                          </a>
+                          
+                        </div>
+                      </li>
+                      <li class="media">
+                        <div class="media-body">
+                          <a href="">
+                            <h5 class="mt-0 mb-1">Other post</h5>
+                          </a>
+                          
+                        </div>
+                      </li>
+                    </ul>
+    
+                  </div>
+    
+                </div>
+                <!--/.Card-->
+    
+              </div>
+              <!--Grid column-->
+    
+            </div>
+            <!--Grid row-->
+    
+          </section>
+          <!--Section: Post-->
+    
+        </div>
+      </main>
+      <!--Main layout-->
+
+{% endblock  %}
