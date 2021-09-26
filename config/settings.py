@@ -11,9 +11,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_KEY = '0gund)iqfs2$^adj_)=i$pg@=b_408!lacm%@5fh-t72vq-w4g'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['faahadmdkamal.pythonanywhere.com']
 
-DEBUG = True
+DEBUG = False
 
 # Application definition
 INSTALLED_APPS = [
@@ -106,12 +106,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/static_files/"
-
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = "/static/"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
